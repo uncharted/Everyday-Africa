@@ -1,12 +1,12 @@
 Everyday-Africa
 ===============
 
-All around you are files containing or for generating the Everyday Africa
+All around you are files pertaining to the Everyday Africa
 tumblr blog.
 
-The finals outputs are
-- `tumblr.html`, which is hand pasted via the tumblr interface
-- `public/tumblr.css`, which must be served via s3 or some other mechanism
+The blog's source is built from component pieces. The finals outputs are:
+- `tumblr.html` which is hand pasted via the tumblr interface
+- `public/tumblr.css` which must be served via s3 or some other mechanism
 
 
 Usage
@@ -27,5 +27,5 @@ To push `public/tumblr.css`, run `make push`. Note that this requires
 Dependencies
 ------------
 
-- [*sass*](http://sass-lang.com/) to compile the css file.
-- [*s3cmd*](http://s3tools.org/s3cmd) to push the css file to s3.
+- [`sass`](http://sass-lang.com/) to compile the css file.
+- [`s3cmd`](http://s3tools.org/s3cmd) to push the css file to s3.
