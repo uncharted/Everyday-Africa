@@ -1,0 +1,65 @@
+@nav-background: #fff;
+@blue: #609ec9;
+
+body {
+  font-family: "Avenir Light", sans-serif;
+  margin: 0;
+}
+
+nav {
+  background-color: @nav-background;
+  height: 64px;
+  padding: 0.2em;
+  // Temporary bottom border
+  border-bottom: 1px solid black;
+
+  ul.nav-buttons {
+    position: absolute;
+    list-style-type: none;
+    margin-right: -2em;
+
+    li {
+      float: left;
+      margin-right: 1em;
+    }
+  }
+
+
+  h1 {
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 300;
+
+    a {
+      text-decoration: none;
+      color: black;
+    }
+
+    .everyday {
+      font-weight: 500;
+      color: @blue;
+    }
+  }
+}
+
+#gallery {
+  .image {
+    overflow: hidden;
+  }
+
+  .tagged-image {
+    margin-top: -0.2em;
+    display: inline-block;
+    width: 12.5%;
+    height: 140px;
+
+    img {
+      margin-top: -40px;
+      height: 220px;
+    }
+  }
+
+  .portrait img {
+    width: 100%;
+  }
+}

@@ -1,3 +1,4 @@
 # Makefile Outputs
-tumblr.html
-public/tumblr.css
+build
+
+node_modules

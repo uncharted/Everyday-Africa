@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Everyday Africa</title>
+    <link rel="stylesheet" type="text/stylesheet" href="STYLESHEET_URL">
+    <script type="text/javascript" src="JQUERY_URL"></script>
+    <script type="text/javascript" src="REACT_URL"></script>
+  </head>
+  <body>
+    <div id="content"></div>
+    <script type="text/javascript" src="EA_JS_URL"></script>
+  </body>
+</html>

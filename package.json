@@ -1,0 +1,10 @@
+{
+  "name": "everyday-africa",
+  "description": "generate the everyday africa tumblr page",
+  "version": "0.0.1",
+  "author": "Thomas Moulia <jtmoulia@pocketknife.io>",
+  "dependencies": {
+    "less": "1.6.x",
+    "react-tools": "0.9.x"
+  }
+}
