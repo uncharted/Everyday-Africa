@@ -1,14 +1,65 @@
 <!DOCTYPE html>
 
-<html>
+<html "{block:English}en{/block:English}{block:French}fr{/block:French}{block:German}de{/block:German}{block:Japanese}ja{/block:Japanese}{block:Italian}it{/block:Italian}{block:Spanish}es{/block:Spanish}{block:Polish}pl{/block:Polish}">
   <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width">
+
     <title>Everyday Africa</title>
+    <link rel="stylesheet" href="http://static.tumblr.com/cqczc5x/kYdmihjuj/normalize.css" type="text/css" media="all">
     <link rel="stylesheet" type="text/stylesheet" href="STYLESHEET_URL">
     <script type="text/javascript" src="JQUERY_URL"></script>
     <script type="text/javascript" src="REACT_URL"></script>
   </head>
   <body>
-    <div id="content"></div>
+    <header></header>
+
+    <section id="content">
+
+    </section>
+    <div id="posts">
+      {block:Posts}
+      <article class="post {TagsAsClasses}">
+	{block:Photo}
+        <img src="{PhotoURL-500}" alt="{PhotoAlt}"/>
+	{/block:Photo}
+      </article>
+      {/block:Posts}
+    </div>
+
+    <script>
+     (function(window) {
+       window.Tumblr = {
+	 Title: "{Title}",
+	 Posts: {
+	   Photos: [
+	     {block:Posts}{block:Photo}
+	     {
+	       PhotoAlt: "{PhotoAlt}",
+	       {block:Caption}Caption: "{Caption}",{/block:Caption}
+	       LinkURL: "{LinkURL}",
+	       'PhotoURL-500': "{PhotoURL-500}",
+	       'PhotoWidth-500': "{PhotoWidth-500}",
+	       'PhotoHeight-500': "{PhotoHeight-500}",
+	       'PhotoURL-400': "{PhotoURL-400}",
+	       'PhotoWidth-400': "{PhotoWidth-400}",
+	       'PhotoHeight-400': "{PhotoHeight-400}",
+	       'PhotoURL-250': "{PhotoURL-250}",
+	       'PhotoWidth-250': "{PhotoWidth-250}",
+	       'PhotoHeight-250': "{PhotoHeight-250}",
+	       'PhotoURL-100': "{PhotoURL-100}",
+	       'PhotoWidth-100': "{PhotoWidth-100}",
+	       'PhotoHeight-100': "{PhotoHeight-100}",
+	       'PhotoURL-75sq': "{PhotoURL-75sq}"
+	      },
+	     {/block:Photo}{/blocks:Post}
+	   ]
+       }
+     );
+
+     }).(window);
+    </script>
     <script type="text/javascript" src="EA_JS_URL"></script>
   </body>
 </html>

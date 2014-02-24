@@ -1,6 +1,12 @@
 @nav-background: #fff;
 @blue: #609ec9;
 
+// TODO: This is going to have to change with the various breakpoints
+@ea-image-width: 12%;
+
+@inline-space: 4px;
+
+
 body {
   font-family: "Avenir Light", sans-serif;
   margin: 0;
@@ -10,6 +16,7 @@ nav {
   background-color: @nav-background;
   height: 64px;
   padding: 0.2em;
+  margin-bottom: @inline-space;
   // Temporary bottom border
   border-bottom: 1px solid black;
 
@@ -42,15 +49,30 @@ nav {
   }
 }
 
-#gallery {
+/****************
+ * Image Columns
+ */
+
+.left-column, .right-column {
+  width: 100% * (3/8);
+}
+
+.center-column {
+  width: 100% * (1/4);
+}
+
+.gallery-column {
+  display: inline-block;
+  vertical-align: top;
+
   .image {
     overflow: hidden;
   }
 
   .tagged-image {
-    margin-top: -0.2em;
+    margin-top: -@inline-space;
     display: inline-block;
-    width: 12.5%;
+    width: 100% / 3;
     height: 140px;
 
     img {

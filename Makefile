@@ -50,7 +50,7 @@ $(PUBLIC):
 $(PUBLIC)/ea.css: stylesheets/ea.less $(PUBLIC) $(LESSC)
 	$(LESSC) $< > $@
 
-$(PUBLIC)/ea.js: JSX_ARGS =
+$(PUBLIC)/ea.js: JSX_ARGS = --cache-dir=$(BUILD)/.module-cache
 $(PUBLIC)/ea.js: scripts/ea.js $(PUBLIC) $(JSX)
 	$(JSX) $(JSX_ARGS) $(dir $<) $(dir $@)
 
