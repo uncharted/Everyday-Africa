@@ -1,0 +1,14 @@
+// -*- mode: javascript -*-
+
+EAConfig = {
+  images: {
+    africa: "AFRICA_URL",
+    photographer: "PHOTOGRAPHER_URL",
+    search: "SEARCH_URL",
+    about: "ABOUT_URL",
+    instagram: "INSTAGRAM_URL",
+    twitter: "TWITTER_URL",
+    facebook: "FACEBOOK_URL",
+    tumblr: "TUMBLR_URL"
+  }
+};

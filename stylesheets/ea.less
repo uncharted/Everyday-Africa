@@ -1,5 +1,8 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400);
+
 @nav-background: #fff;
 @blue: #609ec9;
+@font: "Lato", sans-serif;
 
 // TODO: This is going to have to change with the various breakpoints
 @ea-image-width: 12%;
@@ -7,35 +10,41 @@
 @inline-space: 4px;
 
 
-body {
-  font-family: "Avenir Light", sans-serif;
-  margin: 0;
-}
-
 nav {
   background-color: @nav-background;
   height: 64px;
-  padding: 0.2em;
-  margin-bottom: @inline-space;
+  position: relative;
+  z-index: 2;
   // Temporary bottom border
   border-bottom: 1px solid black;
-
-  ul.nav-buttons {
+  
+  .nav-panel {
+    top: 0;
     position: absolute;
-    list-style-type: none;
-    margin-right: -2em;
+    margin: 0.5em 1em 0.5em 1em;
 
-    li {
-      float: left;
+    img {
       margin-right: 1em;
     }
   }
 
+  #nav-buttons img {
+    text-align: left;
+  }
+
+  #share-buttons {
+    right: 0;
+
+    img {
+      text-align: right;
+    }
+  }
 
   h1 {
+    font-family: @font;
+    font-weight: 300;
     text-align: center;
     text-transform: uppercase;
-    font-weight: 300;
 
     a {
       text-decoration: none;
@@ -59,6 +68,11 @@ nav {
 
 .center-column {
   width: 100% * (1/4);
+  position: relative;
+  z-index: 1;
+  box-shadow: -25px 0 100px black,
+              25px 0 100px black;
+
 }
 
 .gallery-column {
@@ -72,16 +86,5 @@ nav {
   .tagged-image {
     margin-top: -@inline-space;
     display: inline-block;
-    width: 100% / 3;
-    height: 140px;
-
-    img {
-      margin-top: -40px;
-      height: 220px;
-    }
-  }
-
-  .portrait img {
-    width: 100%;
   }
 }

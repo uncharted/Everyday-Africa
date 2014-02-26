@@ -5,6 +5,7 @@
   "author": "Thomas Moulia <jtmoulia@pocketknife.io>",
   "dependencies": {
     "less": "1.6.x",
-    "react-tools": "0.9.x"
+    "react-tools": "0.9.x",
+    "bower": "*"
   }
 }
