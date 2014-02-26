@@ -4,11 +4,6 @@
 $(function() {
 
   /**
-   * Routing
-   */
-
-  Path.map("#/instagram").to(function() { console.log("YESH") });
-  /**
    * Internal Helpers
    */
 
@@ -36,17 +31,23 @@ $(function() {
   /***************
    * Instagram API
    */
-  var instaFetch = {
-    clientId: "57dbff39f8dc4b659e6489ac6dd68b45",
-    apiUrl: "https://api.instagram.com/v1",
+  var InstaFetch = {
+    CLIENT_ID: "57dbff39f8dc4b659e6489ac6dd68b45",
+    API_URL: "https://api.instagram.com/v1",
+    cache: {},
 
-    fetchByTag: function(tag) {
+    fetchByTag: function(tag, callback) {
       // Fetch the media given the provided tag
-      var params = $.param({client_id: this.clientId, callback: "?"});
-      //return $.getJSON(this.apiUrl + "/tags/" + tag + "/media/recent?" + params)
-      return $.ajax({
-        url: this.apiUrl + "/tags/" + tag + "/media/recent?" + params,
-        dataType: "jsonp"});
+      var params = $.param({client_id: this.CLIENT_ID, callback: "?"}),
+          deferred = $.Deferred();
+      $.ajax({
+        url: this.API_URL + "/tags/" + tag + "/media/recent?" + params,
+        dataType: "jsonp"})
+	.done(function(d) {
+	  d.data.forEach(function(d) { this.cache[d.id] = d }.bind(this));
+	  deferred.resolveWith(this, [d]); }.bind(this))
+        .fail(function(d) { deferred.rejectWith(this, [d]); });
+      return deferred.promise();
     }
   };
 
@@ -99,7 +100,7 @@ $(function() {
     },
 
     componentWillMount: function() {
-      instaFetch.fetchByTag(this.props.tag)
+      InstaFetch.fetchByTag(this.props.tag)
         .done(function(d) {
             this.setState({
 	      data: d.data.map(function(media) {
@@ -137,9 +138,9 @@ $(function() {
           centerLength = 0.25 * width;
 
       return (<div className="gallery">
-                <GalleryColumn position="left" imageLength={sideLength} data={imageGroups[0]} />
-                <GalleryColumn position="center" imageLength={centerLength} data={this.state.tumblrData} />
-                <GalleryColumn position="right" imageLength={sideLength} data={imageGroups[1]} />
+                <GalleryColumn type="instagram" position="left" imageLength={sideLength} data={imageGroups[0]} />
+                <GalleryColumn type="tumblr" position="center" imageLength={centerLength} data={this.state.tumblrData} />
+                <GalleryColumn type="instagram" position="right" imageLength={sideLength} data={imageGroups[1]} />
               </div>);
     }
   });
@@ -163,7 +164,11 @@ $(function() {
                     portrait: isPortrait,
                     landscape: !isPortrait});
 
-                  return <TaggedImage key={d.id} className={classes} imageLength={this.props.imageLength} image={d} />;
+                  return (<TaggedImage key={d.id}
+			               className={classes}
+			               imageLength={this.props.imageLength}
+			               type={this.props.type}
+			               image={d} />);
                 }.bind(this))}
               </div>);
     }
@@ -183,8 +188,10 @@ $(function() {
 	imgStyle.height = "140%";
       }
 
-      return (<div className={this.props.className} style={divStyle}>
-                  <img src={this.props.image.url} style={imgStyle} />
+      return (<div ref={this.props.key} className={this.props.className} style={divStyle}>
+                 <a href={"#/posts/" + this.props.type + "/" + this.props.key}>
+	           <img src={this.props.image.url} style={imgStyle} />
+	         </a>
               </div>);
     }
   });
@@ -192,14 +199,59 @@ $(function() {
   // The Image detail view
   var ImageDetail = React.createClass({
     render: function() {
-      return (<div className="image-detail">
-                <img src={this.props.image.url} />
-                <p>More goes here</p>
+      console.log(this.props.image);
+      return (<div className="detail">
+	        <a href="#/"><div className="overlay"></div></a>
+	        <div className="image-detail">
+                  <img src={this.props.image} />
+                  <p>More goes here</p>
+	        </div>
               </div>);
     }
   });
 
   React.renderComponent(<NavBar />, $("header").get(0));
   React.renderComponent(<Gallery tag="everydayafrica" />, $("#content").get(0));
+
+  /**
+   * Generate the toggleable modal
+   */
+  var Details = {
+    root: $("#modal").get(0),
+
+    // Show the detail view for the given data
+    show: function(params) {
+      this.dismiss();
+      React.renderComponent(<ImageDetail image={params.image.url} />, this.root);
+    },
+
+    dismiss: function(params) {
+      return React.unmountComponentAtNode(this.root);
+    }
+  }
+
+
+  /**
+   * Routing
+   */
+
+  var router = Router({
+    "/": function() { Details.dismiss() },
+    "/countries": function() { console.log("Countries") },
+    "/countries/:country": function() { console.log("Countries") },
+    "/posts/instagram/:post": function(post) {
+      var post = InstaFetch.cache[post];
+      if(post) {
+	Details.show({image: post.images.standard_resolution});
+      }
+    },
+    "/posts/tumblr/:post": function(post) {
+      var post = TumblrVars.Posts.Photos[post];
+      if(post) {
+	Details.show({image: {url: post.photoUrl500}});
+      }
+    }
+  });
+  router.init();
 
 });

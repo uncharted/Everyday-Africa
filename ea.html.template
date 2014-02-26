@@ -10,12 +10,13 @@
     <link rel="stylesheet" href="http://static.tumblr.com/cqczc5x/kYdmihjuj/normalize.css" type="text/css" media="all">
     <link rel="stylesheet" type="text/stylesheet" href="STYLESHEET_URL">
     <script type="text/javascript" src="JQUERY_URL"></script>
-    <script type="text/javascript" src="PATHJS_URL"></script>
     <script type="text/javascript" src="REACT_URL"></script>
+    <script type="text/javascript" src="FLATIRON_URL"></script>
+    <script type="text/javascript" src="BLUR_URL"></script>
   </head>
   <body>
     <header></header>
-
+    <div id="modal"></div>
     <section id="content"></section>
 
     <script type="text/javascript">

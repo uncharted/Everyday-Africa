@@ -3,6 +3,7 @@
 @nav-background: #fff;
 @blue: #609ec9;
 @font: "Lato", sans-serif;
+@detail-width: 640px;
 
 // TODO: This is going to have to change with the various breakpoints
 @ea-image-width: 12%;
@@ -86,5 +87,37 @@ nav {
   .tagged-image {
     margin-top: -@inline-space;
     display: inline-block;
+  }
+}
+
+
+/**
+ * Image Details
+ */
+
+.detail {
+  width: 100%;
+  height: 100%;
+  text-aling: center;
+
+  .overlay {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+
+    background-color: black;
+    opacity: 0.4;
+  }
+
+  .image-detail {
+    position: absolute;
+    width: @detail-width;
+    left: 50%;
+    margin-left: -@detail-width / 2;
+    z-index: 2;
+
+    background-color: white;
   }
 }

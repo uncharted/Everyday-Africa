@@ -25,8 +25,9 @@ IMAGES_BASE_URL = /$(PUBLIC)/images
 STYLESHEET_URL	= /$(PUBLIC_STYLESHEETS)/ea.css
 EA_JS_URL	= /$(PUBLIC_SCRIPTS)/ea.js
 CONFIG_URL      = /$(PUBLIC_SCRIPTS)/config.js
-PATHJS_URL	= /$(PUBLIC_SCRIPTS)/path.js
+FLATIRON_URL	= /$(PUBLIC_SCRIPTS)/director.min.js
 JQUERY_URL	= http://code.jquery.com/jquery-2.1.0.js
+BLUR_URL	= /$(PUBLIC_SCRIPTS)/blur.js
 REACT_URL	= http://fb.me/react-with-addons-0.9.0.js
 TUMBLRVARS	= -e '/TUMBLRVARS/{r ./local.js' -e 'd;}'
 
@@ -37,9 +38,10 @@ ifeq ($(PROFILE), prod)
     IMAGES_BASE_URL	= $(S3_PUBLIC)/images
     STYLESHEET_URL	= $(S3_PUBLIC)/stylesheets/ea.css
     EA_JS_URL		= $(S3_PUBLIC)/scripts/ea.js
-    PATHJS_URL		= $(S3_PUBLIC)/scripts/path.min.js
+    FLATIRON_URL	= $(S3_PUBLIC)/scripts/director.min.js
     CONFIG_URL		= $(S3_PUBLIC)/scripts/config.js
     JQUERY_URL		= http://code.jquery.com/jquery-2.1.0.min.js
+    BLUR_URL		= $(S3_PUBLIC)/scripts/blur.js
     REACT_URL		= http://fb.me/react-with-addons-0.9.0.min.js
     TUMBLRVARS		= -e '/TUMBLRVARS/{r ./tumblrvars.js' -e 'd;}'
 endif
@@ -59,7 +61,8 @@ SED_TEMPLATER = sed \
             -e 's|CONFIG_URL|$(CONFIG_URL)|g' \
             -e 's|JQUERY_URL|$(JQUERY_URL)|g' \
             -e 's|REACT_URL|$(REACT_URL)|g' \
-            -e 's|PATHJS_URL|$(PATHJS_URL)|g' \
+            -e 's|FLATIRON_URL|$(FLATIRON_URL)|g' \
+            -e 's|BLUR_URL|$(BLUR_URL)|g' \
             -e 's|AFRICA_URL|$(AFRICA_URL)|g' \
             -e 's|PHOTOGRAPHER_URL|$(PHOTOGRAPHER_URL)|g' \
             -e 's|SEARCH_URL|$(SEARCH_URL)|g' \
