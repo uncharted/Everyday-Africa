@@ -1,9 +1,14 @@
 /** @jsx React.DOM */
 "use strict";
 
+$(function() {
 
-(function($, React, EAConfig, TumblrVars) {
-  /******************
+  /**
+   * Routing
+   */
+
+  Path.map("#/instagram").to(function() { console.log("YESH") });
+  /**
    * Internal Helpers
    */
 
@@ -55,17 +60,17 @@
       return (
          <nav>
 	   <div id="nav-buttons" className="nav-panel">
-	     <a href="#countries"><img src={EAConfig.images.africa} /></a>
-	     <a href="#photographers"><img src={EAConfig.images.photographer} /></a>
-	     <a href="#search"><img src={EAConfig.images.search} /></a>
-	     <a href="#about"><img src={EAConfig.images.about} /></a>
+	     <a href="#/countries"><img src={EAConfig.images.africa} /></a>
+	     <a href="#/photographers"><img src={EAConfig.images.photographer} /></a>
+	     <a href="#/search"><img src={EAConfig.images.search} /></a>
+	     <a href="#/about"><img src={EAConfig.images.about} /></a>
 	    </div>
            <h1><a href="/"><span className="everyday">Everyday</span>Africa</a></h1>
 	   <div id="share-buttons" className="nav-panel">
-	     <a href="#instagram"><img src={EAConfig.images.instagram} /></a>
-	     <a href="#twitter"><img src={EAConfig.images.twitter} /></a>
-	     <a href="#facebook"><img src={EAConfig.images.facebook} /></a>
-	     <a href="#tumblr"><img src={EAConfig.images.tumblr} /></a>
+	     <a href="#/instagram"><img src={EAConfig.images.instagram} /></a>
+	     <a href="#/twitter"><img src={EAConfig.images.twitter} /></a>
+	     <a href="#/facebook"><img src={EAConfig.images.facebook} /></a>
+	     <a href="#/tumblr"><img src={EAConfig.images.tumblr} /></a>
 	   </div>
          </nav>);
 
@@ -197,4 +202,4 @@
   React.renderComponent(<NavBar />, $("header").get(0));
   React.renderComponent(<Gallery tag="everydayafrica" />, $("#content").get(0));
 
-})(jQuery, React, EAConfig, TumblrVars);
+});

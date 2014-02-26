@@ -1,7 +1,2 @@
-# Makefile Outputs
-build/ea.html
-build/public/scripts
-build/public/stylesheets
-build/.module_cache/
-
+var
 node_modules
