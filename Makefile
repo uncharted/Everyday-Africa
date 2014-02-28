@@ -29,6 +29,7 @@ FLATIRON_URL	= /$(PUBLIC_SCRIPTS)/director.min.js
 JQUERY_URL	= http://code.jquery.com/jquery-2.1.0.js
 BLUR_URL	= /$(PUBLIC_SCRIPTS)/blur.js
 REACT_URL	= http://fb.me/react-with-addons-0.9.0.js
+LODASH_URL	= http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js
 TUMBLRVARS	= -e '/TUMBLRVARS/{r ./local.js' -e 'd;}'
 
 
@@ -63,6 +64,7 @@ SED_TEMPLATER = sed \
             -e 's|REACT_URL|$(REACT_URL)|g' \
             -e 's|FLATIRON_URL|$(FLATIRON_URL)|g' \
             -e 's|BLUR_URL|$(BLUR_URL)|g' \
+            -e 's|LODASH_URL|$(LODASH_URL)|g' \
             -e 's|AFRICA_URL|$(AFRICA_URL)|g' \
             -e 's|PHOTOGRAPHER_URL|$(PHOTOGRAPHER_URL)|g' \
             -e 's|SEARCH_URL|$(SEARCH_URL)|g' \
@@ -119,7 +121,7 @@ $(VAR)/ea.html: ea.html.template $(VAR) Makefile
 	$(SED_TEMPLATER) $< > $@
 
 push: BUCKET = s3://everydayafrica/
-push: $(PUBLIC) $(PUBLIC)/ea.css
+push: $(PUBLIC)
 	$(S3CMD) mb $(BUCKET)
 	$(S3CMD) sync --acl-public $< $(BUCKET)
 

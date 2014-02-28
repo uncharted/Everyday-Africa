@@ -36,17 +36,29 @@ $(function() {
     API_URL: "https://api.instagram.com/v1",
     cache: {},
 
-    fetchByTag: function(tag, callback) {
-      // Fetch the media given the provided tag
-      var params = $.param({client_id: this.CLIENT_ID, callback: "?"}),
-          deferred = $.Deferred();
-      $.ajax({
-        url: this.API_URL + "/tags/" + tag + "/media/recent?" + params,
-        dataType: "jsonp"})
+    //
+    _fetcher: function(tag, total, url, deferred) {
+      $.ajax({url: url, dataType: "jsonp"})
 	.done(function(d) {
-	  d.data.forEach(function(d) { this.cache[d.id] = d }.bind(this));
-	  deferred.resolveWith(this, [d]); }.bind(this))
+	  d.data.forEach(function(datum) {
+	    this.cache[datum.id] = datum;
+	    deferred.notifyWith(this, [datum]);
+	  }.bind(this));
+	  if (total > _.size(this.cache)) {
+	    this._fetcher(tag, total, d.pagination.next_url, deferred)
+	  } else {
+	    deferred.resolveWith(this, [this.cache]);
+	  }
+	}.bind(this))
         .fail(function(d) { deferred.rejectWith(this, [d]); });
+    },
+
+    populate: function(tag, total) {
+      var params = $.param({client_id: this.CLIENT_ID, callback: "?"}),
+          url = this.API_URL + "/tags/" + tag + "/media/recent?" + params,
+          deferred = $.Deferred();
+
+      this._fetcher(tag, total || 60, url, deferred);
       return deferred.promise();
     }
   };
@@ -100,19 +112,19 @@ $(function() {
     },
 
     componentWillMount: function() {
-      InstaFetch.fetchByTag(this.props.tag)
+      InstaFetch.populate(this.props.tag)
         .done(function(d) {
-            this.setState({
-	      data: d.data.map(function(media) {
-		var img = media.images.low_resolution;
-		return {
-		  id: media.id,
-		  url: img.url,
-		  width: img.width,
-		  height: img.height};
-	      })
-	    });
-          }.bind(this))
+          this.setState({
+	    data: _.map(d, function(media) {
+	      var img = media.images.low_resolution;
+	      return {
+		id: media.id,
+		url: img.url,
+		width: img.width,
+		height: img.height};
+	    })
+	  });
+        }.bind(this))
         .fail(function(d) {
             alert("Failed to fetch tagged photos")
           });
@@ -179,7 +191,7 @@ $(function() {
     render: function() {
       var divStyle = {
 	width: this.props.imageLength,
-	height: this.props.imageLength};
+	height: this.props.imageLength };
       var imgStyle = {'margin-top': "-20%",
 		      'margin-left': "-20%"};
       if (this.props.image.width > this.props.image.height) {

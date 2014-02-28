@@ -12,6 +12,7 @@
     <script type="text/javascript" src="JQUERY_URL"></script>
     <script type="text/javascript" src="REACT_URL"></script>
     <script type="text/javascript" src="FLATIRON_URL"></script>
+    <script type="text/javascript" src="LODASH_URL"></script>
     <script type="text/javascript" src="BLUR_URL"></script>
   </head>
   <body>
