@@ -146,8 +146,8 @@ $(function() {
       // Divide the images which fall on the left and the right
       var imageGroups = partition(this.state.data, 3),
           width = window.innerWidth,
-          sideLength = 0.125 * width,
-          centerLength = 0.25 * width;
+          sideLength = 0.1 * width,
+          centerLength = 0.4 * width;
 
       return (<div className="gallery">
                 <GalleryColumn type="instagram" position="left" imageLength={sideLength} data={imageGroups[0]} />
@@ -211,16 +211,41 @@ $(function() {
   // The Image detail view
   var ImageDetail = React.createClass({
     render: function() {
-      console.log(this.props.image);
+      console.log(this.props.data);
       return (<div className="detail">
 	        <a href="#/"><div className="overlay"></div></a>
 	        <div className="image-detail">
-                  <img src={this.props.image} />
-                  <p>More goes here</p>
+                  <img src={this.props.data.image.url} />
+	          <div>
+	            <div className="detail-header">
+	              <img src={this.props.data.user.profile_picture} />
+	              <div>
+	                <h4>{this.props.data.user.username}</h4>
+	                <h5>{this.props.data.created}</h5>
+	              </div>
+	              <button>Follow</button>
+	            </div>
+	            <p>{this.props.data.caption}</p>
+	            <ul className="detail-tags">
+	              {this.props.data.tags.map(function(d) {
+		         return <li>{d}</li>; })}
+	            </ul>
+	            <ul className="detail-hearts">
+	              {this.props.data.likes.data.map(function(d) {
+		         return <li>{d.username}, </li>; })}
+	            </ul>
+	            <CommentBox />
+	          </div>
 	        </div>
               </div>);
     }
   });
+
+  var CommentBox = React.createClass({
+    render: function() {
+      return <div>BOX</div>;
+    }
+  })
 
   React.renderComponent(<NavBar />, $("header").get(0));
   React.renderComponent(<Gallery tag="everydayafrica" />, $("#content").get(0));
@@ -232,9 +257,9 @@ $(function() {
     root: $("#modal").get(0),
 
     // Show the detail view for the given data
-    show: function(params) {
+    show: function(data) {
       this.dismiss();
-      React.renderComponent(<ImageDetail image={params.image.url} />, this.root);
+      React.renderComponent(<ImageDetail data={data} />, this.root);
     },
 
     dismiss: function(params) {
@@ -254,7 +279,16 @@ $(function() {
     "/posts/instagram/:post": function(post) {
       var post = InstaFetch.cache[post];
       if(post) {
-	Details.show({image: post.images.standard_resolution});
+	// Convert data to common format
+	Details.show({
+	  caption: post.caption.text,
+	  comments: post.comments,
+	  created: post.created_time,
+	  likes: post.likes,
+	  image: post.images.standard_resolution,
+	  tags: post.tags,
+	  user: post.user
+	});
       }
     },
     "/posts/tumblr/:post": function(post) {

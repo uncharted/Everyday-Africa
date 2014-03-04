@@ -3,10 +3,14 @@
 @nav-background: #fff;
 @blue: #609ec9;
 @font: "Lato", sans-serif;
-@detail-width: 640px;
+
+@detail-width: 820px;
+@detail-image-width: 480px;
+@detail-side-width: @detail-width - @detail-image-width - 20px;
+
 
 // TODO: This is going to have to change with the various breakpoints
-@ea-image-width: 12%;
+@ea-image-width: 10%;
 
 @inline-space: 4px;
 
@@ -17,7 +21,8 @@
 nav {
   background-color: @nav-background;
   height: 64px;
-  position: relative;
+  position: fixed;
+  width: 100%;
   z-index: 2;
   // Temporary bottom border
   border-bottom: 1px solid black;
@@ -25,7 +30,7 @@ nav {
   .nav-panel {
     top: 0;
     position: absolute;
-    margin: 0.5em 1em 0.5em 1em;
+    margin: 1.2em 1em 0.5em 1em;
 
     img {
       margin-right: 1em;
@@ -49,6 +54,7 @@ nav {
     font-weight: 300;
     text-align: center;
     text-transform: uppercase;
+    margin: 0.35em 0;
 
     a {
       text-decoration: none;
@@ -68,11 +74,11 @@ nav {
  */
 
 .left-column, .right-column {
-  width: 100% * (3/8);
+  width: @ea-image-width * 3;
 }
 
 .center-column {
-  width: 100% * (1/4);
+  width: 100% - (@ea-image-width * 6);
   position: relative;
   z-index: 1;
   box-shadow: -25px 0 100px black,
@@ -95,6 +101,17 @@ nav {
 }
 
 
+.overlay {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+
+  background-color: black;
+  opacity: 0.4;
+}
+
 /**
  * Image Details
  */
@@ -102,25 +119,96 @@ nav {
 .detail {
   width: 100%;
   height: 100%;
-
-  .overlay {
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-
-    background-color: black;
-    opacity: 0.4;
-  }
+  font-family: @font;
+  font-weight: 300;
 
   .image-detail {
-    position: absolute;
+    position: fixed;
     width: @detail-width;
+    top: 20%;
     left: 50%;
     margin-left: -@detail-width / 2;
     z-index: 2;
 
     background-color: white;
+    box-shadow: -25px 0 100px black,
+		25px 0 100px black;
+
+    > img, > div {
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    > img {
+      width: @detail-image-width;
+      margin-right: 0.5em;
+    }
+
+    > div {
+      overflow-y: scroll;
+      width: @detail-side-width;
+      margin-top: 0.5em;
+
+      .detail-header {
+	img, div {
+	  display: inline-block;
+	  vertical-align: top;
+	}
+
+	img {
+	  margin-right: 0.5em;
+	  width: 64px;
+	}
+
+	button {
+	  position: absolute;
+	  right: 0.5em;
+	  background-color: @blue;
+	  color: white;
+	  border: none;
+	  border-radius: 2px;
+	  font-weight: 400;
+	  font-size: 0.8em;
+	  padding: 0.4em 0.8em;
+	}
+
+	h4 {
+	  font-family: @font;
+	  font-weight: 400;
+	  color: @blue;
+	  margin-top: 0;
+	  margin-bottom: 0.3em;
+	}
+	h5 {
+	  margin-top: 0.1em;
+	}
+      }
+
+      > ul {
+	margin-left: -2.2em;
+	li {
+	  // float: left;
+	  list-style: none;
+	  font-size: 0.8em;
+	}
+      }
+
+      .detail-tags {
+	li {
+	  display: inline-block;
+	  background-color: grey;
+	  color: white;
+	  border-radius: 2px;
+	  margin: 0.1em;
+	  padding: 1px 2px;
+	}
+      }
+
+      .detail-hearts {
+	li {
+	  display: inline-block;
+	}
+      }
+    }
   }
 }
