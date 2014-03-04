@@ -60,6 +60,10 @@ $(function() {
 
       this._fetcher(tag, total || 60, url, deferred);
       return deferred.promise();
+    },
+
+    userUrl: function(user) {
+      return ["http://instagram.com", user].join("/");
     }
   };
 
@@ -220,8 +224,10 @@ $(function() {
 	            <div className="detail-header">
 	              <img src={this.props.data.user.profile_picture} />
 	              <div>
-	                <h4>{this.props.data.user.username}</h4>
-	                <h5>{this.props.data.created}</h5>
+	                <a href={InstaFetch.userUrl(this.props.data.user.username)}>
+	                  <h4>{this.props.data.user.username}</h4>
+	                </a>
+	                <h5>{moment.unix(this.props.data.created).fromNow()}</h5>
 	              </div>
 	              <button>Follow</button>
 	            </div>
