@@ -124,6 +124,7 @@ $(function() {
   var Countries = React.createClass({
     render: function() {
       return (<div className="countries">
+	        <h3>Countries</h3>
 	        {_.map(this.props.data, function(data, country) {
 		  return <Country key={country} country={country} data={data} />;
 		}.bind(this))}
@@ -232,6 +233,10 @@ $(function() {
 
   // A single Image
   var TaggedImage = React.createClass({
+    getDefaultProps: function() {
+      return {scale: 1.5};
+    },
+    
     render: function() {
       var divStyle = {
         width: this.props.imageLength,
@@ -245,10 +250,45 @@ $(function() {
       }
 
       return (<div ref={this.props.key} className={this.props.className} style={divStyle}>
-                 <a href={"#/posts/" + this.props.type + "/" + this.props.key}>
+                 <a href={"#/posts/" + this.props.type + "/" + this.props.key}
+	            style={divStyle}
+	            onMouseEnter={this.mouseEnterHandler}
+	            onMouseOut={this.mouseOutHandler}>
                    <img src={this.props.image.url} style={imgStyle} />
                  </a>
               </div>);
+    },
+
+    anchor: function() {
+      return $(this.getDOMNode()).find("a");
+    },
+
+    componentDidMount: function() {
+      var $anchor = this.anchor();
+      this.setState({
+	width: $anchor.width(),
+	height: $anchor.height()});
+      
+    },
+
+    mouseEnterHandler: function() {
+      return;
+      this.anchor()
+        .css("position", "relative")
+	.animate({width: this.state.width * this.props.scale,
+		  height: this.state.height * this.props.scale,
+		  "margin-left": "-=" + this.state.width * this.props.scale / 8,
+		  "margin-top": "-=" + this.state.width * this.props.scale / 8});
+    },
+
+    mouseOutHandler: function() {
+      return;
+      this.anchor()
+        .css("position", "initial")
+	.animate({width: this.state.width,
+		  height: this.state.height,
+		  "margin-left": "+=" + this.state.width * this.props.scale / 8,
+		  "margin-top": "+=" + this.state.width * this.props.scale / 8});
     }
   });
 

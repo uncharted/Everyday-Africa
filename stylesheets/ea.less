@@ -99,12 +99,23 @@ nav {
   vertical-align: top;
 
   .image {
-    overflow: hidden;
+    a {
+      overflow: hidden;
+      display: block;
+    }
   }
 
   .tagged-image {
     margin-top: -@inline-space;
     display: inline-block;
+
+    /*:hover {
+      -webkit-transform: scale(1.5);
+      transform: scale(1.5);
+
+      -webkit-transition: transform 0.25s ease;
+      transition: transform 0.25s ease;
+    }*/
   }
 }
 
