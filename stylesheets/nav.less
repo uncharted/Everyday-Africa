@@ -23,12 +23,26 @@ nav {
     }
   }
 
-  #nav-buttons img {
-    text-align: left;
+  #nav-hamburger {
+    @media (min-width: 700px) {
+      display: none;
+    }
+  }
+
+  #nav-buttons {
+    @media (max-width: 700px){
+        width: 200px;
+    }
+    img {
+      text-align: left;
+    }
   }
 
   #share-buttons {
     right: 0;
+    @media (max-width: 700px){
+      display: none;
+    }
 
     img {
       text-align: right;
