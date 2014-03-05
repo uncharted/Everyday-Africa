@@ -123,7 +123,7 @@ $(PUBLIC_SCRIPTS)/%: scripts/% $(PUBLIC_SCRIPTS) $(JSX)
 scripts/config.js: scripts/config.js.template Makefile
 	$(SED_TEMPLATER) $< > $@
 
-$(VAR)/ea.html: ea.html.template $(VAR) Makefile
+$(VAR)/ea.html: ea.html.template $(VAR) Makefile local.js
 	$(SED_TEMPLATER) $< > $@
 
 push: BUCKET = s3://everydayafrica/
