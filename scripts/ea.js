@@ -240,18 +240,67 @@ $(function() {
 	              {this.props.data.likes.data.map(function(d) {
 		         return <li>{d.username}, </li>; })}
 	            </ul>
-	            <CommentBox />
+	            <CommentBox comments={{instagram: this.props.data.comments}}/>
 	          </div>
 	        </div>
               </div>);
     }
   });
 
+  /*
+   * Properties:
+   *
+   * props: {
+   *   comments: {
+   *     instagram: see above,
+   *     tumblr: see above
+   *   },
+   *   active: "tumblr" | "instagram"
+   * }
+   *
+   * The comment type selector will only contain the types for which
+   * there are comments.
+   */
   var CommentBox = React.createClass({
+    getDefaultProps: function() {
+      // Set the active comment type
+      return {active: _.findKey(this.props.comments)};
+    },
+
+    // Get the currently active comments
+    activeComments: function() {
+      return this.props.comments[this.props.active].data;
+    },
+
     render: function() {
-      return <div>BOX</div>;
+      return (<div className="comments">
+	        <div>
+	          <ul>
+		    {_.map(_.keys(this.props.comments).sort(), function(type) {
+		      return <li key={type}>{type}</li>;
+		    }.bind(this))}
+	          </ul>
+	        </div>
+	        <div>
+	          {_.map(this.activeComments(), function(comment) {
+		    return <Comment key={comment.id} data={comment} />;
+		  }.bind(this))}
+	          <div>
+	          </div>
+	        </div>
+	      </div>);
     }
   })
+
+  var Comment = React.createClass({
+    render: function() {
+      return (<div className="comment">
+	        <img src={this.props.data.from.profile_picture} />
+	        <h4>{this.props.data.from.username}</h4>
+	        <p>{this.props.data.text}</p>
+	      </div>);
+    }
+  });
 
   React.renderComponent(<NavBar />, $("header").get(0));
   React.renderComponent(<Gallery tag="everydayafrica" />, $("#content").get(0));
