@@ -91,7 +91,6 @@ nav {
   z-index: 1;
   box-shadow: -25px 0 100px black,
               25px 0 100px black;
-
 }
 
 .gallery-column {
@@ -211,17 +210,24 @@ nav {
 
     .detail-header {
       padding: 15px;
+      padding-bottom: 0px;
+      @media (max-width: 700px) {
+        padding-left: 20px;
+      }
       img, div {
         display: inline-block;
         vertical-align: top;
       }
 
       img {
-        margin-right: 0.5em;
+        margin-right: 0.6em;
         width: 40px;
+        @media (max-width: 700px) {
+          width: 55px;
+        }
       }
       a {
-        font-size: 1em;
+        font-size: 1.1em;
         letter-spacing: .08em;
         text-decoration: none;
       }
@@ -233,7 +239,7 @@ nav {
         border: none;
         border-radius: 2px;
         font-weight: 400;
-        font-size: 0.8em;
+        font-size: .95em;
         padding: 0.4em 0.8em;
       }
 
@@ -243,24 +249,33 @@ nav {
         color: @blue;
         margin-top: 0;
         margin-bottom: 0.3em;
+        @media (max-width: 700px){
+          font-size: 1.2em;
+          font-weight: 400;
+        }
       }
       h5 {
-        margin-top: 0.1em;
+        margin-top: 0.05em;
         font-weight: 300;
+        @media (max-width: 700px){
+          font-size: 1em;
+          color: gray;
+        }
       }
       }
       .caption {
-        padding: 0px 9px 0px 15px;
-        font-size: 0.9em;
-        font-weight: 400;
-        @media (max-width: 480px){
-          font-size: 1.2em;
+        padding: 0px 9px 0px 18px;
+        @media (max-width: 700px){
+          font-size: 1.15em;
           line-height: 1.35em;
         }
       }
 
       > ul {
         margin-left: -1.95em;
+        @media (max-width: 480px){
+          margin-left: -1.80em;
+        }
         li {
           // float: left;
           list-style: none;
@@ -271,7 +286,24 @@ nav {
             }
         }
       }
-
+      .detail-tags,
+      .detail-hearts{
+        padding-left: 0px;
+        .leftcol {
+          width: 8%;
+          display: inline-block; 
+          vertical-align: top;
+          .icon {
+            padding-top: 4px;
+            padding-right: 10px;
+            width: 30px;
+          }
+        }
+        .rightcol {
+          width: 92%;
+          display: inline-block;
+        }
+      }
       .detail-tags {
         li {
           display: inline-block;
@@ -281,10 +313,7 @@ nav {
           border-radius: 2px;
           margin: 0.3em;
           padding: 2px 6px 3px 6px;
-          @media (max-width: 480px){
-            font-size: .95em;
-            font-weight: 400;
-          }
+          font-size: 0.8em;
         }
       }
 
@@ -297,7 +326,8 @@ nav {
           font-weight: 400;
           padding-left: 2px;
           display: inline-block;
-          line-height: 1em;
+          line-height: .9em;
+          font-size: 1em;
         }
       }
     }
@@ -309,14 +339,14 @@ nav {
       .comment-source {
         background-color: #FFF;
         color: gray;
-        padding: 5px;
+        padding: 8px;
         border-width: 2px;
         border-color: gray;
         border-style: solid;
         border-radius: 2px;
         text-align: center;
-        font-weight: 700;
-        font-size: 0.8em;
+        font-weight: 800;
+        font-size: 1.1em;
         text-transform: uppercase;
         margin: 0px 10px 20px 10px;
         list-style-type: none;
@@ -331,24 +361,24 @@ nav {
         }
         .leftcol{
           width: 25%;
+          text-align: center;
         }
         .rightcol{
           width: 74%;
           margin-top: 5px;
           p {
-            font-size: .8em;
+            font-size: 1em;
             font-weight: 400;
             margin: 0 auto;
-            @media (max-width: 480px){
-              font-size: .95em;
-            }
           }
           h4 {
             margin: 0 auto;
-            font-size: 1.2em;
+            font-size: 1em;
             color: @blue;
-            @media (max-width: 480px){
-              font-size: 1.1em;
+            line-height: 30px;
+            @media (max-width: 700px){
+              font-size: 1.05em;
+              font-weight: 600;
             }
           }
         }
@@ -356,13 +386,11 @@ nav {
     }
 
     .circle_profile {
-      width: 50px;
-      height: 50px;
+      width: 58px;
+      height: 58px;
       border-radius: 150px;
       -webkit-border-radius: 150px;
       -moz-border-radius: 150px;
-      padding-left: 5px;
-      padding-right: 5px;
     }
   }
 }

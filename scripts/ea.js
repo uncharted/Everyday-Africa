@@ -311,21 +311,31 @@ $(function() {
                       </div>
                       <button>Follow</button>
                     </div>
-                    <p className="caption">{this.props.data.caption}</p>
-                    <ul className="detail-tags">
-                <img src={EAConfig.images.tag} className="icon"/>
-                      {this.props.data.tags.map(function(d) {
-                         return <li>{d}</li>; })}
-                    </ul>
-                    <ul className="detail-hearts">
-                <img src={EAConfig.images.heart} className="icon"/>
-                      {this.props.data.likes.data.map(function(d) {
-                         return <li>
-                                  <a href={InstaFetch.userUrl(d.username)}>
-                                    {d.username}
-                                  </a>&emsp;
-                                </li>; })}
-                    </ul>
+                    <div className="caption">
+                      <p>{this.props.data.caption}</p>
+                      <ul className="detail-tags">
+                        <div className="leftcol">
+                          <img src={EAConfig.images.tag} className="icon"/>
+                        </div>
+                        <div className="rightcol">
+                          {this.props.data.tags.map(function(d) {
+                           return <li>{d}</li>; })}
+                        </div>
+                      </ul>
+                      <ul className="detail-hearts">
+                        <div className="leftcol">
+                          <img src={EAConfig.images.heart} className="icon"/>
+                        </div>
+                          <div className="rightcol">
+                            {this.props.data.likes.data.map(function(d) {
+                             return <li>
+                                <a href={InstaFetch.userUrl(d.username)}>
+                                  {d.username}
+                                </a>&emsp;
+                              </li>; })}
+                          </div>
+                      </ul>
+                    </div>
                     <CommentBox comments={{instagram: this.props.data.comments}}/>
                   </div>
                 </div>
