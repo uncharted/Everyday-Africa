@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="283px" height="242px" viewBox="0 0 283 242" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+<svg width="247px" height="242px" viewBox="0 0 247 242" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
     <title>heart_icon</title>
     <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
     <defs></defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-        <path d="M143.499997,52.7460937 C143.499997,52.7460937 86.8046829,-24.1289055 33.7499991,8.12109371 C-19.3046889,40.3710875 3.99999668,96.406252 18.8749996,114 C33.7500009,131.593749 143.499996,241.593749 143.499996,241.593749 C143.499996,241.593749 258.136747,131.781259 268.707044,114.000004 C279.27734,96.2187487 302.832027,30.6640631 242.082027,8.12109395 C181.332025,-14.4218699 143.499997,52.7460937 143.499997,52.7460937 Z" id="Rectangle-1" fill="#CECECE" sketch:type="MSShapeGroup"></path>
+        <path d="M121.228445,55.834695 C121.228445,55.834695 73.4801826,-17.0988699 28.7980248,13.4976495 C-15.8841365,44.0941638 3.74285144,97.2563667 16.2704396,113.948071 C28.7980263,130.639776 121.228444,235 121.228444,235 C121.228444,235 217.774442,130.817672 226.676647,113.948075 C235.578852,97.0784768 255.416389,34.8848253 204.253308,13.4976498 C153.090225,-7.88952073 121.228445,55.834695 121.228445,55.834695 Z" id="Rectangle-1" fill="#CECECE" sketch:type="MSShapeGroup"></path>
     </g>
 </svg>

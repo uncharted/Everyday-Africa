@@ -259,7 +259,7 @@ $(function() {
       return (<div className="detail">
                 <div className="overlay"><a href="#/"></a></div>
                 <div className="image-detail">
-                  <img src={this.props.data.image.url} />
+                  <img src={this.props.data.image.url} className="image-large"/>
                   <div className="detail-panel">
                     <div className="detail-header">
                       <img src={this.props.data.user.profile_picture} />
@@ -321,7 +321,7 @@ $(function() {
     render: function() {
       return (<div className="comments">
                 <div>
-                  <ul>
+                  <ul className="comment-source">
                     {_.map(_.keys(this.props.comments).sort(), function(type) {
                     var classes = React.addons.classSet(
                       {active: type === this.props.active});
