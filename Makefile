@@ -47,6 +47,7 @@ ifeq ($(PROFILE), prod)
     TUMBLRVARS		= -e '/TUMBLRVARS/{r ./tumblrvars.js' -e 'd;}'
 endif
 
+FLAG_BASE		= $(IMAGES_BASE_URL)/flags/flat/64
 AFRICA_URL		= $(IMAGES_BASE_URL)/africa.png
 PHOTOGRAPHER_URL	= $(IMAGES_BASE_URL)/photographer.png
 SEARCH_URL		= $(IMAGES_BASE_URL)/search.png
@@ -55,8 +56,8 @@ INSTAGRAM_URL		= $(IMAGES_BASE_URL)/instagram.png
 TWITTER_URL		= $(IMAGES_BASE_URL)/twitter.png
 FACEBOOK_URL		= $(IMAGES_BASE_URL)/facebook.png
 TUMBLR_URL		= $(IMAGES_BASE_URL)/tumblr.png
-TAG_ICON_URL	= $(IMAGES_BASE_URL)/tag_icon.svg
-HEART_ICON_URL	= $(IMAGES_BASE_URL)/heart_icon.svg
+TAG_ICON_URL		= $(IMAGES_BASE_URL)/tag_icon.svg
+HEART_ICON_URL		= $(IMAGES_BASE_URL)/heart_icon.svg
 
 SED_TEMPLATER = sed \
             -e 's|STYLESHEET_URL|$(STYLESHEET_URL)|g' \
@@ -67,6 +68,7 @@ SED_TEMPLATER = sed \
             -e 's|FLATIRON_URL|$(FLATIRON_URL)|g' \
             -e 's|BLUR_URL|$(BLUR_URL)|g' \
             -e 's|LODASH_URL|$(LODASH_URL)|g' \
+            -e 's|FLAG_BASE|$(FLAG_BASE)|g' \
             -e 's|AFRICA_URL|$(AFRICA_URL)|g' \
             -e 's|PHOTOGRAPHER_URL|$(PHOTOGRAPHER_URL)|g' \
             -e 's|SEARCH_URL|$(SEARCH_URL)|g' \
@@ -111,7 +113,7 @@ $(PUBLIC_STYLESHEETS): $(PUBLIC)
 
 
 # Scripts and Stylesheets
-$(PUBLIC_STYLESHEETS)/%.css: stylesheets/%.less $(PUBLIC_STYLESHEETS) $(LESSC)
+$(PUBLIC_STYLESHEETS)/%.css: stylesheets/%.less $(PUBLIC_STYLESHEETS) stylesheets/navdrawer.less $(LESSC)
 	$(LESSC) $< > $@
 
 $(PUBLIC_SCRIPTS)/%: scripts/% $(PUBLIC_SCRIPTS) $(JSX)
