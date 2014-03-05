@@ -230,8 +230,11 @@ nav {
       }
 
       .detail-hearts {
-        li {
+        a{
+          text-decoration: none;
           color: @blue;
+        }
+        li {
           font-weight: 400;
           padding-left: 2px;
           display: inline-block;
@@ -239,7 +242,43 @@ nav {
         }
       }
     }
+
+    .circle_profile {
+      width: 50px;
+      height: 50px;
+      border-radius: 150px;
+      -webkit-border-radius: 150px;
+      -moz-border-radius: 150px;
+      padding-left: 15px;
+      padding-right: 5px;
+    }
   }
 
-
+  .detail-panel{
+    width: 350px;
+    .comment {
+      margin-bottom: 50px;
+      .leftcol, .rightcol {
+        display: inline-block;
+        vertical-align: top;
+      }
+      .leftcol{
+        width: 25%;
+        
+      }
+      .rightcol{
+        width: 74%;
+        p {
+          font-size: .8em;
+          font-weight: 400;
+          margin: 0 auto;
+        }
+        h4 {
+          margin: 0 auto;
+          font-size: .9em;
+          color: @blue;
+        }
+      }
+    }
+  }
 }
