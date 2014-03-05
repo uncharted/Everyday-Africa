@@ -17,9 +17,14 @@
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
   </head>
   <body>
+    <!-- Nav + Title + Social -->
     <header></header>
-    <div id="modal"></div>
+    <!-- The nav drawer is used to display filters and searches -->
+    <div id="nav-drawer"></div>
+    <!-- The image gallery -->
     <section id="content"></section>
+    <!-- A modal containing the image details -->
+    <div id="modal"></div>
 
     <script type="text/javascript">
     TUMBLRVARS

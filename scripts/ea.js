@@ -93,6 +93,7 @@ $(function() {
 
     }
   });
+
   var NavButton = React.createClass({
     render: function() {
       return (<a className="nav-button" onClick={this.handleClick} href="#">
@@ -104,6 +105,13 @@ $(function() {
       e.preventDefault();
     }
   });
+
+  var Countries = React.createClass({
+    render: function() {
+      return (<div className="countries">
+	      </div>);
+    }
+  })
 
   /********
    * Images
@@ -283,7 +291,9 @@ $(function() {
 	        <div>
 	          <ul>
 		    {_.map(_.keys(this.props.comments).sort(), function(type) {
-		      return <li key={type}>{type}</li>;
+		    var classes = React.addons.classSet(
+		      {active: type === this.props.active});
+		      return <li key={type} className={classes}>{type}</li>;
 		    }.bind(this))}
 	          </ul>
 	        </div>
@@ -304,8 +314,10 @@ $(function() {
     render: function() {
       return (<div className="comment">
 	        <img src={this.props.data.from.profile_picture} />
-	        <h4>{this.props.data.from.username}</h4>
-	        <p>{this.props.data.text}</p>
+	        <div>
+	          <h4>{this.props.data.from.username}</h4>
+	          <p>{this.props.data.text}</p>
+	        </div>
 	      </div>);
     }
   });
