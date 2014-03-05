@@ -55,6 +55,8 @@ INSTAGRAM_URL		= $(IMAGES_BASE_URL)/instagram.png
 TWITTER_URL		= $(IMAGES_BASE_URL)/twitter.png
 FACEBOOK_URL		= $(IMAGES_BASE_URL)/facebook.png
 TUMBLR_URL		= $(IMAGES_BASE_URL)/tumblr.png
+TAG_ICON_URL	= $(IMAGES_BASE_URL)/tag_icon.svg
+HEART_ICON_URL	= $(IMAGES_BASE_URL)/heart_icon.svg
 
 SED_TEMPLATER = sed \
             -e 's|STYLESHEET_URL|$(STYLESHEET_URL)|g' \
@@ -73,6 +75,8 @@ SED_TEMPLATER = sed \
             -e 's|TWITTER_URL|$(TWITTER_URL)|g' \
             -e 's|FACEBOOK_URL|$(FACEBOOK_URL)|g' \
             -e 's|TUMBLR_URL|$(TUMBLR_URL)|g' \
+            -e 's|TAG_ICON_URL|$(TAG_ICON_URL)|g' \
+            -e 's|HEART_ICON_URL|$(HEART_ICON_URL)|g' \
 	    $(TUMBLRVARS)
 
 

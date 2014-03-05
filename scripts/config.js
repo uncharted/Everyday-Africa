@@ -9,6 +9,8 @@ EAConfig = {
     instagram: "/var/public/images/instagram.png",
     twitter: "/var/public/images/twitter.png",
     facebook: "/var/public/images/facebook.png",
-    tumblr: "/var/public/images/tumblr.png"
+    tumblr: "/var/public/images/tumblr.png",
+    tag: "/var/public/images/tag_icon.svg",
+    heart: "/var/public/images/heart_icon.svg"
   }
 };

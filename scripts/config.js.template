@@ -9,6 +9,8 @@ EAConfig = {
     instagram: "INSTAGRAM_URL",
     twitter: "TWITTER_URL",
     facebook: "FACEBOOK_URL",
-    tumblr: "TUMBLR_URL"
+    tumblr: "TUMBLR_URL",
+    tag: "TAG_ICON_URL",
+    heart: "HEART_ICON_URL"
   }
 };

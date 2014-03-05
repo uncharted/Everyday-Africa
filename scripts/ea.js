@@ -231,12 +231,14 @@ $(function() {
 	              </div>
 	              <button>Follow</button>
 	            </div>
-	            <p>{this.props.data.caption}</p>
+	            <p className="caption">{this.props.data.caption}</p>
 	            <ul className="detail-tags">
+                <img src={EAConfig.images.tag} className="icon"/>
 	              {this.props.data.tags.map(function(d) {
 		         return <li>{d}</li>; })}
 	            </ul>
 	            <ul className="detail-hearts">
+                <img src={EAConfig.images.heart} className="icon"/>
 	              {this.props.data.likes.data.map(function(d) {
 		         return <li>{d.username}, </li>; })}
 	            </ul>
@@ -291,7 +293,9 @@ $(function() {
 	      </div>);
     }
   })
-
+  /*
+   * Single Comment View
+   */
   var Comment = React.createClass({
     render: function() {
       return (<div className="comment">
