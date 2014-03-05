@@ -238,7 +238,11 @@ $(function() {
 	            </ul>
 	            <ul className="detail-hearts">
 	              {this.props.data.likes.data.map(function(d) {
-		         return <li>{d.username}, </li>; })}
+		         return <li>
+			          <a href={InstaFetch.userUrl(d.username)}>
+			            {d.username}
+			          </a>&emsp;
+			        </li>; })}
 	            </ul>
 	            <CommentBox comments={{instagram: this.props.data.comments}}/>
 	          </div>
