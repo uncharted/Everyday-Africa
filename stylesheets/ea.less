@@ -17,61 +17,6 @@
 
 @inline-space: 4px;
 
-/**
- * Nav bar
- */
-
-nav {
-  background-color: @nav-background;
-  height: @nav-height;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 2;
-  // Temporary bottom border
-  border-bottom: 1px solid black;
-  
-  .nav-panel {
-    top: 0;
-    position: absolute;
-    margin: 1.2em 1em 0.5em 1em;
-
-    img {
-      margin-right: 1em;
-    }
-  }
-
-  #nav-buttons img {
-    text-align: left;
-  }
-
-  #share-buttons {
-    right: 0;
-
-    img {
-      text-align: right;
-    }
-  }
-
-  h1 {
-    font-family: @font;
-    font-weight: 300;
-    text-align: center;
-    text-transform: uppercase;
-    margin: 0.35em 0;
-
-    a {
-      text-decoration: none;
-      color: black;
-    }
-
-    .everyday {
-      font-weight: 500;
-      color: @blue;
-    }
-  }
-}
-
 
 /**
  * Image Columns
@@ -402,3 +347,4 @@ nav {
 
 // Import other less files
 @import "navdrawer.less";
+@import "nav.less";

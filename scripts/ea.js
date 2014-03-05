@@ -76,6 +76,11 @@ $(function() {
     render: function() {
       return (
          <nav>
+	   <div id="nav-hamburger" className="nav-panel">
+	     <a href="#" onClick={this.menuHandler}>
+	       <img src={EAConfig.images.menu} />
+	     </a>
+	   </div>
            <div id="nav-buttons" className="nav-panel">
 	     <NavToggleButton href="#/countries" src={EAConfig.images.africa} />
              <a href="#/photographers"><img src={EAConfig.images.photographer} /></a>
@@ -90,7 +95,11 @@ $(function() {
              <a href="#/tumblr"><img src={EAConfig.images.tumblr} /></a>
            </div>
          </nav>);
+    },
 
+    menuHandler: function(e) {
+      e.preventDefault();
+      $("#nav-buttons").toggle();
     }
   });
 
@@ -406,9 +415,16 @@ $(function() {
     }
   });
 
-  React.renderComponent(<NavBar />, $("header").get(0));
-  React.renderComponent(<Gallery tag="everydayafrica" />, $("#content").get(0));
+  (function() {
+    var gallery = <Gallery tag="everydayafrica" />;
 
+    React.renderComponent(<NavBar />, $("header").get(0));
+    React.renderComponent(gallery, $("#content").get(0));
+
+    //Redraw on resize
+    $(window).resize(function() { gallery.forceUpdate(); });
+  })();
+  
   /**
    * Generate the toggleable modal
    */
