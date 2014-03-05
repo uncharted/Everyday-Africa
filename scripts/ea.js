@@ -479,7 +479,15 @@ $(function() {
     "/posts/tumblr/:post": function(post) {
       var post = TumblrVars.Posts.Photos[post];
       if(post) {
-        Details.show({image: {url: post.photoUrl500}});
+        Details.show({
+	  caption: "Some text",
+	  comments: {data: [], count: 0},
+	  created: 1320232,
+	  likes: {data: [], count: 0},
+	  image: {url: post.photoUrl500},
+	  tags: [],
+	  user: "jtmoulia"
+	});
       }
     },
   });
