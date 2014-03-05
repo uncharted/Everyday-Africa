@@ -149,11 +149,11 @@ nav {
       overflow-x: hidden;
     }
     @media (max-width: 480px){
-      max-width: 75%;
-      max-height: 75%;
+      max-width: 100%;
+      max-height: 90%;
       margin-left: 0px;
-      left: 12%;
-      top: 16%;
+      left: 0%;
+      top: 10%;
       overflow-y: scroll;
       overflow-x: hidden;
     }
@@ -165,12 +165,8 @@ nav {
     > img, > div {
       display: inline-block;
       vertical-align: top;
-      max-height: @detail-height;
-      @media (max-width: 700px) {
-        max-height: 500px;
-      }
-      @media (max-width: 480px) {
-        max-height: 400px;
+      @media (min-width: 700px){
+        max-height: @detail-height;
       }
     }
 
@@ -184,7 +180,8 @@ nav {
       width: @detail-side-width;
       margin-top: 0.5em;
       @media (max-width: 700px){
-        width: 100%
+        width: 100%;
+        overflow-y: visible;
       }
 
     .detail-header {
@@ -231,6 +228,10 @@ nav {
         padding: 0px 9px 0px 15px;
         font-size: 0.9em;
         font-weight: 400;
+        @media (max-width: 480px){
+          font-size: 1.2em;
+          line-height: 1.35em;
+        }
       }
 
       > ul {
@@ -240,6 +241,9 @@ nav {
           list-style: none;
           font-size: 0.8em;
           font-weight: 300;
+           @media (max-width: 480px){
+              font-size: 1.1em;
+            }
         }
       }
 
@@ -252,6 +256,10 @@ nav {
           border-radius: 2px;
           margin: 0.3em;
           padding: 2px 6px 3px 6px;
+          @media (max-width: 480px){
+            font-size: .95em;
+            font-weight: 400;
+          }
         }
       }
 
@@ -306,11 +314,17 @@ nav {
             font-size: .8em;
             font-weight: 400;
             margin: 0 auto;
+            @media (max-width: 480px){
+              font-size: .95em;
+            }
           }
           h4 {
             margin: 0 auto;
-            font-size: .9em;
+            font-size: 1.2em;
             color: @blue;
+            @media (max-width: 480px){
+              font-size: 1.1em;
+            }
           }
         }
       }
