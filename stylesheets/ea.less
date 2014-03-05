@@ -1,6 +1,8 @@
 @import url(http://fonts.googleapis.com/css?family=Lato:300,400);
 
 @nav-background: #fff;
+@nav-height: 64px;
+
 @blue: #609ec9;
 @font: "Lato", sans-serif;
 
@@ -21,8 +23,9 @@
 
 nav {
   background-color: @nav-background;
-  height: 64px;
+  height: @nav-height;
   position: fixed;
+  top: 0;
   width: 100%;
   z-index: 2;
   // Temporary bottom border
@@ -74,6 +77,10 @@ nav {
  * Image Columns
  */
 
+.gallery {
+  margin-top: @nav-height;
+}
+
 .left-column, .right-column {
   width: @ea-image-width * 3;
 }
@@ -104,6 +111,7 @@ nav {
 
 .overlay {
   position: fixed;
+  top: 0;
   left: 0;
   width: 100%;
   height: 100%;
@@ -111,6 +119,12 @@ nav {
 
   background-color: black;
   opacity: 0.4;
+
+  a {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 /**
@@ -282,3 +296,7 @@ nav {
     }
   }
 }
+
+
+// Import other less files
+@import "navdrawer.less";

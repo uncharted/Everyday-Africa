@@ -77,7 +77,7 @@ $(function() {
       return (
          <nav>
            <div id="nav-buttons" className="nav-panel">
-             <a href="#/countries"><img src={EAConfig.images.africa} /></a>
+	     <NavToggleButton href="#/countries" src={EAConfig.images.africa} />
              <a href="#/photographers"><img src={EAConfig.images.photographer} /></a>
              <a href="#/search"><img src={EAConfig.images.search} /></a>
              <a href="#/about"><img src={EAConfig.images.about} /></a>
@@ -94,24 +94,53 @@ $(function() {
     }
   });
 
-  var NavButton = React.createClass({
+  var NavToggleButton = React.createClass({
+    componentWillMount: function() {
+      this.setState(
+	{target: this.props.href,
+	 toggle: this.props.toggle || "#"});
+    },
+
+    // Get the next link
+    href: function() {
+      if (window.location.href.indexOf(this.state.target) == -1 ) {
+	return this.state.target;
+      } else {
+	return this.state.toggle;
+      }
+    },
+    
     render: function() {
-      return (<a className="nav-button" onClick={this.handleClick} href="#">
-                {this.props.src}
+      return (<a className="nav-button" href={this.href()} onClick={this.handleClick}>
+	        <img src={this.props.src} />
               </a>);
     },
 
-    handleClick: function(e) {
-      e.preventDefault();
+    handleClick: function() {
+      this.forceUpdate();
     }
   });
 
   var Countries = React.createClass({
     render: function() {
       return (<div className="countries">
+	        {_.map(this.props.data, function(data, country) {
+		  return <Country key={country} country={country} data={data} />;
+		}.bind(this))}
               </div>);
     }
-  })
+  });
+
+  var Country = React.createClass({
+    render: function() {
+      return (<div className="country">
+	        <a href={"#/countries/" + this.props.country}>
+	          <img src={this.props.data.flag} alt={this.props.data.name} />
+	          <h4>{this.props.data.name}</h4>
+	        </a>
+	      </div>);
+    }
+  });
 
   /********
    * Images
@@ -124,10 +153,11 @@ $(function() {
     },
 
     componentWillMount: function() {
-      InstaFetch.populate(this.props.tag)
+      var total = TumblrVars.Posts.Photos.length * 24;
+      InstaFetch.populate(this.props.tag, total)
         .done(function(d) {
           this.setState({
-            data: _.map(d, function(media) {
+            data: _(d).values().first(total).map(function(media) {
               var img = media.images.low_resolution;
               return {
                 id: media.id,
@@ -135,6 +165,7 @@ $(function() {
                 width: img.width,
                 height: img.height};
             })
+	    .value()
           });
         }.bind(this))
         .fail(function(d) {
@@ -161,6 +192,7 @@ $(function() {
           sideLength = 0.1 * width,
           centerLength = 0.4 * width;
 
+      //debugger;
       return (<div className="gallery">
                 <GalleryColumn type="instagram" position="left" imageLength={sideLength} data={imageGroups[0]} />
                 <GalleryColumn type="tumblr" position="center" imageLength={centerLength} data={this.state.tumblrData} />
@@ -225,7 +257,7 @@ $(function() {
     render: function() {
       console.log(this.props.data);
       return (<div className="detail">
-                <a href="#/"><div className="overlay"></div></a>
+                <div className="overlay"><a href="#/"></a></div>
                 <div className="image-detail">
                   <img src={this.props.data.image.url} />
                   <div className="detail-panel">
@@ -342,17 +374,43 @@ $(function() {
     dismiss: function(params) {
       return React.unmountComponentAtNode(this.root);
     }
-  }
+  };
+
+  var NavDrawer = {
+    root: $("#nav-drawer").get(0),
+
+    show: function(component) {
+      this.dismiss;
+      React.renderComponent(component, this.root);
+    },
+
+    dismiss: function() {
+      React.unmountComponentAtNode(this.root);
+    }
+  };
 
 
-  /**
+  /*********
    * Routing
    */
 
   var router = Router({
-    "/": function() { Details.dismiss() },
-    "/countries": function() { console.log("Countries") },
-    "/countries/:country": function() { console.log("Countries") },
+    "/": function() {
+      Details.dismiss();
+    },
+
+    "/countries": {
+      on: function() { 
+	NavDrawer.show(<Countries data={EAConfig.countries} />);
+      },
+      after: function() {
+	NavDrawer.dismiss();
+      }
+    },
+
+    "/countries/:country": function() {
+      console.log("Countries") },
+
     "/posts/instagram/:post": function(post) {
       var post = InstaFetch.cache[post];
       if(post) {
@@ -373,7 +431,7 @@ $(function() {
       if(post) {
         Details.show({image: {url: post.photoUrl500}});
       }
-    }
+    },
   });
   router.init();
 

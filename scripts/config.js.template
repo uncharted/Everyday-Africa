@@ -43,20 +43,20 @@ EAConfig = {
     capeVerde: {
       name: "Cape Verde",
       flag: "FLAG_BASE/Cape-Verde.png"},
-    centralAfricaRepublic: {
-      name: "CentralAfricaRepublic",
-      flag: "FLAG_BASE/CentralAfricaRepublic.png"},
-    ceuta: {
+    centralAfricanRepublic: {
+      name: "Central African Republic",
+      flag: "FLAG_BASE/Central-African-Republic.png"},
+    /*ceuta: {
       name: "Ceuta",
-      flag: "FLAG_BASE/Ceuta.png"},
+      flag: "FLAG_BASE/Ceuta.png"},*/
     comoros: {
       name: "Comoros",
       flag: "FLAG_BASE/Comoros.png"},
     cotedIvoire: {
-      name: "Coted'Ivoire",
-      flag: "FLAG_BASE/Cote-d'Ivoire.png"},
+      name: "Cote d'Ivoire",
+      flag: "FLAG_BASE/Cote-dIvoire.png"},
     democraticRepublicoftheCongo: {
-      name: "DemocraticRepublicoftheCongo",
+      name: "Democratic Republic of the Congo",
       flag: "FLAG_BASE/Democratic-Republic-of-the-Congo.png"},
     djibouti: {
       name: "Djibouti",
@@ -65,7 +65,7 @@ EAConfig = {
       name: "Egypt",
       flag: "FLAG_BASE/Egypt.png"},
     equatorialGuinea: {
-      name: "EquatorialGuinea",
+      name: "Equatorial Guinea",
       flag: "FLAG_BASE/Equatorial-Guinea.png"},
     eritrea: {
       name: "Eritrea",
@@ -103,9 +103,9 @@ EAConfig = {
     madagascar: {
       name: "Madagascar",
       flag: "FLAG_BASE/Madagascar.png"},
-    madeira: {
+    /*madeira: {
       name: "Madeira",
-      flag: "FLAG_BASE/Madeira.png"},
+      flag: "FLAG_BASE/Madeira.png"},*/
     malawi: {
       name: "Malawi",
       flag: "FLAG_BASE/Malawi.png"},
@@ -121,9 +121,9 @@ EAConfig = {
     mayotte: {
       name: "Mayotte",
       flag: "FLAG_BASE/Mayotte.png"},
-    melilla: {
+    /*melilla: {
       name: "Melilla",
-      flag: "FLAG_BASE/Melilla.png"},
+      flag: "FLAG_BASE/Melilla.png"},*/
     morocco: {
       name: "Morocco",
       flag: "FLAG_BASE/Morocco.png"},
@@ -140,19 +140,19 @@ EAConfig = {
       name: "Nigeria",
       flag: "FLAG_BASE/Nigeria.png"},
     republicoftheCongo: {
-      name: "RepublicoftheCongo",
+      name: "Republic of the Congo",
       flag: "FLAG_BASE/Republic-of-the-Congo.png"},
-    reunion: {
+    /*reunion: {
       name: "Reunion",
-      flag: "FLAG_BASE/Reunion.png"},
+      flag: "FLAG_BASE/Reunion.png"},*/
     rwanda: {
       name: "Rwanda",
       flag: "FLAG_BASE/Rwanda.png"},
     saintHelena: {
-      name: "SaintHelena",
+      name: "Saint Helena",
       flag: "FLAG_BASE/Saint-Helena.png"},
     saoTomeandPrincipe: {
-      name: "SaoTomeandPrincipe",
+      name: "Sao Tome and Principe",
       flag: "FLAG_BASE/Sao-Tome-and-Principe.png"},
     senegal: {
       name: "Senegal",
@@ -167,7 +167,7 @@ EAConfig = {
       name: "Somalia",
       flag: "FLAG_BASE/Somalia.png"},
     southAfrica: {
-      name: "SouthAfrica",
+      name: "South Africa",
       flag: "FLAG_BASE/South-Africa.png"},
     sudan: {
       name: "Sudan",
