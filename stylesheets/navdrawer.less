@@ -1,10 +1,13 @@
 #nav-drawer {
-  position: fixed;
   top: @nav-height;
   z-index: 4;
   background: rgba(255, 255, 255, 0.9);
+  position: fixed;
 
   .countries {
+    overflow-y: scroll;
+    display: inline-block;
+    max-height: 650px;
     h3 {
       text-transform: uppercase;
       font-family: "Lato";
