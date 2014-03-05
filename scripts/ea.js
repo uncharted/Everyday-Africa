@@ -228,7 +228,7 @@ $(function() {
 	        <a href="#/"><div className="overlay"></div></a>
 	        <div className="image-detail">
                   <img src={this.props.data.image.url} />
-	          <div>
+	          <div className="detail-panel">
 	            <div className="detail-header">
 	              <img src={this.props.data.user.profile_picture} />
 	              <div>
@@ -313,11 +313,13 @@ $(function() {
   var Comment = React.createClass({
     render: function() {
       return (<div className="comment">
-	        <img src={this.props.data.from.profile_picture} />
-	        <div>
-	          <h4>{this.props.data.from.username}</h4>
-	          <p>{this.props.data.text}</p>
-	        </div>
+          <div className="leftcol">
+            <img src={this.props.data.from.profile_picture} className="circle_profile" />
+          </div>
+            <div className="rightcol">
+              <h4>{this.props.data.from.username}</h4>
+              <p>{this.props.data.text}</p>
+            </div>
 	      </div>);
     }
   });
