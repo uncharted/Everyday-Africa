@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="235px" height="273px" viewBox="0 0 235 273" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>tag_icon</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Rectangle-1-+-Oval-1" sketch:type="MSLayerGroup" transform="translate(79.301543, 92.651220) rotate(-36.000000) translate(-79.301543, -92.651220) translate(20.301543, -19.848780)">
+            <path d="M59,-1.42108547e-14 C48.0430582,-3.15467578e-06 3.50784146e-07,48.0826113 0,57.7475973 L0,225 L118,225 L118,57.7475973 C118,52.5368772 69.9569418,3.41401975e-06 59,-1.42108547e-14 Z" id="Rectangle-1" fill="#CECECE" sketch:type="MSShapeGroup"></path>
+            <circle id="Oval-1" fill="#FFFFFF" sketch:type="MSShapeGroup" cx="58.5" cy="65.5" r="29.5"></circle>
+        </g>
+    </g>
+</svg>
