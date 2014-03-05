@@ -11,7 +11,8 @@ EAConfig = {
     facebook: "FACEBOOK_URL",
     tumblr: "TUMBLR_URL",
     tag: "TAG_ICON_URL",
-    heart: "HEART_ICON_URL"
+    heart: "HEART_ICON_URL",
+    menu: "MENU_URL"
   },
 
   countries: {

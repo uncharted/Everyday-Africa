@@ -58,6 +58,7 @@ FACEBOOK_URL		= $(IMAGES_BASE_URL)/facebook.png
 TUMBLR_URL		= $(IMAGES_BASE_URL)/tumblr.png
 TAG_ICON_URL		= $(IMAGES_BASE_URL)/tag_icon.svg
 HEART_ICON_URL		= $(IMAGES_BASE_URL)/heart_icon.svg
+MENU_URL		= $(IMAGES_BASE_URL)/menu.svg
 
 SED_TEMPLATER = sed \
             -e 's|STYLESHEET_URL|$(STYLESHEET_URL)|g' \
@@ -78,6 +79,7 @@ SED_TEMPLATER = sed \
             -e 's|FACEBOOK_URL|$(FACEBOOK_URL)|g' \
             -e 's|TUMBLR_URL|$(TUMBLR_URL)|g' \
             -e 's|TAG_ICON_URL|$(TAG_ICON_URL)|g' \
+            -e 's|MENU_URL|$(MENU_URL)|g' \
             -e 's|HEART_ICON_URL|$(HEART_ICON_URL)|g' \
 	    $(TUMBLRVARS)
 
@@ -113,7 +115,7 @@ $(PUBLIC_STYLESHEETS): $(PUBLIC)
 
 
 # Scripts and Stylesheets
-$(PUBLIC_STYLESHEETS)/%.css: stylesheets/%.less $(PUBLIC_STYLESHEETS) stylesheets/navdrawer.less $(LESSC)
+$(PUBLIC_STYLESHEETS)/%.css: stylesheets/%.less $(PUBLIC_STYLESHEETS) stylesheets/navdrawer.less stylesheets/nav.less $(LESSC)
 	$(LESSC) $< > $@
 
 $(PUBLIC_SCRIPTS)/%: scripts/% $(PUBLIC_SCRIPTS) $(JSX)
