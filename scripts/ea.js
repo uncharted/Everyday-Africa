@@ -39,17 +39,17 @@ $(function() {
     //
     _fetcher: function(tag, total, url, deferred) {
       $.ajax({url: url, dataType: "jsonp"})
-	.done(function(d) {
-	  d.data.forEach(function(datum) {
-	    this.cache[datum.id] = datum;
-	    deferred.notifyWith(this, [datum]);
-	  }.bind(this));
-	  if (total > _.size(this.cache)) {
-	    this._fetcher(tag, total, d.pagination.next_url, deferred)
-	  } else {
-	    deferred.resolveWith(this, [this.cache]);
-	  }
-	}.bind(this))
+        .done(function(d) {
+          d.data.forEach(function(datum) {
+            this.cache[datum.id] = datum;
+            deferred.notifyWith(this, [datum]);
+          }.bind(this));
+          if (total > _.size(this.cache)) {
+            this._fetcher(tag, total, d.pagination.next_url, deferred)
+          } else {
+            deferred.resolveWith(this, [this.cache]);
+          }
+        }.bind(this))
         .fail(function(d) { deferred.rejectWith(this, [d]); });
     },
 
@@ -76,19 +76,19 @@ $(function() {
     render: function() {
       return (
          <nav>
-	   <div id="nav-buttons" className="nav-panel">
-	     <a href="#/countries"><img src={EAConfig.images.africa} /></a>
-	     <a href="#/photographers"><img src={EAConfig.images.photographer} /></a>
-	     <a href="#/search"><img src={EAConfig.images.search} /></a>
-	     <a href="#/about"><img src={EAConfig.images.about} /></a>
-	    </div>
+           <div id="nav-buttons" className="nav-panel">
+             <a href="#/countries"><img src={EAConfig.images.africa} /></a>
+             <a href="#/photographers"><img src={EAConfig.images.photographer} /></a>
+             <a href="#/search"><img src={EAConfig.images.search} /></a>
+             <a href="#/about"><img src={EAConfig.images.about} /></a>
+            </div>
            <h1><a href="/"><span className="everyday">Everyday</span>Africa</a></h1>
-	   <div id="share-buttons" className="nav-panel">
-	     <a href="#/instagram"><img src={EAConfig.images.instagram} /></a>
-	     <a href="#/twitter"><img src={EAConfig.images.twitter} /></a>
-	     <a href="#/facebook"><img src={EAConfig.images.facebook} /></a>
-	     <a href="#/tumblr"><img src={EAConfig.images.tumblr} /></a>
-	   </div>
+           <div id="share-buttons" className="nav-panel">
+             <a href="#/instagram"><img src={EAConfig.images.instagram} /></a>
+             <a href="#/twitter"><img src={EAConfig.images.twitter} /></a>
+             <a href="#/facebook"><img src={EAConfig.images.facebook} /></a>
+             <a href="#/tumblr"><img src={EAConfig.images.tumblr} /></a>
+           </div>
          </nav>);
 
     }
@@ -109,7 +109,7 @@ $(function() {
   var Countries = React.createClass({
     render: function() {
       return (<div className="countries">
-	      </div>);
+              </div>);
     }
   })
 
@@ -127,30 +127,30 @@ $(function() {
       InstaFetch.populate(this.props.tag)
         .done(function(d) {
           this.setState({
-	    data: _.map(d, function(media) {
-	      var img = media.images.low_resolution;
-	      return {
-		id: media.id,
-		url: img.url,
-		width: img.width,
-		height: img.height};
-	    })
-	  });
+            data: _.map(d, function(media) {
+              var img = media.images.low_resolution;
+              return {
+                id: media.id,
+                url: img.url,
+                width: img.width,
+                height: img.height};
+            })
+          });
         }.bind(this))
         .fail(function(d) {
             alert("Failed to fetch tagged photos")
           });
 
       this.state.tumblrData = TumblrVars.Posts.Photos.map(function(photo, i) {
-	function sizedProp(prop) {
-	  return photo[prop + "500"];
-	};
+        function sizedProp(prop) {
+          return photo[prop + "500"];
+        };
 
-	return {
-	  id: i,
-	  url: sizedProp('photoUrl'),
-	  width: sizedProp('photoWidth'),
-	  height: sizedProp('photoHeight')};
+        return {
+          id: i,
+          url: sizedProp('photoUrl'),
+          width: sizedProp('photoWidth'),
+          height: sizedProp('photoHeight')};
       });
     },
 
@@ -189,10 +189,10 @@ $(function() {
                     landscape: !isPortrait});
 
                   return (<TaggedImage key={d.id}
-			               className={classes}
-			               imageLength={this.props.imageLength}
-			               type={this.props.type}
-			               image={d} />);
+                                       className={classes}
+                                       imageLength={this.props.imageLength}
+                                       type={this.props.type}
+                                       image={d} />);
                 }.bind(this))}
               </div>);
     }
@@ -202,20 +202,20 @@ $(function() {
   var TaggedImage = React.createClass({
     render: function() {
       var divStyle = {
-	width: this.props.imageLength,
-	height: this.props.imageLength };
+        width: this.props.imageLength,
+        height: this.props.imageLength };
       var imgStyle = {'margin-top': "-20%",
-		      'margin-left': "-20%"};
+                      'margin-left': "-20%"};
       if (this.props.image.width > this.props.image.height) {
-	imgStyle.width = "140%";
+        imgStyle.width = "140%";
       } else {
-	imgStyle.height = "140%";
+        imgStyle.height = "140%";
       }
 
       return (<div ref={this.props.key} className={this.props.className} style={divStyle}>
                  <a href={"#/posts/" + this.props.type + "/" + this.props.key}>
-	           <img src={this.props.image.url} style={imgStyle} />
-	         </a>
+                   <img src={this.props.image.url} style={imgStyle} />
+                 </a>
               </div>);
     }
   });
@@ -225,38 +225,38 @@ $(function() {
     render: function() {
       console.log(this.props.data);
       return (<div className="detail">
-	        <a href="#/"><div className="overlay"></div></a>
-	        <div className="image-detail">
+                <a href="#/"><div className="overlay"></div></a>
+                <div className="image-detail">
                   <img src={this.props.data.image.url} />
-	          <div className="detail-panel">
-	            <div className="detail-header">
-	              <img src={this.props.data.user.profile_picture} />
-	              <div>
-	                <a href={InstaFetch.userUrl(this.props.data.user.username)}>
-	                  <h4>{this.props.data.user.username}</h4>
-	                </a>
-	                <h5>{moment.unix(this.props.data.created).fromNow()}</h5>
-	              </div>
-	              <button>Follow</button>
-	            </div>
-	            <p className="caption">{this.props.data.caption}</p>
-	            <ul className="detail-tags">
+                  <div className="detail-panel">
+                    <div className="detail-header">
+                      <img src={this.props.data.user.profile_picture} />
+                      <div>
+                        <a href={InstaFetch.userUrl(this.props.data.user.username)}>
+                          <h4>{this.props.data.user.username}</h4>
+                        </a>
+                        <h5>{moment.unix(this.props.data.created).fromNow()}</h5>
+                      </div>
+                      <button>Follow</button>
+                    </div>
+                    <p className="caption">{this.props.data.caption}</p>
+                    <ul className="detail-tags">
                 <img src={EAConfig.images.tag} className="icon"/>
-	              {this.props.data.tags.map(function(d) {
-		         return <li>{d}</li>; })}
-	            </ul>
-	            <ul className="detail-hearts">
+                      {this.props.data.tags.map(function(d) {
+                         return <li>{d}</li>; })}
+                    </ul>
+                    <ul className="detail-hearts">
                 <img src={EAConfig.images.heart} className="icon"/>
-	              {this.props.data.likes.data.map(function(d) {
-		         return <li>
-			          <a href={InstaFetch.userUrl(d.username)}>
-			            {d.username}
-			          </a>&emsp;
-			        </li>; })}
-	            </ul>
-	            <CommentBox comments={{instagram: this.props.data.comments}}/>
-	          </div>
-	        </div>
+                      {this.props.data.likes.data.map(function(d) {
+                         return <li>
+                                  <a href={InstaFetch.userUrl(d.username)}>
+                                    {d.username}
+                                  </a>&emsp;
+                                </li>; })}
+                    </ul>
+                    <CommentBox comments={{instagram: this.props.data.comments}}/>
+                  </div>
+                </div>
               </div>);
     }
   });
@@ -288,23 +288,23 @@ $(function() {
 
     render: function() {
       return (<div className="comments">
-	        <div>
-	          <ul>
-		    {_.map(_.keys(this.props.comments).sort(), function(type) {
-		    var classes = React.addons.classSet(
-		      {active: type === this.props.active});
-		      return <li key={type} className={classes}>{type}</li>;
-		    }.bind(this))}
-	          </ul>
-	        </div>
-	        <div>
-	          {_.map(this.activeComments(), function(comment) {
-		    return <Comment key={comment.id} data={comment} />;
-		  }.bind(this))}
-	          <div>
-	          </div>
-	        </div>
-	      </div>);
+                <div>
+                  <ul>
+                    {_.map(_.keys(this.props.comments).sort(), function(type) {
+                    var classes = React.addons.classSet(
+                      {active: type === this.props.active});
+                      return <li key={type} className={classes}>{type}</li>;
+                    }.bind(this))}
+                  </ul>
+                </div>
+                <div>
+                  {_.map(this.activeComments(), function(comment) {
+                    return <Comment key={comment.id} data={comment} />;
+                  }.bind(this))}
+                  <div>
+                  </div>
+                </div>
+              </div>);
     }
   })
   /*
@@ -320,7 +320,7 @@ $(function() {
               <h4>{this.props.data.from.username}</h4>
               <p>{this.props.data.text}</p>
             </div>
-	      </div>);
+              </div>);
     }
   });
 
@@ -356,22 +356,22 @@ $(function() {
     "/posts/instagram/:post": function(post) {
       var post = InstaFetch.cache[post];
       if(post) {
-	// Convert data to common format
-	Details.show({
-	  caption: post.caption.text,
-	  comments: post.comments,
-	  created: post.created_time,
-	  likes: post.likes,
-	  image: post.images.standard_resolution,
-	  tags: post.tags,
-	  user: post.user
-	});
+        // Convert data to common format
+        Details.show({
+          caption: post.caption.text,
+          comments: post.comments,
+          created: post.created_time,
+          likes: post.likes,
+          image: post.images.standard_resolution,
+          tags: post.tags,
+          user: post.user
+        });
       }
     },
     "/posts/tumblr/:post": function(post) {
       var post = TumblrVars.Posts.Photos[post];
       if(post) {
-	Details.show({image: {url: post.photoUrl500}});
+        Details.show({image: {url: post.photoUrl500}});
       }
     }
   });
