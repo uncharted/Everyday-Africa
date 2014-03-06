@@ -8,7 +8,7 @@ nav {
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 2;
+  z-index: 10;
   // Temporary bottom border
   border-bottom: 1px solid black;
   
@@ -26,6 +26,7 @@ nav {
   #nav-hamburger {
     // TODO remove this when unnecesarry
     z-index: 20;
+    padding-right: 10px;
     @media (min-width: 700px) {
       display: none;
     }
@@ -33,11 +34,22 @@ nav {
 
   #nav-buttons {
     @media (max-width: 700px){
-        width: 200px;
-	display: none;
+        width: 280px;
+        display: none;
+        margin-top: 62px;
+        background-color: @blue;
+        opacity: 100%;
     }
     img {
       text-align: left;
+      @media (max-width: 700px){
+        .grayscale {
+          -webkit-filter: grayscale(100%);
+        }
+      }
+    }
+    li {
+      width: 80%;
     }
   }
 
