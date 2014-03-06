@@ -7,6 +7,7 @@ nav {
   height: @nav-height;
   position: fixed;
   top: 0;
+  left: 0px;
   width: 100%;
   z-index: 10;
   // Temporary bottom border
@@ -15,8 +16,11 @@ nav {
   .nav-panel {
     top: 0;
     position: absolute;
-    margin: 1.2em 1em 0.5em 1em;
+    margin: 1.2em 0.5em 0.5em 0em;
 
+    @media (max-width: 700px) {
+      margin-left: 20px;
+    } 
     img {
       margin-right: 1em;
       width: 1.5em;
@@ -33,28 +37,65 @@ nav {
   }
 
   #nav-buttons {
-    @media (max-width: 700px){
-        width: 280px;
-        display: none;
-        margin-top: 62px;
-        background-color: @blue;
-        opacity: 100%;
-    }
-    img {
-      text-align: left;
-      @media (max-width: 700px){
-        .grayscale {
-          -webkit-filter: grayscale(100%);
-        }
+    ul {
+      list-style: none;
+      margin-top: 5px;
+      @media (max-width: 700px) {
+        padding-left: 0px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+      }
+      li {
+        display: block;
+        float: left;
+        height: 32px;
       }
     }
-    li {
-      width: 80%;
+    img {
+      padding-right: 6px;
+    }
+    .navlist {
+      display: none;
+      @media (max-width: 700px) {
+        display: inline-block; 
+        font-size: 1.1em;
+        font-family: @font;
+        font-weight: 600px;
+        color: #FFF;
+        text-transform: uppercase;
+        margin-left: 5px;
+      }
+    }
+    // #nav-buttons small screen styling
+    @media (max-width: 700px) {
+        width: 75%;
+        display: none;
+        margin-top: 64px;
+        margin-left: -5px;
+        padding-bottom: 2px;
+        background-color: @blue;
+        opacity: 100%;
+        li {
+          clear: both;
+          border-bottom: 1.5px solid #FFF;
+          width: 100%;   
+          padding-bottom: 34px;     
+        }
+
+        li:last-child {
+          border-bottom: 0px;
+        }
+      
+        img {
+          padding-bottom: 10px;
+          padding-top: 10px;
+        }
     }
   }
 
   #share-buttons {
     right: 0;
+    margin-top: 20px;
     @media (max-width: 700px){
       display: none;
     }
@@ -64,12 +105,18 @@ nav {
     }
   }
 
+  // Everyday Africa Logo
+
   h1 {
     font-family: @font;
     font-weight: 300;
     text-align: center;
     text-transform: uppercase;
     margin: 0.35em 0;
+    @media (max-width: 480px) {
+      font-size: 1.6em;
+      margin-top: 20px;
+    }
 
     a {
       text-decoration: none;

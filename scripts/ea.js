@@ -76,17 +76,19 @@ $(function() {
     render: function() {
       return (
          <nav>
-	   <div id="nav-hamburger" className="nav-panel">
+          <div id="nav-hamburger" className="nav-panel">
 	     <a href="#" onClick={this.menuHandler}>
 	       <img src={EAConfig.images.menu} />
 	     </a>
-	   </div>
-           <div id="nav-buttons" className="nav-panel">
-	     <NavToggleButton href="#/countries" src={EAConfig.images.africa} />
-             <a href="#/photographers"><img src={EAConfig.images.photographer} /></a>
-             <a href="#/search"><img src={EAConfig.images.search} /></a>
-             <a href="#/about"><img src={EAConfig.images.about} /></a>
-            </div>
+          </div>
+          <div id="nav-buttons" className="nav-panel">
+            <ul>
+              <li><NavToggleButton href="#/countries" src={EAConfig.images.africa} /><span className="navlist">COUNTRIES</span></li>
+              <li><a href="#/photographers"><img src={EAConfig.images.photographer} /><span className="navlist">PHOTOGRAPHERS</span></a></li>
+              <li><a href="#/search"><img src={EAConfig.images.search} /><span className="navlist">SEARCH</span></a></li>
+              <li><a href="#/about"><img src={EAConfig.images.about} /><span className="navlist">ABOUT</span></a></li>
+            </ul>
+          </div>
            <h1><a href="/"><span className="everyday">Everyday</span>Africa</a></h1>
            <div id="share-buttons" className="nav-panel">
              <a href="#/instagram"><img src={EAConfig.images.instagram} /></a>
