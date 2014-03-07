@@ -1,6 +1,10 @@
 (function(window) {
   window.TumblrVars = {
     title: '{Title}',
+    blogUrl: '{BlogURL}',
+    rss: '{RSS}',
+    portraitUrl64: '{PortraitURL-64}',
+
     posts: {
       photos: [
         {block:Posts}{block:Photo} {

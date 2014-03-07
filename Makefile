@@ -4,6 +4,7 @@
 
 # The build profile to use
 PROFILE		= dev
+HOST		= localhost
 PORT		= 8000
 
 # Node paths and tools
@@ -36,6 +37,7 @@ TUMBLRVARS	= -e '/TUMBLRVARS/{r ./local.js' -e 'd;}'
 
 # Production Profile
 ifeq ($(PROFILE), prod)
+    PORT		= 80
     S3_PUBLIC		= http://s3.amazonaws.com/everydayafrica/public
     IMAGES_BASE_URL	= $(S3_PUBLIC)/images
     STYLESHEET_URL	= $(S3_PUBLIC)/stylesheets/ea.css
@@ -63,6 +65,8 @@ HEART_ICON_URL		= $(IMAGES_BASE_URL)/heart_icon.svg
 MENU_URL		= $(IMAGES_BASE_URL)/menu.svg
 
 SED_TEMPLATER = sed \
+            -e 's|HOST|$(HOST)|g' \
+            -e 's|PORT|$(PORT)|g' \
             -e 's|STYLESHEET_URL|$(STYLESHEET_URL)|g' \
             -e 's|EA_JS_URL|$(EA_JS_URL)|g' \
             -e 's|CONFIG_URL|$(CONFIG_URL)|g' \
@@ -124,6 +128,8 @@ $(PUBLIC_STYLESHEETS)/%.css: stylesheets/%.less $(wildcard stylesheets/*.less) $
 $(PUBLIC_SCRIPTS)/%: scripts/% $(PUBLIC_SCRIPTS) $(JSX)
 	$(JSX) $< > $@
 
+local.js: local.js.template Makefile
+	$(SED_TEMPLATER) $< > $@
 
 scripts/config.js: scripts/config.js.template Makefile
 	$(SED_TEMPLATER) $< > $@

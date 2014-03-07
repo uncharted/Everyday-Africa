@@ -7,6 +7,10 @@
    * Internal Helpers
    */
 
+  function tumblrTagUrl(tag) {
+    return TumblrVars.blogUrl + "/tagged/" + tag;
+  }
+
   /**
    * Partition a `list` with int `partitions` partitions, with
    * `per` items per partition
@@ -165,7 +169,7 @@
   var Country = React.createClass({
     render: function() {
       return (<div className="country">
-	        <a href={"#/countries/" + this.props.country}>
+	        <a href={tumblrTagUrl(this.props.country)}>
 	          <img src={this.props.data.flag} alt={this.props.data.name} />
 	          <h4>{this.props.data.name}</h4>
 	        </a>
@@ -328,6 +332,20 @@
       return _.pick(this.props, ["tumblr", "instagram"]);
     },
 
+    componentWillMount: function() {
+      var active;
+      if (this.props.active) {
+        active = this.props.active;
+      } else {
+        if (this.props.tumblr) {
+          active = "tumblr";
+        } else if (this.props.instagram) {
+          active = "instagram";
+        }
+      }
+      this.setState({active: active});
+    },
+
     componentDidMount: function() {
       if (this.props.instagramID) {
         InstaFetch.get(this.props.instagramID).done(function(d) {
@@ -361,22 +379,31 @@
 			   .map(function(type) {
                              var classes = React.addons.classSet(
                                {active: type === this.props.active});
-                               return <li key={type} className={classes}>{type}</li>;
+                               return <li key={type} className={classes}>
+                                        <a href={this.props.url + "/" + type}>{type}</a>
+                                      </li>;
+
                              }.bind(this))}
                       </ul>
                     </div>
-	            {this.props.instagram &&
-	              <InstagramDetails tags={this.props.instagram.tags}
-	                                likes={this.props.instagram.likes}
-	                                comments={this.props.instagram.comments} />}
-	            {this.props.tumblr &&
+	            {this.props.active === "tumblr" && this.props.tumblr &&
                       <TumblrDetails tags={this.props.tumblr.tags}
                                      notes={this.props.tumblr.notes}
                                      likeButton={this.props.tumblr.likeButton}
                                      reblogButton={this.props.tumblr.reblogButton} />}
+	            {this.props.active === "instagram" && this.props.instagram &&
+	              <InstagramDetails tags={this.props.instagram.tags}
+	                                likes={this.props.instagram.likes}
+	                                comments={this.props.instagram.comments} />}
                   </div>
                 </div>
               </div>);
+    },
+
+    handleSourceSelect: function(type) {
+      return function() {
+        
+      }.bind(this);
     }
   });
 
@@ -537,7 +564,7 @@
     },
 
     "/countries": {
-      on: function() { 
+      on: function() {
 	NavDrawer.show(<Countries data={EAConfig.countries} />);
       },
       after: function() {
@@ -548,32 +575,39 @@
     "/countries/:country": function() {
       console.log("Countries") },
 
-    "/posts/instagram/:post": function(post) {
-      var post = InstaFetch.cache[post];
+    "/posts/tumblr/:id/?(\\w+)?": function(id, type) {
+      var post = TumblrVars.posts.photos[id];
       if(post) {
         Details.show(
-	    <ImageDetails caption={post.caption.text}
-                          image={post.images.standard_resolution}
-	                  created={post.created_time}
-                          user={post.user}
-	                  instagram={post} />);
-      }
-    },
-
-    "/posts/tumblr/:post": function(post) {
-      var post = TumblrVars.posts.photos[post];
-      if(post) {
-        Details.show(
-	    <ImageDetails caption={post.caption}
+	    <ImageDetails id={id}
+                          url={"#/posts/tumblr/" + id}
+                          caption={post.caption}
                           created={1320232}
                           image={{url: post.photoUrl500,
                                   width: post.photoWidth500,
                                   height: post.photoHeight500}}
-                          user={{username: "jtmoulia"}}
+                          user={{profile_picture: TumblrVars.portraitUrl64,
+                                 username: "jtmoulia"}}
                           tumblr={post}
+                          active={type || "tumblr"}
                           instagramID="536018816062052929_145884981" />);
       }
     },
+
+    "/posts/instagram/:id/?(\\w+)?": function(id, type) {
+      var post = InstaFetch.cache[id];
+      if(post) {
+        Details.show(
+	    <ImageDetails id={id}
+                          url={"#/posts/instagram/" + id}
+                          caption={post.caption.text}
+                          image={post.images.standard_resolution}
+	                  created={post.created_time}
+                          user={post.user}
+                          active={type || "instagram"}
+	                  instagram={post} />);
+      }
+    }
   });
   router.init();
 

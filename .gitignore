@@ -1,3 +1,4 @@
 var
 node_modules
 scripts/config.js
+local.js
