@@ -265,7 +265,7 @@
                 return <TaggedImage className="mobile image instagram"
                                     key={insta.id}
                                     imageLength={single}
-                                    type="tumblr"
+                                    type="instagram"
                                     image={insta} />;
               }
             };
