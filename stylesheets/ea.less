@@ -17,6 +17,21 @@
 
 @inline-space: 4px;
 
+@small: 480px;
+@medium: 700px;
+
+.hide-for-small {
+  @media (max-width: @medium) {
+    display: none;
+  }
+}
+
+.hide-for-large {
+  @media (min-width: @medium) {
+    display: none;
+  }
+}
+
 
 /**
  * Image Columns

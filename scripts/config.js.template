@@ -12,7 +12,12 @@ EAConfig = {
     tumblr: "TUMBLR_URL",
     tag: "TAG_ICON_URL",
     heart: "HEART_ICON_URL",
-    menu: "MENU_URL"
+    menu: "MENU_URL",
+    africaWhite: "AFRICA-WHITE_URL",
+    photographerWhite: "PHOTOGRAPHER-WHITE_URL",
+    searchWhite: "SEARCH-WHITE_URL",
+    aboutWhite: "ABOUT-WHITE_URL"
+
   },
 
   countries: {

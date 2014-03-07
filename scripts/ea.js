@@ -83,10 +83,24 @@ $(function() {
           </div>
           <div id="nav-buttons" className="nav-panel">
             <ul>
-              <li><NavToggleButton href="#/countries" src={EAConfig.images.africa} /><span className="navlist">COUNTRIES</span></li>
-              <li><a href="#/photographers"><img src={EAConfig.images.photographer} /><span className="navlist">PHOTOGRAPHERS</span></a></li>
-              <li><a href="#/search"><img src={EAConfig.images.search} /><span className="navlist">SEARCH</span></a></li>
-              <li><a href="#/about"><img src={EAConfig.images.about} /><span className="navlist">ABOUT</span></a></li>
+              <li>
+                <span className="hide-for-small"><NavToggleButton href="#/countries" src={EAConfig.images.africa} /></span>
+                <img className="hide-for-large" src={EAConfig.images.africaWhite} /><span className="navlist">COUNTRIES</span></li>
+              <li>
+                <a href="#/photographers">
+                  <img className="hide-for-small" src={EAConfig.images.photographer} />
+                  <img className="hide-for-large" src={EAConfig.images.photographerWhite} />
+                    <span className="navlist">PHOTOGRAPHERS</span></a></li>
+              <li>
+                <a href="#/search">
+                  <img className="hide-for-small" src={EAConfig.images.search} />
+                  <img className="hide-for-large" src={EAConfig.images.searchWhite} />
+                    <span className="navlist">SEARCH</span></a></li>
+              <li>
+                <a href="#/about">
+                  <img className="hide-for-small" src={EAConfig.images.about} />
+                  <img className="hide-for-large" src={EAConfig.images.aboutWhite} />
+                    <span className="navlist">ABOUT</span></a></li>
             </ul>
           </div>
            <h1><a href="/"><span className="everyday">Everyday</span>Africa</a></h1>

@@ -16,10 +16,10 @@ nav {
   .nav-panel {
     top: 0;
     position: absolute;
-    margin: 1.2em 0.5em 0.5em 0em;
+    margin: .9em 0em 0.5em 0em;
 
     @media (max-width: 700px) {
-      margin-left: 20px;
+
     } 
     img {
       margin-right: 1em;
@@ -31,6 +31,8 @@ nav {
     // TODO remove this when unnecesarry
     z-index: 20;
     padding-right: 10px;
+    padding-top: 6px;
+    padding-left: 20px;
     @media (min-width: 700px) {
       display: none;
     }
@@ -39,37 +41,46 @@ nav {
   #nav-buttons {
     ul {
       list-style: none;
-      margin-top: 5px;
+      margin-top: 6px;
       padding-left: 20px;
+      padding-top: 4px;
       @media (max-width: 700px) {
-        padding-left: 0px;
+        padding-left: 10px;
         margin-top: 0px;
         margin-bottom: 0px;
+
+        img {
+          width: 37px;
+        }
       }
       li {
         display: block;
         float: left;
-        height: 32px;
+        height: 50px;
       }
     }
     img {
       padding-right: 6px;
+      vertical-align: middle;
+      margin-bottom: 4px;
     }
     .navlist {
       display: none;
       @media (max-width: 700px) {
         display: inline-block; 
-        font-size: 1.1em;
+        font-size: 1.2em;
         font-family: @font;
-        font-weight: 600px;
+        font-weight: 900px;
         color: #FFF;
+        letter-spacing: .2em;
         text-transform: uppercase;
         margin-left: 5px;
+        vertical-align: middle;
       }
     }
     // #nav-buttons small screen styling
     @media (max-width: 700px) {
-        width: 75%;
+        min-width: 58%;
         display: none;
         margin-top: 64px;
         margin-left: -5px;
@@ -78,9 +89,8 @@ nav {
         opacity: 100%;
         li {
           clear: both;
-          border-bottom: 1.5px solid #FFF;
-          width: 100%;   
-          padding-bottom: 34px;     
+          border-bottom: 2px solid #FFF;
+          width: 100%;
         }
 
         li:last-child {
@@ -88,9 +98,10 @@ nav {
         }
       
         img {
-          padding-bottom: 10px;
-          padding-top: 10px;
+          vertical-align: middle;
+          padding-top: 5px;
         }
+      
     }
   }
 
