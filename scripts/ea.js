@@ -1,7 +1,11 @@
 /** @jsx React.DOM */
 "use strict";
 
-(function($, _, React, Router, jRespond) {
+(function($, _, React, Router) {
+  var Settings = {
+    galleryBreakpoint: 600
+  };
+
 
   /**
    * Internal Helpers
@@ -223,16 +227,19 @@
     render: function() {
       // Divide the images which fall on the left and the right
       var imageGroups = partition(this.state.data, 3),
-          width = window.innerWidth,
+          width = $(window).width(),
           sideLength = 0.1 * width,
           centerLength = 0.4 * width;
 
-      //debugger;
-      return (<div className="gallery">
-                <GalleryColumn type="instagram" position="left" imageLength={sideLength} data={imageGroups[0]} />
-                <GalleryColumn type="tumblr" position="center" imageLength={centerLength} data={this.state.tumblrData} />
-                <GalleryColumn type="instagram" position="right" imageLength={sideLength} data={imageGroups[1]} />
+      if (width > Settings.galleryBreakpoint) {
+        return (<div className="gallery">
+                  <GalleryColumn type="instagram" position="left" imageLength={sideLength} data={imageGroups[0]} />
+                  <GalleryColumn type="tumblr" position="center" imageLength={centerLength} data={this.state.tumblrData} />
+                  <GalleryColumn type="instagram" position="right" imageLength={sideLength} data={imageGroups[1]} />
               </div>);
+        } else {
+          return <p>Muahahaha</p>;
+        }
     }
   });
 
@@ -521,13 +528,15 @@
     }
   });
 
+  /**
+   * Mount components, and wire up responsive layout
+   */
   (function() {
     var gallery = <Gallery tag="everydayafrica" />;
 
     React.renderComponent(<NavBar />, $("header").get(0));
     React.renderComponent(gallery, $("#content").get(0));
 
-    //Redraw on resize
     $(window).resize(function() { gallery.forceUpdate(); });
   })();
 
@@ -611,10 +620,4 @@
   });
   router.init();
 
-  var jRes = jRespond([
-    {
-      label: 'mine'
-    }
-  ]);
-
-}(jQuery, _, React, Router, jRespond));
+}(jQuery, _, React, Router));
