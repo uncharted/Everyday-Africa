@@ -93,7 +93,7 @@
         overflow-y: visible;
       }
 
-      .detail-header {
+.detail-header {
 	padding: 15px;
 	padding-bottom: 0px;
 	@media (max-width: 700px) {
@@ -112,8 +112,8 @@
           }
 	}
 	a {
-          font-size: 1.1em;
-          letter-spacing: .08em;
+          font-size: 1em;
+          letter-spacing: .07em;
           text-decoration: none;
 	}
 	button {
@@ -140,21 +140,21 @@
           }
 	}
 	h5 {
-          margin-top: 0.05em;
-          font-weight: 300;
-          @media (max-width: 700px){
-            font-size: 1em;
-            color: gray;
-          }
-	}
+    margin-top: 0.05em;
+    font-weight: 300;
+    @media (max-width: 700px){
+      font-size: 1em;
+      color: gray;
       }
-
-      .caption {
-	padding: 0px 9px 0px 18px;
-	@media (max-width: 700px) {
-          font-size: 1.15em;
-          line-height: 1.35em;
 	}
+}
+
+  .caption {
+    padding: 0px 9px 0px 18px;
+    @media (max-width: 700px) {
+    font-size: 1.15em;
+    line-height: 1.35em;
+  }
       }
 
       /*> ul {
@@ -173,23 +173,24 @@
 	}
       }*/
 
-      .detail-tags,
-      .detail-hearts {
+.detail-tags,
+.detail-hearts {
 	padding-left: 0px;
 	.leftcol {
-          width: 8%;
-          display: inline-block; 
-          vertical-align: top;
+    width: 8%;
+    display: inline-block; 
+    vertical-align: top;
 
-          .icon {
-            padding-top: 4px;
-            padding-right: 10px;
-            width: 30px;
-          }
+    .icon {
+      padding-top: 4px;
+      padding-right: 10px;
+      width: 30px;
+    }
 	}
 	.rightcol {
-          width: 92%;
-          display: inline-block;
+    width: 92%;
+    display: inline-block;
+    ul { padding-left: 5px;}
 	}
       }
 
@@ -251,19 +252,30 @@
 }
 
 .sources {
-  background-color: #FFF;
-  color: gray;
-  padding: 8px;
   border-width: 2px;
   border-color: gray;
   border-style: solid;
   border-radius: 2px;
-  text-align: center;
-  font-weight: 800;
-  font-size: 1.1em;
+  text-decoration: none;
+  font-weight: 500;
   text-transform: uppercase;
-  margin: 0px 10px 20px 10px;
+  margin: 0px 20px 20px 10px;
+  width: 80%;
   list-style-type: none;
+  display: inline-block;
+  a { 
+    color: #FFF;
+    text-decoration: none;
+  }
+  a:active { color: gray;}
+  li {
+    float: left;
+    text-align: center;
+    background: gray;
+    color: #FFF;
+    padding: 10px;
+  }
+  li:active {background-color: #fff;}
 }
 
 
@@ -280,12 +292,12 @@
   li {
     display: inline-block;
     background-color: grey;
-    color: white;
     letter-spacing: 0.05em;
     border-radius: 2px;
     margin: 0.3em;
     padding: 2px 6px 3px 6px;
     font-size: 0.8em;
+    a {text-decoration: none; color: white;}
   }
 }
 
