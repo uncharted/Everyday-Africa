@@ -1,13 +1,13 @@
 /** @jsx React.DOM */
 "use strict";
 
-$(function() {
+(function($, _, React, Router, jRespond) {
 
   /**
    * Internal Helpers
    */
 
-  /*
+  /**
    * Partition a `list` with int `partitions` partitions, with
    * `per` items per partition
    */
@@ -36,7 +36,10 @@ $(function() {
     API_URL: "https://api.instagram.com/v1",
     cache: {},
 
-    //
+    _params: function() {
+      return $.param({client_id: this.CLIENT_ID, callback: "?"});
+    },
+
     _fetcher: function(tag, total, url, deferred) {
       $.ajax({url: url, dataType: "jsonp"})
         .done(function(d) {
@@ -54,19 +57,37 @@ $(function() {
     },
 
     populate: function(tag, total) {
-      var params = $.param({client_id: this.CLIENT_ID, callback: "?"}),
-          url = this.API_URL + "/tags/" + tag + "/media/recent?" + params,
-          deferred = $.Deferred();
+      var url = this.API_URL + "/tags/" + tag + "/media/recent?" + this._params();
+      var deferred = $.Deferred();
 
       this._fetcher(tag, total || 60, url, deferred);
       return deferred.promise();
+    },
+
+    /**
+     * Get a single instagram media item, from the cache if possible
+     *
+     * Returns {meta: {...}, data: {...}} where `data` contains the data,
+     * and meta is optional
+     *  http://instagram.com/developer/endpoints/media/#get_media
+     */
+    get: function(id) {
+      if (id in this.cache) {
+        var resp = {data: this.cache[id]};
+        return $.Deferred().resolveWith(this, [resp]).promise();
+      } else {
+        var url = this.API_URL + "/media/" + id + "?" + this._params();
+        return $.ajax({url: url, dataType: "jsonp"})
+          .done(function(d) {
+            this.cache[d.data.id] = d.data;
+          }.bind(this));
+      }
     },
 
     userUrl: function(user) {
       return ["http://instagram.com", user].join("/");
     }
   };
-
 
   /************
    * Navigation
@@ -118,7 +139,7 @@ $(function() {
 	return this.state.toggle;
       }
     },
-    
+
     render: function() {
       return (<a className="nav-button" href={this.href()} onClick={this.handleClick}>
 	        <img src={this.props.src} />
@@ -163,7 +184,7 @@ $(function() {
     },
 
     componentWillMount: function() {
-      var total = TumblrVars.Posts.Photos.length * 24;
+      var total = TumblrVars.posts.photos.length * 24;
       InstaFetch.populate(this.props.tag, total)
         .done(function(d) {
           this.setState({
@@ -179,10 +200,10 @@ $(function() {
           });
         }.bind(this))
         .fail(function(d) {
-            alert("Failed to fetch tagged photos")
+            console.log("Failed to fetch tagged photos")
           });
 
-      this.state.tumblrData = TumblrVars.Posts.Photos.map(function(photo, i) {
+      this.state.tumblrData = TumblrVars.posts.photos.map(function(photo, i) {
         function sizedProp(prop) {
           return photo[prop + "500"];
         };
@@ -222,7 +243,7 @@ $(function() {
       });
 
       return (<div className={classes}>
-                {this.props.data.map(function(d) {
+                {_(this.props.data).map(function(d) {
                   var isPortrait = d.height > d.width,
                       classes = React.addons.classSet({
                     'tagged-image': true,
@@ -302,53 +323,120 @@ $(function() {
   });
 
   // The Image detail view
-  var ImageDetail = React.createClass({
+  var ImageDetails = React.createClass({
+    getSources: function() {
+      return _.pick(this.props, ["tumblr", "instagram"]);
+    },
+
+    componentDidMount: function() {
+      if (this.props.instagramID) {
+        InstaFetch.get(this.props.instagramID).done(function(d) {
+          this.setProps({instagram: d.data})
+        }.bind(this));
+      }
+    },
+
     render: function() {
-      console.log(this.props.data);
+      console.log(this.props);
       return (<div className="detail">
                 <div className="overlay"><a href="#/"></a></div>
                 <div className="image-detail">
-                  <img src={this.props.data.image.url} className="image-large"/>
+                  <img src={this.props.image.url} className="image-large"/>
                   <div className="detail-panel">
                     <div className="detail-header">
-                      <img src={this.props.data.user.profile_picture} />
+                      <img src={this.props.user.profile_picture} />
                       <div>
-                        <a href={InstaFetch.userUrl(this.props.data.user.username)}>
-                          <h4>{this.props.data.user.username}</h4>
+                        <a href={InstaFetch.userUrl(this.props.user.username)}>
+                          <h4>{this.props.user.username}</h4>
                         </a>
-                        <h5>{moment.unix(this.props.data.created).fromNow()}</h5>
+                        <h5>{moment.unix(this.props.created).fromNow()}</h5>
                       </div>
                       <button>Follow</button>
                     </div>
-                    <div className="caption">
-                      <p>{this.props.data.caption}</p>
-                      <ul className="detail-tags">
-                        <div className="leftcol">
-                          <img src={EAConfig.images.tag} className="icon"/>
-                        </div>
-                        <div className="rightcol">
-                          {this.props.data.tags.map(function(d) {
-                           return <li>{d}</li>; })}
-                        </div>
-                      </ul>
-                      <ul className="detail-hearts">
-                        <div className="leftcol">
-                          <img src={EAConfig.images.heart} className="icon"/>
-                        </div>
-                          <div className="rightcol">
-                            {this.props.data.likes.data.map(function(d) {
-                             return <li>
-                                <a href={InstaFetch.userUrl(d.username)}>
-                                  {d.username}
-                                </a>&emsp;
-                              </li>; })}
-                          </div>
+                    <p>{this.props.caption.replace("<p>", "").replace("</p>", "")}</p>
+                    <div>
+                      <ul className="sources">
+                        {_(this.getSources())
+			   .keys().sort()
+			   .map(function(type) {
+                             var classes = React.addons.classSet(
+                               {active: type === this.props.active});
+                               return <li key={type} className={classes}>{type}</li>;
+                             }.bind(this))}
                       </ul>
                     </div>
-                    <CommentBox comments={{instagram: this.props.data.comments}}/>
+	            {this.props.instagram &&
+	              <InstagramDetails tags={this.props.instagram.tags}
+	                                likes={this.props.instagram.likes}
+	                                comments={this.props.instagram.comments} />}
+	            {this.props.tumblr &&
+                      <TumblrDetails tags={this.props.tumblr.tags}
+                                     notes={this.props.tumblr.notes}
+                                     likeButton={this.props.tumblr.likeButton}
+                                     reblogButton={this.props.tumblr.reblogButton} />}
                   </div>
                 </div>
               </div>);
+    }
+  });
+
+  var InstagramDetails = React.createClass({
+    render: function() {
+      return(<div className="instagram source-details">
+               <TagList tags={_.map(this.props.tags, function(t) {
+                 return {tag: t, url: "#"};
+               })} />
+               <div className="detail-hearts detail-list">
+                 <div className="leftcol">
+                   <img src={EAConfig.images.heart} className="icon"/>
+                 </div>
+                 <div className="rightcol">
+                   <ul className="detail-hearts">
+                     {this.props.likes.data.map(function(d) {
+                        return <li>
+                                 <a href={InstaFetch.userUrl(d.username)}>
+                                   {d.username}
+                                 </a>&emsp;
+                               </li>; })}
+                   </ul>
+                 </div>
+               </div>
+               <CommentBox comments={{instagram: this.props.comments}}/>
+	     </div>);
+    }
+  });
+
+  var TumblrDetails = React.createClass({
+    render: function() {
+      return (<div className="tumblr source-details">
+                <TagList tags={_.map(this.props.tags, function(t) {
+                  return {tag: t.tag, url: t.tagUrl};
+                })} />
+                <p>{this.props.notes ? this.props.notes.count : "0"} Notes</p>
+                <div dangerouslySetInnerHTML={{__html: this.props.likeButton}} />
+                <div dangerouslySetInnerHTML={{__html: this.props.reblogButton}} />
+              </div>);
+    }
+  });
+
+  /**
+   * TagList draws a list of tags for the detail views
+   *
+   * props: {tags: [{tag: string, url: string}]}
+   */
+  var TagList = React.createClass({
+    render: function() {
+        return (<div className="detail-tags detail-list">
+                 <div className="leftcol">
+                   <img src={EAConfig.images.tag} className="icon"/>
+                 </div>
+                 <div className="rightcol">
+                   <ul>
+                     {_(this.props.tags).map(function(t) {
+                       return <li><a href={t.url}>{t.tag}</a></li>; })}
+                   </ul>
+                 </div>
+               </div>);
     }
   });
 
@@ -379,15 +467,6 @@ $(function() {
 
     render: function() {
       return (<div className="comments">
-                <div>
-                  <ul className="comment-source">
-                    {_.map(_.keys(this.props.comments).sort(), function(type) {
-                    var classes = React.addons.classSet(
-                      {active: type === this.props.active});
-                      return <li key={type} className={classes}>{type}</li>;
-                    }.bind(this))}
-                  </ul>
-                </div>
                 <div>
                   {_.map(this.activeComments(), function(comment) {
                     return <Comment key={comment.id} data={comment} />;
@@ -424,36 +503,28 @@ $(function() {
     //Redraw on resize
     $(window).resize(function() { gallery.forceUpdate(); });
   })();
-  
+
   /**
    * Generate the toggleable modal
+   *
+   * props: {
+   * }
    */
-  var Details = {
-    root: $("#modal").get(0),
+  function ComponentHandler($root) {
+    var rootElt = $root.get(0);
 
-    // Show the detail view for the given data
-    show: function(data) {
-      this.dismiss();
-      React.renderComponent(<ImageDetail data={data} />, this.root);
-    },
+    this.show = function(component) {
+	this.dismiss();
+	React.renderComponent(component, rootElt);
+    };
 
-    dismiss: function(params) {
-      return React.unmountComponentAtNode(this.root);
-    }
-  };
+    this.dismiss = function() {
+      return React.unmountComponentAtNode(rootElt);
+    };
+  }
 
-  var NavDrawer = {
-    root: $("#nav-drawer").get(0),
-
-    show: function(component) {
-      this.dismiss;
-      React.renderComponent(component, this.root);
-    },
-
-    dismiss: function() {
-      React.unmountComponentAtNode(this.root);
-    }
-  };
+  var Details = new ComponentHandler($("#modal"));
+  var NavDrawer = new ComponentHandler($("#nav-drawer"));
 
 
   /*********
@@ -480,33 +551,36 @@ $(function() {
     "/posts/instagram/:post": function(post) {
       var post = InstaFetch.cache[post];
       if(post) {
-        // Convert data to common format
-        Details.show({
-          caption: post.caption.text,
-          comments: post.comments,
-          created: post.created_time,
-          likes: post.likes,
-          image: post.images.standard_resolution,
-          tags: post.tags,
-          user: post.user
-        });
+        Details.show(
+	    <ImageDetails caption={post.caption.text}
+                          image={post.images.standard_resolution}
+	                  created={post.created_time}
+                          user={post.user}
+	                  instagram={post} />);
       }
     },
+
     "/posts/tumblr/:post": function(post) {
-      var post = TumblrVars.Posts.Photos[post];
+      var post = TumblrVars.posts.photos[post];
       if(post) {
-        Details.show({
-	  caption: "Some text",
-	  comments: {data: [], count: 0},
-	  created: 1320232,
-	  likes: {data: [], count: 0},
-	  image: {url: post.photoUrl500},
-	  tags: [],
-	  user: "jtmoulia"
-	});
+        Details.show(
+	    <ImageDetails caption={post.caption}
+                          created={1320232}
+                          image={{url: post.photoUrl500,
+                                  width: post.photoWidth500,
+                                  height: post.photoHeight500}}
+                          user={{username: "jtmoulia"}}
+                          tumblr={post}
+                          instagramID="536018816062052929_145884981" />);
       }
     },
   });
   router.init();
 
-});
+  var jRes = jRespond([
+    {
+      label: 'mine'
+    }
+  ]);
+
+}(jQuery, _, React, Router, jRespond));

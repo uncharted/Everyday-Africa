@@ -1,12 +1,17 @@
 (function(window) {
+  var likeButton =  '<div class="like_button" data-post-id="77691397179" id="like_button_77691397179"><iframe id="like_iframe_77691397179" src="http://assets.tumblr.com/assets/html/like_iframe.html?_v=2cf918764e6e8101ee…ba71b71#name=pocketknife-prototype&amp;post_id=77691397179&amp;rk=JClD8Zzw" scrolling="no" width="20" height="20" frameborder="0" class="like_toggle" allowTransparency="true"></iframe></div>'
+  var reblogButton = '<a href="http://www.tumblr.com/reblog/77691397179/JClD8Zzw" class="reblog_button" style="display: block;width:20px;height:20px;"><svg width="100%" height="100%" viewBox="0 0 537 512" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#ccc"><path d="M 98.893,177.139c0.00-7.462, 4.826-12.275, 12.288-12.275L 405.12,164.864 l0.00,83.469 l 118.72-120.947L 405.12,8.678l0.00,81.51 L 49.382,90.189 c-15.206,0.00-27.648,12.429-27.648,27.648l0.00,171.814 l 77.146-71.603L 98.88,177.139 z M 438.874,332.646c0.00,7.45-4.826,12.275-12.275,12.275L 123.75,344.922 l0.00-83.469 l-116.506,120.922l 116.506,120.947l0.00-81.498 l 356.864,0.00 c 15.206,0.00, 27.648-12.454, 27.648-27.648L 508.262,220.134 l-69.402,71.59L 438.861,332.646 z" ></path></svg></a>'
+
   window.TumblrVars = {
-    Title: "eaprototype",
-    Posts: {
-      Photos: [
+    title: "eaprototype",
+    posts: {
+      photos: [
 	{
 	  photoAlt: "Cleaning dust out of computers",
 	  caption: "<p>Cleaning dust out of computers</p>",
 	  linkUrl: "http://instagram.com/p/lIuDOajovN/",
+	  likeButton: likeButton,
+	  reblogButton: reblogButton,
 	  photoUrl500:   "http://25.media.tumblr.com/0bda437d9cf8fdfe1f0990ceb6133414/tumblr_n1xlqwsi5Q1rgx8vno1_500.jpg",
 	  photoWidth500: "500",
 	  photoHeight500: "500",
@@ -19,13 +24,27 @@
 	  photoUrl100: "http://25.media.tumblr.com/0bda437d9cf8fdfe1f0990ceb6133414/tumblr_n1xlqwsi5Q1rgx8vno1_100.jpg",
 	  photoWidth100: "100",
 	  photoHeight100: "100",
-	  photoUrl75sq:  "http://25.media.tumblr.com/0bda437d9cf8fdfe1f0990ceb6133414/tumblr_n1xlqwsi5Q1rgx8vno1_7sq.jpg"
+	  photoUrl75sq:  "http://25.media.tumblr.com/0bda437d9cf8fdfe1f0990ceb6133414/tumblr_n1xlqwsi5Q1rgx8vno1_7sq.jpg",
+	  tags: [
+	    {
+	      tag: "punkrock",
+	      urlSafeTag: "punkrock",
+	      tagUrl: "http://pocketknife-prototype.tumblr.com/tagged/punkrock",
+	      tagUrlChrono: "http://pocketknife-prototype.tumblr.com/tagged/punkrock/chrono"
+	    },
+	  ],
+	  notes: {
+	    count: 7,
+	    countWithLabel: "7 Notes"
+	  }
 	},
 
 	{
 	  photoAlt: "",
 	  caption: "<p>Caption</p>",
 	  linkUrl: "http://instagram.com/p/kfJ4epjoha/",
+	  likeButton: likeButton,
+	  reblogButton: reblogButton,
 	  photoUrl500: "http://31.media.tumblr.com/faa51e38cc5648a29e129a76f4ea732a/tumblr_n146504OaG1rgx8vno1_500.jpg",
 	  photoWidth500: "500",
 	  photoHeight500: "500",
@@ -45,6 +64,8 @@
 	  photoAlt: "Cape Town, Sout Africa",
 	  caption: "<p>Cape Town, Sout Africa</p>",
 	  linkUrl: "http://instagram.com/p/ki_OG5BIU9/",
+	  likeButton: likeButton,
+	  reblogButton: reblogButton,
 	  photoUrl500: "http://31.media.tumblr.com/ac3396b87c2b8c466513fff6c15ff8fa/tumblr_n0ztmgQMQF1rgx8vno1_500.jpg",
 	  photoWidth500: "500",
 	  photoHeight500: "500",
@@ -64,6 +85,8 @@
 	  photoAlt: "Cleaning dust out of computers",
 	  caption: "<p>Cleaning dust out of computers</p>",
 	  linkUrl: "http://instagram.com/p/lIuDOajovN/",
+	  likeButton: likeButton,
+	  reblogButton: reblogButton,
 	  photoUrl500:   "http://25.media.tumblr.com/0bda437d9cf8fdfe1f0990ceb6133414/tumblr_n1xlqwsi5Q1rgx8vno1_500.jpg",
 	  photoWidth500: "500",
 	  photoHeight500: "500",
@@ -83,6 +106,8 @@
 	  photoAlt: "",
 	  caption: "<p>Caption</p>",
 	  linkUrl: "http://instagram.com/p/kfJ4epjoha/",
+	  likeButton: likeButton,
+	  reblogButton: reblogButton,
 	  photoUrl500: "http://31.media.tumblr.com/faa51e38cc5648a29e129a76f4ea732a/tumblr_n146504OaG1rgx8vno1_500.jpg",
 	  photoWidth500: "500",
 	  photoHeight500: "500",
@@ -102,6 +127,8 @@
 	  photoAlt: "Cape Town, Sout Africa",
 	  caption: "<p>Cape Town, Sout Africa</p>",
 	  linkUrl: "http://instagram.com/p/ki_OG5BIU9/",
+	  likeButton: likeButton,
+	  reblogButton: reblogButton,
 	  photoUrl500: "http://31.media.tumblr.com/ac3396b87c2b8c466513fff6c15ff8fa/tumblr_n0ztmgQMQF1rgx8vno1_500.jpg",
 	  photoWidth500: "500",
 	  photoHeight500: "500",

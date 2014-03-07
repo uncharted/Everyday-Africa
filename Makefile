@@ -28,6 +28,7 @@ CONFIG_URL      = /$(PUBLIC_SCRIPTS)/config.js
 FLATIRON_URL	= /$(PUBLIC_SCRIPTS)/director.min.js
 JQUERY_URL	= http://code.jquery.com/jquery-2.1.0.js
 BLUR_URL	= /$(PUBLIC_SCRIPTS)/blur.js
+JRESPOND_URL	= /$(PUBLIC_SCRIPTS)/jRespond.js
 REACT_URL	= http://fb.me/react-with-addons-0.9.0.js
 LODASH_URL	= http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js
 TUMBLRVARS	= -e '/TUMBLRVARS/{r ./local.js' -e 'd;}'
@@ -43,6 +44,7 @@ ifeq ($(PROFILE), prod)
     CONFIG_URL		= $(S3_PUBLIC)/scripts/config.js
     JQUERY_URL		= http://code.jquery.com/jquery-2.1.0.min.js
     BLUR_URL		= $(S3_PUBLIC)/scripts/blur.js
+    JRESPOND_URL	= $(S3_PUBLIC)/scripts/jRespond.min.js
     REACT_URL		= http://fb.me/react-with-addons-0.9.0.min.js
     TUMBLRVARS		= -e '/TUMBLRVARS/{r ./tumblrvars.js' -e 'd;}'
 endif
@@ -68,6 +70,7 @@ SED_TEMPLATER = sed \
             -e 's|REACT_URL|$(REACT_URL)|g' \
             -e 's|FLATIRON_URL|$(FLATIRON_URL)|g' \
             -e 's|BLUR_URL|$(BLUR_URL)|g' \
+            -e 's|JRESPOND_URL|$(JRESPOND_URL)|g' \
             -e 's|LODASH_URL|$(LODASH_URL)|g' \
             -e 's|FLAG_BASE|$(FLAG_BASE)|g' \
             -e 's|AFRICA_URL|$(AFRICA_URL)|g' \
@@ -115,7 +118,7 @@ $(PUBLIC_STYLESHEETS): $(PUBLIC)
 
 
 # Scripts and Stylesheets
-$(PUBLIC_STYLESHEETS)/%.css: stylesheets/%.less $(PUBLIC_STYLESHEETS) stylesheets/navdrawer.less stylesheets/nav.less $(LESSC)
+$(PUBLIC_STYLESHEETS)/%.css: stylesheets/%.less $(wildcard stylesheets/*.less) $(PUBLIC_STYLESHEETS) stylesheets $(LESSC)
 	$(LESSC) $< > $@
 
 $(PUBLIC_SCRIPTS)/%: scripts/% $(PUBLIC_SCRIPTS) $(JSX)
@@ -125,7 +128,7 @@ $(PUBLIC_SCRIPTS)/%: scripts/% $(PUBLIC_SCRIPTS) $(JSX)
 scripts/config.js: scripts/config.js.template Makefile
 	$(SED_TEMPLATER) $< > $@
 
-$(VAR)/ea.html: ea.html.template $(VAR) Makefile local.js
+$(VAR)/ea.html: ea.html.template $(VAR) Makefile local.js tumblrvars.js
 	$(SED_TEMPLATER) $< > $@
 
 push: BUCKET = s3://everydayafrica/

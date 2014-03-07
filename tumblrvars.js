@@ -1,27 +1,49 @@
 (function(window) {
   window.TumblrVars = {
-    title: "{Title}",
+    title: '{Title}',
     posts: {
       photos: [
-	{block:Posts}{block:Photo} {
-	  photoAlt: "{PhotoAlt}",
-	  {block:Caption}caption: "{Caption}",{/block:Caption}
-	  linkUrl: "{LinkURL}",
-	  photoURL500: "{PhotoURL-500}",
-	  photoWidth500: "{PhotoWidth-500}",
-	  photoHeight500: "{PhotoHeight-500}",
-	  photoURL400: "{PhotoURL-400}",
-	  photoWidth400: "{PhotoWidth-400}",
-	  photoHeight400: "{PhotoHeight-400}",
-	  photoURL250: "{PhotoURL-250}",
-	  photoWidth250: "{PhotoWidth-250}",
-	  photoHeight250: "{PhotoHeight-250}",
-	  photoURL100: "{PhotoURL-100}",
-	  photoWidth100: "{PhotoWidth-100}",
-	  photoHeight100: "{PhotoHeight-100}",
-	  photoURL75sq: "{PhotoURL-75sq}"
-	 }, {/block:Photo}{/block:Posts}
+        {block:Posts}{block:Photo} {
+          postType: '{PostType}',
+          postId: '{PostID}',
+          permalink: '{Permalink}',
+          postNotesUrl: '{PostNotesUrl}',
+
+          likeButton: '{LikeButton}',
+          reblogButton: '{ReblogButton}',
+
+          photoAlt: '{PhotoAlt}',
+          {block:Caption}caption: '{Caption}',{/block:Caption}
+          linkUrl: '{LinkURL}',
+          photoUrl500: '{PhotoURL-500}',
+          photoWidth500: '{PhotoWidth-500}',
+          photoHeight500: '{PhotoHeight-500}',
+          photoUrl400: '{PhotoURL-400}',
+          photoWidth400: '{PhotoWidth-400}',
+          photoHeight400: '{PhotoHeight-400}',
+          photoUrl250: '{PhotoURL-250}',
+          photoWidth250: '{PhotoWidth-250}',
+          photoHeight250: '{PhotoHeight-250}',
+          photoUrl100: '{PhotoURL-100}',
+          photoWidth100: '{PhotoWidth-100}',
+          photoHeight100: '{PhotoHeight-100}',
+          photoUrl75sq: '{PhotoURL-75sq}',
+          {/block:Photo}
+          {block:HasTags} tags: [
+            {block:Tags} {
+              tag: '{Tag}',
+              urlSafeTag: '{URLSafeTag}',
+              tagUrl: '{TagURL}',
+              tagUrlChrono: '{TagURLChrono}'
+            }, {/block:Tags}
+          ], {/block:HasTags}
+          {block:NoteCount} notes: {
+            count: {NoteCount},
+            countWithLabel: '{NoteCountWithLabel}'
+          } {/block:NoteCount}
+         },
+         {/block:Posts}
       ]
-    }
+    },
   }
 })(window);
