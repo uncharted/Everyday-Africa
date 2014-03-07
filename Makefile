@@ -13,9 +13,9 @@ LESSC		= $(NODE_MODULES)/less/bin/lessc
 JSX		= $(NODE_MODULES)/react-tools/bin/jsx --cache-dir=$(VAR)/.module-cache
 
 # Project structure
-VAR           		= var
-PUBLIC          	= $(VAR)/public
-PUBLIC_SCRIPTS  	= $(PUBLIC)/scripts
+VAR				= var
+PUBLIC				= $(VAR)/public
+PUBLIC_SCRIPTS		= $(PUBLIC)/scripts
 PUBLIC_STYLESHEETS	= $(PUBLIC)/stylesheets
 
 # Other commands
@@ -50,10 +50,10 @@ ifeq ($(PROFILE), prod)
 endif
 
 FLAG_BASE		= $(IMAGES_BASE_URL)/flags/flat/64
-AFRICA_URL		= $(IMAGES_BASE_URL)/africa.png
-PHOTOGRAPHER_URL	= $(IMAGES_BASE_URL)/photographer.png
-SEARCH_URL		= $(IMAGES_BASE_URL)/search.png
-ABOUT_URL		= $(IMAGES_BASE_URL)/about.png
+AFRICA_URL		= $(IMAGES_BASE_URL)/africa.svg
+PHOTOGRAPHER_URL	= $(IMAGES_BASE_URL)/photographer.svg
+SEARCH_URL		= $(IMAGES_BASE_URL)/search.svg
+ABOUT_URL		= $(IMAGES_BASE_URL)/about.svg
 INSTAGRAM_URL		= $(IMAGES_BASE_URL)/instagram.png
 TWITTER_URL		= $(IMAGES_BASE_URL)/twitter.png
 FACEBOOK_URL		= $(IMAGES_BASE_URL)/facebook.png
@@ -61,6 +61,10 @@ TUMBLR_URL		= $(IMAGES_BASE_URL)/tumblr.png
 TAG_ICON_URL		= $(IMAGES_BASE_URL)/tag_icon.svg
 HEART_ICON_URL		= $(IMAGES_BASE_URL)/heart_icon.svg
 MENU_URL		= $(IMAGES_BASE_URL)/menu.svg
+AFRICA-WHITE_URL	=$(IMAGES_BASE_URL)/africa-white.svg
+PHOTOGRAPHER-WHITE_URL	=$(IMAGES_BASE_URL)/photographer-white.svg
+SEARCH-WHITE_URL	=$(IMAGES_BASE_URL)/search-white.svg
+ABOUT-WHITE_URL	=$(IMAGES_BASE_URL)/about-white.svg
 
 SED_TEMPLATER = sed \
             -e 's|HOST|$(HOST)|g' \
@@ -85,6 +89,10 @@ SED_TEMPLATER = sed \
             -e 's|TAG_ICON_URL|$(TAG_ICON_URL)|g' \
             -e 's|MENU_URL|$(MENU_URL)|g' \
             -e 's|HEART_ICON_URL|$(HEART_ICON_URL)|g' \
+            -e 's|AFRICA-WHITE_URL|$(AFRICA-WHITE_URL)|g' \
+            -e 's|PHOTOGRAPHER-WHITE_URL|$(PHOTOGRAPHER-WHITE_URL)|g' \
+            -e 's|SEARCH-WHITE_URL|$(SEARCH-WHITE_URL)|g' \
+            -e 's|ABOUT-WHITE_URL|$(ABOUT-WHITE_URL)|g' \
 	    $(TUMBLRVARS)
 
 
