@@ -276,16 +276,23 @@
                       var even = i % 2 === 0;
                       return (<div>
                                 <div className="mobile-row dbl-row">
-                                  {!even ? instaGen() : undefined}
-                                  {!even ? instaGen() : undefined}
+			          {!even &&
+				   <div className="single-col left">
+                                     {instaGen()}
+                                     {instaGen()}
+				   </div>}
                                   <TaggedImage className="mobile image tumblr"
                                                key={i}
                                                imageLength={dbl}
                                                type="tumblr"
                                                image={p} />
-                                  {even ? instaGen() : undefined}
-                                  {even ? instaGen() : undefined}
+			          {even &&
+				   <div className="single-col right">
+                                     {instaGen()}
+                                     {instaGen()}
+				   </div>}
                                 </div>
+			        <div className="clear" />
                                 <div className="mobile-row single-row">
                                   {instaGen()}
                                   {instaGen()}
@@ -417,7 +424,8 @@
     },
 
     render: function() {
-      console.log(this.props);
+      var count = _.values(this.getSources()).length;
+
       return (<div className="detail">
                 <div className="overlay"><a href="#/"></a></div>
                 <div className="image-detail">
@@ -439,9 +447,10 @@
                         {_(this.getSources())
 			   .keys().sort()
 			   .map(function(type) {
+			     var style = {width: (100 / count) + "%"}
                              var classes = React.addons.classSet(
                                {active: type === this.props.active});
-                               return <li key={type} className={classes}>
+                               return <li key={type} className={classes} style={style}>
                                         <a href={this.props.url + "/" + type}>{type}</a>
                                       </li>;
 
@@ -461,12 +470,6 @@
                 </div>
               </div>);
     },
-
-    handleSourceSelect: function(type) {
-      return function() {
-        
-      }.bind(this);
-    }
   });
 
   var InstagramDetails = React.createClass({

@@ -6,6 +6,12 @@
 @detail-height: 480px;
 @detail-image-width: 480px;
 @detail-side-width: @detail-width - @detail-image-width - 10px;
+@inactive-color: grey;
+
+@tablet-max: 830px;
+@tablet-min: 480px;
+@mobile-max: 480px;
+@mobile-min: 0px;
 
 .overlay {
   position: fixed;
@@ -34,7 +40,7 @@
   .icon{
     height: 18px;
     width: 15px;
-    display: inline-block; 
+    display: inline-block;
     vertical-align: middle;
     padding-right: 3px;
   }
@@ -116,9 +122,10 @@
           letter-spacing: .07em;
           text-decoration: none;
 	}
+
 	button {
           position: absolute;
-          right: 2em;
+          right: 1em;
           background-color: @blue;
           color: white;
           border: none;
@@ -178,7 +185,7 @@
 	padding-left: 0px;
 	.leftcol {
     width: 8%;
-    display: inline-block; 
+    display: inline-block;
     vertical-align: top;
 
     .icon {
@@ -259,28 +266,40 @@
   text-decoration: none;
   font-weight: 500;
   text-transform: uppercase;
-  margin: 0px 20px 20px 10px;
+  margin-left: 10%;
   width: 80%;
   list-style-type: none;
   display: inline-block;
-  a { 
+  padding: 0;
+
+  a {
     color: #FFF;
     text-decoration: none;
+    display: block;
+    padding: 0.4em 0;
   }
   a:active { color: gray;}
+
   li {
-    float: left;
+    display: inline-block;
     text-align: center;
     background: gray;
     color: #FFF;
-    padding: 10px;
+    margin-bottom: 1px;
   }
   li:active {background-color: #fff;}
+
+  .active {
+    background-color: white;
+
+    a {
+      color: @inactive-color;
+    }
+  }
 }
 
-
 .detail-list {
-  margin: 0.5em;
+  margin: 0.4em 0.1em 0.6em 0;
 
   ul {
     margin: 0;
@@ -291,7 +310,7 @@
 .detail-tags {
   li {
     display: inline-block;
-    background-color: grey;
+    background-color: @inactive-color;
     letter-spacing: 0.05em;
     border-radius: 2px;
     margin: 0.3em;
