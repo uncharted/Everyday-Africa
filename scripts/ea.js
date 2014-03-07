@@ -242,19 +242,58 @@
 
     render: function() {
       // Divide the images which fall on the left and the right
-      var imageGroups = partition(this.state.data, 3),
-          width = $(window).width(),
-          sideLength = 0.1 * width,
-          centerLength = 0.4 * width;
+      var width = $(window).width();
 
       if (width > Settings.galleryBreakpoint) {
-        return (<div className="gallery">
+        var imageGroups = partition(this.state.data, 3);
+        var sideLength = 0.1 * width;
+        var centerLength = 0.4 * width;
+        return (<div className="gallery desktop">
                   <GalleryColumn type="instagram" position="left" imageLength={sideLength} data={imageGroups[0]} />
                   <GalleryColumn type="tumblr" position="center" imageLength={centerLength} data={this.state.tumblrData} />
                   <GalleryColumn type="instagram" position="right" imageLength={sideLength} data={imageGroups[1]} />
               </div>);
         } else {
-          return <p>Muahahaha</p>;
+          var single = width / 3;
+          var dbl = single * 2;
+
+          var instaGen = (function(data) {
+            var index = 0;
+            return function() {
+              if (index < data.length) {
+                var insta = data[++index];
+                return <TaggedImage className="mobile image instagram"
+                                    key={insta.id}
+                                    imageLength={single}
+                                    type="tumblr"
+                                    image={insta} />;
+              }
+            };
+          })(this.state.data);
+
+          return (<div className="gallery mobile">
+                    {_.map(this.state.tumblrData, function(p, i) {
+                      var even = i % 2 === 0;
+                      return (<div>
+                                <div className="mobile-row dbl-row">
+                                  {!even ? instaGen() : undefined}
+                                  {!even ? instaGen() : undefined}
+                                  <TaggedImage className="mobile image tumblr"
+                                               key={i}
+                                               imageLength={dbl}
+                                               type="tumblr"
+                                               image={p} />
+                                  {even ? instaGen() : undefined}
+                                  {even ? instaGen() : undefined}
+                                </div>
+                                <div className="mobile-row single-row">
+                                  {instaGen()}
+                                  {instaGen()}
+                                  {instaGen()}
+                                </div>
+                              </div>);
+                    }.bind(this))}
+                  </div>);
         }
     }
   });
@@ -293,13 +332,13 @@
     getDefaultProps: function() {
       return {scale: 1.5};
     },
-    
+
     render: function() {
       var divStyle = {
         width: this.props.imageLength,
         height: this.props.imageLength };
-      var imgStyle = {'margin-top': "-20%",
-                      'margin-left': "-20%"};
+      var imgStyle = {};
+
       if (this.props.image.width > this.props.image.height) {
         imgStyle.width = "140%";
       } else {
