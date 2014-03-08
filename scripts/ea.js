@@ -103,33 +103,51 @@
 
   var NavBar = React.createClass({
     render: function() {
+      var navData = [
+        {
+          href: "#/countries",
+          largeSrc: EAConfig.images.africa,
+          smallSrc: EAConfig.images.africaWhite,
+          content: "COUNTRIES"
+        }, {
+          href: "#/photographers",
+          largeSrc: EAConfig.images.photographer,
+          smallSrc: EAConfig.images.photographerWhite,
+          content: "PHOTOGRAPHERS"
+        }, {
+          href: "#/search",
+          largeSrc: EAConfig.images.search,
+          smallSrc: EAConfig.images.searchWhite,
+          content: "SEARCH"
+        }, {
+          href: "#/about",
+          largeSrc: EAConfig.images.about,
+          smallSrc: EAConfig.images.aboutWhite,
+          content: "ABOUT"
+        }
+      ];
+
       return (
          <nav>
           <div id="nav-hamburger" className="nav-panel">
-	     <a href="#" onClick={this.menuHandler}>
-	       <img src={EAConfig.images.menu} />
-	     </a>
+             <a href="#" onClick={this.menuHandler}>
+               <img src={EAConfig.images.menu} />
+             </a>
           </div>
           <div id="nav-buttons" className="nav-panel">
             <ul>
-              <li>
-                <span className="hide-for-small"><NavToggleButton href="#/countries" src={EAConfig.images.africa} /></span>
-                <img className="hide-for-large" src={EAConfig.images.africaWhite} /><span className="navlist">COUNTRIES</span></li>
-              <li>
-                <a href="#/photographers">
-                  <img className="hide-for-small" src={EAConfig.images.photographer} />
-                  <img className="hide-for-large" src={EAConfig.images.photographerWhite} />
-                    <span className="navlist">PHOTOGRAPHERS</span></a></li>
-              <li>
-                <a href="#/search">
-                  <img className="hide-for-small" src={EAConfig.images.search} />
-                  <img className="hide-for-large" src={EAConfig.images.searchWhite} />
-                    <span className="navlist">SEARCH</span></a></li>
-              <li>
-                <a href="#/about">
-                  <img className="hide-for-small" src={EAConfig.images.about} />
-                  <img className="hide-for-large" src={EAConfig.images.aboutWhite} />
-                    <span className="navlist">ABOUT</span></a></li>
+              {_.map(navData, function(d) {
+                var href = (window.location.href.indexOf(d.href) == -1) ? d.href : "#/";
+                return (<li>
+                          <NavToggleButton href={href}
+                                           largeSrc={d.largeSrc}
+                                           smallSrc={d.smallSrc}
+                                           content={d.content}
+                                           onClick={function() {
+                                             debugger;
+                                             this.forceUpdate;}.bind(this)}/>
+                        </li>);
+              })}
             </ul>
           </div>
            <h1><a href="/"><span className="everyday">Everyday</span>Africa</a></h1>
@@ -149,51 +167,43 @@
   });
 
   var NavToggleButton = React.createClass({
-    componentWillMount: function() {
-      this.setState(
-	{target: this.props.href,
-	 toggle: this.props.toggle || "#"});
-    },
-
-    // Get the next link
-    href: function() {
-      if (window.location.href.indexOf(this.state.target) == -1 ) {
-	return this.state.target;
-      } else {
-	return this.state.toggle;
-      }
-    },
-
     render: function() {
-      return (<a className="nav-button" href={this.href()} onClick={this.handleClick}>
-	        <img src={this.props.src} />
+      return (<a className="nav-button" href={this.props.href}>
+                <img className="hide-for-small" src={this.props.largeSrc} />
+                <img className="hide-for-large" src={this.props.smallSrc} />
+                <span className="navlist">{this.props.content}</span>
               </a>);
-    },
-
-    handleClick: function() {
-      this.forceUpdate();
     }
   });
 
+  /**
+   * NavDrawers:
+   *   - Countries
+   *   - Photographers
+   *   - Search
+   */
   var Countries = React.createClass({
     render: function() {
       return (<div className="countries">
-	        <h3>Countries</h3>
-	        {_.map(this.props.data, function(data, country) {
-		  return <Country key={country} country={country} data={data} />;
-		}.bind(this))}
+                <h3>Countries</h3>
+                {_.map(this.props.data, function(data, country) {
+                  return (<div className="country">
+                            <a href={tumblrTagUrl(country)}>
+                              <img src={data.flag} alt={data.name} />
+                              <h4>{data.name}</h4>
+                            </a>
+                          </div>);
+                }.bind(this))}
               </div>);
     }
   });
 
-  var Country = React.createClass({
+  var Search = React.createClass({
     render: function() {
-      return (<div className="country">
-	        <a href={tumblrTagUrl(this.props.country)}>
-	          <img src={this.props.data.flag} alt={this.props.data.name} />
-	          <h4>{this.props.data.name}</h4>
-	        </a>
-	      </div>);
+      return (<div className="search">
+                <h3>Search</h3>
+                <input className="search-input" placeholder="search term" />
+              </div>);
     }
   });
 
@@ -220,7 +230,7 @@
                 width: img.width,
                 height: img.height};
             })
-	    .value()
+            .value()
           });
         }.bind(this))
         .fail(function(d) {
@@ -276,23 +286,23 @@
                       var even = i % 2 === 0;
                       return (<div>
                                 <div className="mobile-row dbl-row">
-			          {!even &&
-				   <div className="single-col left">
+                                  {!even &&
+                                   <div className="single-col left">
                                      {instaGen()}
                                      {instaGen()}
-				   </div>}
+                                   </div>}
                                   <TaggedImage className="mobile image tumblr"
                                                key={i}
                                                imageLength={dbl}
                                                type="tumblr"
                                                image={p} />
-			          {even &&
-				   <div className="single-col right">
+                                  {even &&
+                                   <div className="single-col right">
                                      {instaGen()}
                                      {instaGen()}
-				   </div>}
+                                   </div>}
                                 </div>
-			        <div className="clear" />
+                                <div className="clear" />
                                 <div className="mobile-row single-row">
                                   {instaGen()}
                                   {instaGen()}
@@ -354,9 +364,9 @@
 
       return (<div ref={this.props.key} className={this.props.className} style={divStyle}>
                  <a href={"#/posts/" + this.props.type + "/" + this.props.key}
-	            style={divStyle}
-	            onMouseEnter={this.mouseEnterHandler}
-	            onMouseOut={this.mouseOutHandler}>
+                    style={divStyle}
+                    onMouseEnter={this.mouseEnterHandler}
+                    onMouseOut={this.mouseOutHandler}>
                    <img src={this.props.image.url} style={imgStyle} />
                  </a>
               </div>);
@@ -369,29 +379,28 @@
     componentDidMount: function() {
       var $anchor = this.anchor();
       this.setState({
-	width: $anchor.width(),
-	height: $anchor.height()});
-      
+        width: $anchor.width(),
+        height: $anchor.height()});
     },
 
     mouseEnterHandler: function() {
       return;
       this.anchor()
         .css("position", "relative")
-	.animate({width: this.state.width * this.props.scale,
-		  height: this.state.height * this.props.scale,
-		  "margin-left": "-=" + this.state.width * this.props.scale / 8,
-		  "margin-top": "-=" + this.state.width * this.props.scale / 8});
+        .animate({width: this.state.width * this.props.scale,
+                  height: this.state.height * this.props.scale,
+                  "margin-left": "-=" + this.state.width * this.props.scale / 8,
+                  "margin-top": "-=" + this.state.width * this.props.scale / 8});
     },
 
     mouseOutHandler: function() {
       return;
       this.anchor()
         .css("position", "initial")
-	.animate({width: this.state.width,
-		  height: this.state.height,
-		  "margin-left": "+=" + this.state.width * this.props.scale / 8,
-		  "margin-top": "+=" + this.state.width * this.props.scale / 8});
+        .animate({width: this.state.width,
+                  height: this.state.height,
+                  "margin-left": "+=" + this.state.width * this.props.scale / 8,
+                  "margin-top": "+=" + this.state.width * this.props.scale / 8});
     }
   });
 
@@ -439,15 +448,16 @@
                         </a>
                         <h5>{moment.unix(this.props.created).fromNow()}</h5>
                       </div>
-                      <button>Follow</button>
+                      <a href="http://www.tumblr.com/follow/everydayafrica"
+                         className="follow-link">Follow</a>
                     </div>
                     <p>{this.props.caption.replace("<p>", "").replace("</p>", "")}</p>
                     <div>
                       <ul className="sources">
                         {_(this.getSources())
-			   .keys().sort()
-			   .map(function(type) {
-			     var style = {width: (100 / count) + "%"}
+                           .keys().sort()
+                           .map(function(type) {
+                             var style = {width: (100 / count) + "%"}
                              var classes = React.addons.classSet(
                                {active: type === this.props.active});
                                return <li key={type} className={classes} style={style}>
@@ -457,15 +467,15 @@
                              }.bind(this))}
                       </ul>
                     </div>
-	            {this.props.active === "tumblr" && this.props.tumblr &&
+                    {this.props.active === "tumblr" && this.props.tumblr &&
                       <TumblrDetails tags={this.props.tumblr.tags}
                                      notes={this.props.tumblr.notes}
                                      likeButton={this.props.tumblr.likeButton}
                                      reblogButton={this.props.tumblr.reblogButton} />}
-	            {this.props.active === "instagram" && this.props.instagram &&
-	              <InstagramDetails tags={this.props.instagram.tags}
-	                                likes={this.props.instagram.likes}
-	                                comments={this.props.instagram.comments} />}
+                    {this.props.active === "instagram" && this.props.instagram &&
+                      <InstagramDetails tags={this.props.instagram.tags}
+                                        likes={this.props.instagram.likes}
+                                        comments={this.props.instagram.comments} />}
                   </div>
                 </div>
               </div>);
@@ -494,7 +504,7 @@
                  </div>
                </div>
                <CommentBox comments={{instagram: this.props.comments}}/>
-	     </div>);
+             </div>);
     }
   });
 
@@ -591,91 +601,103 @@
    */
   (function() {
     var gallery = <Gallery tag="everydayafrica" />;
+    var navBar = <NavBar />;
 
-    React.renderComponent(<NavBar />, $("header").get(0));
+    React.renderComponent(navBar, $("header").get(0));
     React.renderComponent(gallery, $("#content").get(0));
 
     $(window).resize(function() { gallery.forceUpdate(); });
+
+    /**
+     * Generate the toggleable modal
+     *
+     * props: {
+     * }
+     */
+    function ComponentHandler($root) {
+      var rootElt = $root.get(0);
+
+      this.show = function(component) {
+        this.dismiss();
+        React.renderComponent(component, rootElt);
+      };
+
+      this.dismiss = function() {
+        return React.unmountComponentAtNode(rootElt);
+      };
+    }
+
+    var Details = new ComponentHandler($("#modal"));
+    var NavDrawer = new ComponentHandler($("#nav-drawer"));
+
+
+    /*********
+     * Routing
+     */
+
+    var router = Router({
+      "/": function() {
+        Details.dismiss();
+        NavDrawer.dismiss();
+      },
+
+      "/countries": {
+        on: function() {
+          NavDrawer.show(<Countries data={EAConfig.countries} />);
+        },
+        after: function() {
+          NavDrawer.dismiss();
+        }
+      },
+
+      "/search": {
+        on: function() {
+          NavDrawer.show(<Search />);
+        },
+        after: function() {
+          NavDrawer.dismiss();
+        }
+      },
+
+      "/posts/tumblr/:id/?(\\w+)?": function(id, type) {
+        var post = TumblrVars.posts.photos[id];
+        if(post) {
+          Details.show(
+              <ImageDetails id={id}
+            url={"#/posts/tumblr/" + id}
+            caption={post.caption}
+            created={1320232}
+            image={{url: post.photoUrl500,
+                    width: post.photoWidth500,
+                    height: post.photoHeight500}}
+            user={{profile_picture: TumblrVars.portraitUrl64,
+                   username: "jtmoulia"}}
+            tumblr={post}
+            active={type || "tumblr"}
+            instagramID="536018816062052929_145884981" />);
+        }
+      },
+
+      "/posts/instagram/:id/?(\\w+)?": function(id, type) {
+        var post = InstaFetch.cache[id];
+        if(post) {
+          Details.show(
+              <ImageDetails id={id}
+            url={"#/posts/instagram/" + id}
+            caption={post.caption.text}
+            image={post.images.standard_resolution}
+            created={post.created_time}
+            user={post.user}
+            active={type || "instagram"}
+            instagram={post} />);
+        }
+      }
+    });
+
+    router.configure({
+      on: function() { navBar.forceUpdate(); }
+    }).init();
   })();
 
-  /**
-   * Generate the toggleable modal
-   *
-   * props: {
-   * }
-   */
-  function ComponentHandler($root) {
-    var rootElt = $root.get(0);
-
-    this.show = function(component) {
-	this.dismiss();
-	React.renderComponent(component, rootElt);
-    };
-
-    this.dismiss = function() {
-      return React.unmountComponentAtNode(rootElt);
-    };
-  }
-
-  var Details = new ComponentHandler($("#modal"));
-  var NavDrawer = new ComponentHandler($("#nav-drawer"));
-
-
-  /*********
-   * Routing
-   */
-
-  var router = Router({
-    "/": function() {
-      Details.dismiss();
-    },
-
-    "/countries": {
-      on: function() {
-	NavDrawer.show(<Countries data={EAConfig.countries} />);
-      },
-      after: function() {
-	NavDrawer.dismiss();
-      }
-    },
-
-    "/countries/:country": function() {
-      console.log("Countries") },
-
-    "/posts/tumblr/:id/?(\\w+)?": function(id, type) {
-      var post = TumblrVars.posts.photos[id];
-      if(post) {
-        Details.show(
-	    <ImageDetails id={id}
-                          url={"#/posts/tumblr/" + id}
-                          caption={post.caption}
-                          created={1320232}
-                          image={{url: post.photoUrl500,
-                                  width: post.photoWidth500,
-                                  height: post.photoHeight500}}
-                          user={{profile_picture: TumblrVars.portraitUrl64,
-                                 username: "jtmoulia"}}
-                          tumblr={post}
-                          active={type || "tumblr"}
-                          instagramID="536018816062052929_145884981" />);
-      }
-    },
-
-    "/posts/instagram/:id/?(\\w+)?": function(id, type) {
-      var post = InstaFetch.cache[id];
-      if(post) {
-        Details.show(
-	    <ImageDetails id={id}
-                          url={"#/posts/instagram/" + id}
-                          caption={post.caption.text}
-                          image={post.images.standard_resolution}
-	                  created={post.created_time}
-                          user={post.user}
-                          active={type || "instagram"}
-	                  instagram={post} />);
-      }
-    }
-  });
-  router.init();
 
 }(jQuery, _, React, Router));
