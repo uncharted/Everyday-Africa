@@ -278,19 +278,24 @@
     display: block;
     padding: 0.4em 0;
   }
-  a:active { color: gray;}
+  a:active {
+    color: gray;
+  }
 
   li {
     display: inline-block;
     text-align: center;
-    background: gray;
     color: #FFF;
   }
-  li:active {background-color: #fff;}
+  li:active {
+    background-color: inherit;
+  }
+
+  .not-active {
+    background-color: @inactive-color;
+  }
 
   .active {
-    background-color: white;
-
     a {
       color: @inactive-color;
     }

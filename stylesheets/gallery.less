@@ -15,8 +15,11 @@
   width: 100% - (@ea-image-width * 6);
   position: relative;
   z-index: 1;
-  box-shadow: -25px 0 100px black,
-              25px 0 100px black;
+
+  .tagged-image {
+    box-shadow: -25px 0 100px black,
+                25px 0 100px black;
+  }
 }
 
 .gallery-column {
@@ -34,6 +37,8 @@
     margin-top: -@inline-space;
     display: inline-block;
 
+    -webkit-transition: all 0.5s ease;
+    transition: all 0.25s ease;
     /*:hover {
       -webkit-transform: scale(1.5);
       transform: scale(1.5);
