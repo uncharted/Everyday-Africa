@@ -144,7 +144,6 @@
                                            smallSrc={d.smallSrc}
                                            content={d.content}
                                            onClick={function() {
-                                             debugger;
                                              this.forceUpdate;}.bind(this)}/>
                         </li>);
               })}
@@ -220,6 +219,48 @@
                 <h3>Search</h3>
                 <input className="search-input" placeholder="search term" />
               </div>);
+    }
+  });
+
+  var About = React.createClass({
+    pages: {
+      default: React.createClass({
+        render: function() {
+          return (<div>
+                    <img src="http://25.media.tumblr.com/f40df582632484f1bc2db7e3d00deaf1/tumblr_n0l3ujEqBi1rgx8vno1_500.jpg" />
+                    <p>
+                      Hey there! This is an about page. Let us know what
+                      content you would like to see here.
+                    </p>
+                  </div>);
+        }
+      }),
+      etc: React.createClass({
+        render: function() {
+          return <p>... and etc ...</p>;
+        }
+      })
+    },
+
+    attrs: {
+      className: "about"
+    },
+
+    render: function() {
+      if (this.props.type in this.pages) {
+        return (<div className="about">
+                  <div className="about-nav nav-list">
+                    <h3>About</h3>
+                    <ul>
+                      <li><a href="#/about/default">Summary</a></li>
+                      <li><a href="#/about/etc">Etc</a></li>
+                    </ul>
+                  </div>
+                  <div className="about-page">
+                    {new this.pages[this.props.type](this.attrs)}
+                  </div>
+                </div>);
+      }
     }
   });
 
@@ -641,6 +682,13 @@
       this.dismiss = function() {
         return React.unmountComponentAtNode(rootElt);
       };
+
+      // A helper for the routing
+      this.dismissFn = function() {
+        return function() {
+          this.dismiss();
+        }.bind(this);
+      }
     }
 
     var Details = new ComponentHandler($("#modal"));
@@ -661,27 +709,34 @@
         on: function() {
           NavDrawer.show(<Countries data={EAConfig.countries} />);
         },
-        after: function() {
-          NavDrawer.dismiss();
-        }
+        after: NavDrawer.dismissFn
       },
 
       "/photographers": {
         on: function() {
           NavDrawer.show(<Photographers data={EAConfig.photographers} />);
         },
-        after: function() {
-          NavDrawer.dismiss();
-        }
+        after: NavDrawer.dissmissFn
       },
 
       "/search": {
         on: function() {
           NavDrawer.show(<Search />);
         },
-        after: function() {
-          NavDrawer.dismiss();
-        }
+        after: NavDrawer.dissmissFn
+      },
+
+      "/about": {
+        "/:page": {
+          on: function(type) {
+            NavDrawer.show(<About type={type} />);
+          },
+          after: NavDrawer.dissmissFn
+        },
+        on: function() {
+          NavDrawer.show(<About type="default" />);
+        },
+        after: NavDrawer.dissmissFn
       },
 
       "/posts/tumblr/:id/?(\\w+)?": function(id, type) {

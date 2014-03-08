@@ -7,7 +7,7 @@
   border-bottom: 1px solid black;
 
 
-  > div > h3 {
+  > div h3 {
     text-transform: uppercase;
     font-family: "Lato";
     margin-left: 1em;
@@ -73,6 +73,38 @@
       color: @blue;
       outline: 0;
       border-bottom-color: @blue;
+    }
+  }
+
+  .about {
+    margin-top: 1em;
+
+    .about-nav {
+      width: 30%;
+      float: left;
+    }
+
+    .about-page {
+      float: right;
+      width: 70%;
+    }
+  }
+
+
+  .nav-list {
+    ul {
+      list-style-type: none;
+      font-size: 1.12em;
+    }
+
+    a {
+      text-decoration: none;
+      color: black;
+    }
+
+    a:hover {
+      color: @blue;
+      text-decoration: underline;
     }
   }
 }
