@@ -571,9 +571,8 @@
                 <TagList tags={_.map(this.props.tags, function(t) {
                   return {tag: t.tag, url: t.tagUrl};
                 })} />
-                <p>{this.props.notes ? this.props.notes.count : "0"} Notes</p>
-                <div dangerouslySetInnerHTML={{__html: this.props.likeButton}} />
-                <div dangerouslySetInnerHTML={{__html: this.props.reblogButton}} />
+                <div className="reblogs" dangerouslySetInnerHTML={{__html: this.props.reblogButton}} />
+                <p>{this.props.notes ? this.props.notes.count : "0"} Photo Reblogs</p>
               </div>);
     }
   });
