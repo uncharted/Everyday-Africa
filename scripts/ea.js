@@ -419,7 +419,10 @@
     render: function() {
       var divStyle = {
         width: this.props.imageLength,
-        height: this.props.imageLength };
+        height: this.props.imageLength,
+        opacity: 0};
+      var aStyle = _.pick(divStyle, ['width', 'height']);
+
       var imgStyle = {};
 
       if (this.props.image.width > this.props.image.height) {
@@ -430,7 +433,7 @@
 
       return (<div ref={this.props.key} className={this.props.className} style={divStyle}>
                  <a href={"#/posts/" + this.props.type + "/" + this.props.key}
-                    style={divStyle}
+                    style={aStyle}
                     onMouseEnter={this.mouseEnterHandler}
                     onMouseOut={this.mouseOutHandler}>
                    <img src={this.props.image.url} style={imgStyle} />
@@ -447,6 +450,12 @@
       this.setState({
         width: $anchor.width(),
         height: $anchor.height()});
+
+      // Fade in the image
+      var $node = $(this.getDOMNode());
+      $node.find("img").load(function(d) {
+        $node.css("opacity", 1);
+      });
     },
 
     mouseEnterHandler: function() {
@@ -525,7 +534,8 @@
                            .map(function(type) {
                              var style = {width: (100 / count) + "%"}
                              var classes = React.addons.classSet(
-                               {active: type === this.props.active});
+                               {active: type === this.props.active,
+                                "not-active": type !== this.props.active});
                                return <li key={type} className={classes} style={style}>
                                         <a href={this.props.url + "/" + type}>{type}</a>
                                       </li>;
@@ -767,18 +777,20 @@
       },
 
       "/posts/instagram/:id/?(\\w+)?": function(id, type) {
-        var post = InstaFetch.cache[id];
-        if(post) {
-          Details.show(
-              <ImageDetails id={id}
-            url={"#/posts/instagram/" + id}
-            caption={post.caption.text}
-            image={post.images.standard_resolution}
-            created={post.created_time}
-            user={post.user}
-            active={type || "instagram"}
-            instagram={post} />);
-        }
+        InstaFetch.get(id).done(function(d) {
+          var post = d.data
+          if(post) {
+            Details.show(
+                <ImageDetails id={id}
+              url={"#/posts/instagram/" + id}
+              caption={post.caption.text}
+              image={post.images.standard_resolution}
+              created={post.created_time}
+              user={post.user}
+              active={type || "instagram"}
+              instagram={post} />);
+          }
+        });
       }
     });
 
