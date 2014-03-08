@@ -204,5 +204,54 @@ EAConfig = {
     zimbabwe: {
       name: "Zimbabwe",
       flag: "FLAG_BASE/Zimbabwe.png"}
-  }
+  },
+
+  photographers: [
+    {
+      name: "Peter DiCampo",
+      url: "http://www.peterdicampo.com/"
+    }, {
+      name: "Austin Merrell"
+    }, {
+      name: "Nana Kofi Acquah",
+      url: "http://www.nkaphoto.com/en/"
+    }, {
+      name: "Jide Alakija",
+      url: "http://www.alakija.com/"
+    }, {
+      name: "Andrew Esiebo",
+      url: "http://www.andrewesiebo.com/"
+    }, {
+      name: "Glenna Gordon",
+      url: "http://www.glennagordon.com/"
+    }, {
+      name: "Jane Hahn",
+      url: "http://www.janehahn.com/"
+    }, {
+      name: "Idil Ibrahim"
+    }, {
+      name: "Shannon Jenson",
+      url: "http://www.shannon-jensen.com/"
+    }, {
+      name: "Lindsay Mackenzie",
+      url: "http://lindsaymackenzie.com/"
+    }, {
+      name: "Holly Pickett",
+      url: "http://www.hollypickett.com/"
+    }, {
+      name: "Allison Shelley",
+      url: "http://allisonshelley.photoshelter.com/#!/index"
+    }, {
+      name: "Charlie Shoemaker",
+      url: "http://www.charlieshoemaker.com/"
+    }, {
+      name: "Nichole Sobecki",
+      url: "http://www.nicholesobecki.com/"
+    }, {
+      name: "Laura El-Tantawy",
+      url: "http://www.lauraeltantawy.com/"
+    }, {
+      name: "Sara Terry"
+    }
+  ]
 };

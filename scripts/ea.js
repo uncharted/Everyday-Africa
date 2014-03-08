@@ -184,13 +184,29 @@
    */
   var Countries = React.createClass({
     render: function() {
-      return (<div className="countries">
+      return (<div className="countries grid">
                 <h3>Countries</h3>
                 {_.map(this.props.data, function(data, country) {
-                  return (<div className="country">
+                  return (<div className="country grid-item">
                             <a href={tumblrTagUrl(country)}>
                               <img src={data.flag} alt={data.name} />
                               <h4>{data.name}</h4>
+                            </a>
+                          </div>);
+                }.bind(this))}
+              </div>);
+    }
+  });
+
+  var Photographers = React.createClass({
+    render: function() {
+      return (<div className="photographers grid">
+                <h3>Photographers</h3>
+                {_.map(this.props.data, function(p) {
+                  return (<div className="photographer grid-item">
+                            <a href={p.url}>
+                              <img src="http://placehold.it/50x50" alt={p.name} />
+                              <h4>{p.name}</h4>
                             </a>
                           </div>);
                 }.bind(this))}
@@ -644,6 +660,15 @@
       "/countries": {
         on: function() {
           NavDrawer.show(<Countries data={EAConfig.countries} />);
+        },
+        after: function() {
+          NavDrawer.dismiss();
+        }
+      },
+
+      "/photographers": {
+        on: function() {
+          NavDrawer.show(<Photographers data={EAConfig.photographers} />);
         },
         after: function() {
           NavDrawer.dismiss();
