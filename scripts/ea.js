@@ -217,8 +217,17 @@
     render: function() {
       return (<div className="search">
                 <h3>Search</h3>
-                <input className="search-input" placeholder="search term" />
+                <input className="search-input"
+                       placeholder="search term"
+                       onKeyPress={this.keyPressHandler} />
               </div>);
+    },
+
+    keyPressHandler: function(e) {
+      if (e.key === "Enter") {
+        var input = $(this.getDOMNode()).find("input").val();
+        if (input) location.href = tumblrTagUrl(input);
+      }
     }
   });
 
