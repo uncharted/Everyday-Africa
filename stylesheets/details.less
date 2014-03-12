@@ -45,13 +45,48 @@
     padding-right: 3px;
   }
 
+.detail-nav {
+  top: 55%;
+  z-index: 10;
+  position: fixed;
+  height: auto;
+  width: 90%;
+  margin-left: 4%;
+  margin-right: 6%;
+
+  @media (max-width: 480px) {
+    display: none;
+  }
+
+
+  a {display: block;}
+
+  img {
+    height: 60px;
+
+    @media (max-width: 700px) {height: 45px;}
+  }
+
+  .arrow-right {
+    width: auto;
+    float: right;
+
+    img {float: right;}
+  }
+  .arrow-left {
+    width: auto;
+    float: left;
+
+    img {float: left;}
+  }
+}
   .image-detail {
     position: fixed;
     width: @detail-width;
     top: 20%;
     left: 50%;
     margin-left: -@detail-width / 2;
-    z-index: 2;
+    z-index: 3;
     overflow-y: hidden;
     max-height: @detail-height;
     @media (max-width: 700px){

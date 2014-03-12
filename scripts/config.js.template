@@ -16,7 +16,9 @@ EAConfig = {
     africaWhite: "AFRICA-WHITE_URL",
     photographerWhite: "PHOTOGRAPHER-WHITE_URL",
     searchWhite: "SEARCH-WHITE_URL",
-    aboutWhite: "ABOUT-WHITE_URL"
+    aboutWhite: "ABOUT-WHITE_URL",
+    arrowleft: "ARROW-LEFT_URL",
+    arrowright: "ARROW-RIGHT_URL"
 
   },
 
