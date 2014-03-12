@@ -530,7 +530,7 @@
                       <a href="http://www.tumblr.com/follow/everydayafrica"
                          className="follow-link">Follow</a>
                     </div>
-                    <p>{this.props.caption.replace("<p>", "").replace("</p>", "")}</p>
+                    <p className="caption">{this.props.caption.replace("<p>", "").replace("</p>", "")}</p>
                     <div>
                       <ul className="sources">
                         {_(this.getSources())

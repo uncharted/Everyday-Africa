@@ -54,7 +54,7 @@
   margin-left: 4%;
   margin-right: 6%;
 
-  @media (max-width: 480px) {
+  @media (max-width: @small) {
     display: none;
   }
 
@@ -64,7 +64,7 @@
   img {
     height: 60px;
 
-    @media (max-width: 700px) {height: 45px;}
+    @media (max-width: @medium) {height: 45px;}
   }
 
   .arrow-right {
@@ -89,7 +89,7 @@
     z-index: 3;
     overflow-y: hidden;
     max-height: @detail-height;
-    @media (max-width: 700px){
+    @media (max-width: @medium){
       max-width: 68%;
       max-height: 82%;
       margin-left: 0px; 
@@ -98,7 +98,7 @@
       overflow-y: scroll;
       overflow-x: hidden;
     }
-    @media (max-width: 480px){
+    @media (max-width: @small){
       max-width: 100%;
       max-height: 90%;
       margin-left: 0px;
@@ -115,7 +115,7 @@
     > img, > div {
       display: inline-block;
       vertical-align: top;
-      @media (min-width: 700px){
+      @media (min-width: @medium){
         max-height: @detail-height;
       }
     }
@@ -123,13 +123,18 @@
     > img {
       height: @detail-height;
       margin-right: 0.5em;
+
+      @media (max-width: @medium) { 
+        width: 100%;
+        height: inherit;
+      }
     }
 
     > div {
       overflow-y: scroll;
       width: @detail-side-width;
       margin-top: 0.5em;
-      @media (max-width: 700px){
+      @media (max-width: @medium){
         width: 100%;
         overflow-y: visible;
       }
@@ -137,7 +142,7 @@
 .detail-header {
 	padding: 15px;
 	padding-bottom: 0px;
-	@media (max-width: 700px) {
+	@media (max-width: @medium) {
           padding-left: 20px;
 	}
 	img, div {
@@ -148,7 +153,7 @@
 	img {
           margin-right: 0.6em;
           width: 40px;
-          @media (max-width: 700px) {
+          @media (max-width: @medium) {
             width: 55px;
           }
 	}
@@ -176,7 +181,7 @@
           color: @blue;
           margin-top: 0;
           margin-bottom: 0.3em;
-          @media (max-width: 700px){
+          @media (max-width: @medium){
             font-size: 1.2em;
             font-weight: 400;
           }
@@ -184,7 +189,7 @@
 	h5 {
     margin-top: 0.05em;
     font-weight: 300;
-    @media (max-width: 700px){
+    @media (max-width: @medium){
       font-size: 1em;
       color: gray;
       }
@@ -192,8 +197,9 @@
 }
 
   .caption {
-    padding: 0px 9px 0px 18px;
-    @media (max-width: 700px) {
+    padding-left: 20px;
+    padding-top: 10px;
+    @media (max-width: @medium) {
     font-size: 1.15em;
     line-height: 1.35em;
   }
@@ -241,7 +247,7 @@
     .detail-panel {
       overflow-x: hidden;
 
-      @media (max-width: 700px) {
+      @media (max-width: @medium) {
         width: 95%;
       }
 
@@ -273,7 +279,7 @@
             font-size: 1em;
             color: @blue;
             line-height: 30px;
-            @media (max-width: 700px){
+            @media (max-width: @medium){
               font-size: 1.05em;
               font-weight: 600;
             }
