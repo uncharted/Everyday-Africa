@@ -512,6 +512,10 @@
 
       return (<div className="detail">
                 <div className="overlay"><a href="#/"></a></div>
+                <div className="detail-nav">
+                  <a className="arrow-left" href="#"><img src={EAConfig.images.arrowleft} /></a>
+                  <a className="arrow-right" href="#"><img src={EAConfig.images.arrowright} /></a>
+                </div>
                 <div className="image-detail">
                   <img src={this.props.image.url} className="image-large"/>
                   <div className="detail-panel">
@@ -526,7 +530,7 @@
                       <a href="http://www.tumblr.com/follow/everydayafrica"
                          className="follow-link">Follow</a>
                     </div>
-                    <p>{this.props.caption.replace("<p>", "").replace("</p>", "")}</p>
+                    <p className="caption">{this.props.caption.replace("<p>", "").replace("</p>", "")}</p>
                     <div>
                       <ul className="sources">
                         {_(this.getSources())
