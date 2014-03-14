@@ -2,8 +2,13 @@
 "use strict";
 
 (function($, _, React, Router) {
+  Number.prototype.mod = function(n) {
+    return ((this%n)+n)%n;
+  }
+
   var Settings = {
-    galleryBreakpoint: 600
+    galleryBreakpoint: 600,
+    mediumBreakpoint: 900
   };
 
 
@@ -43,16 +48,22 @@
     CLIENT_ID: "57dbff39f8dc4b659e6489ac6dd68b45",
     API_URL: "https://api.instagram.com/v1",
     cache: {},
+    _order: [],
 
     _params: function() {
       return $.param({client_id: this.CLIENT_ID, callback: "?"});
+    },
+
+    _push: function(data) {
+      this.cache[data.id] = data;
+      this._order.push(data.id);
     },
 
     _fetcher: function(tag, total, url, deferred) {
       $.ajax({url: url, dataType: "jsonp"})
         .done(function(d) {
           d.data.forEach(function(datum) {
-            this.cache[datum.id] = datum;
+	    this._push(datum);
             deferred.notifyWith(this, [datum]);
           }.bind(this));
           if (total > _.size(this.cache)) {
@@ -68,7 +79,7 @@
       var url = this.API_URL + "/tags/" + tag + "/media/recent?" + this._params();
       var deferred = $.Deferred();
 
-      this._fetcher(tag, total || 60, url, deferred);
+      this._fetcher(tag, total || 20, url, deferred);
       return deferred.promise();
     },
 
@@ -87,13 +98,25 @@
         var url = this.API_URL + "/media/" + id + "?" + this._params();
         return $.ajax({url: url, dataType: "jsonp"})
           .done(function(d) {
-            this.cache[d.data.id] = d.data;
+            this._push(d.data);
           }.bind(this));
       }
     },
 
     userUrl: function(user) {
       return ["http://instagram.com", user].join("/");
+    },
+
+    eaUrl: function(id) {
+      return "#/posts/instagram/" + id;
+    },
+
+    next: function(id, steps) {
+      return this._order[(this._order.indexOf(id) + (steps || 1)).mod(this._order.length)];
+    },
+
+    prev: function(id, steps) {
+      return this._order[(this._order.indexOf(id) - (steps || 1)).mod(this._order.length)];
     }
   };
 
@@ -127,6 +150,10 @@
         }
       ];
 
+      var buttonsStyle =
+	{display: $(window).width() < Settings.mediumBreakpoint ?
+	 'none' : 'inline-block' };
+
       return (
          <nav>
           <div id="nav-hamburger" className="nav-panel">
@@ -134,7 +161,7 @@
                <img src={EAConfig.images.menu} />
              </a>
           </div>
-          <div id="nav-buttons" className="nav-panel">
+          <div id="nav-buttons" className="nav-panel" style={buttonsStyle} >
             <ul>
               {_.map(navData, function(d) {
                 var href = (window.location.href.indexOf(d.href) == -1) ? d.href : "#/";
@@ -144,7 +171,7 @@
                                            smallSrc={d.smallSrc}
                                            content={d.content}
                                            onClick={function() {
-                                             this.forceUpdate;}.bind(this)}/>
+                                             this.forceUpdate }.bind(this)}/>
                         </li>);
               })}
             </ul>
@@ -413,7 +440,7 @@
   // A single Image
   var TaggedImage = React.createClass({
     getDefaultProps: function() {
-      return {scale: 1.5};
+      return {scale: 1.2, duration: 200};
     },
 
     render: function() {
@@ -441,16 +468,7 @@
               </div>);
     },
 
-    anchor: function() {
-      return $(this.getDOMNode()).find("a");
-    },
-
     componentDidMount: function() {
-      var $anchor = this.anchor();
-      this.setState({
-        width: $anchor.width(),
-        height: $anchor.height()});
-
       // Fade in the image
       var $node = $(this.getDOMNode());
       $node.find("img").load(function(d) {
@@ -459,23 +477,30 @@
     },
 
     mouseEnterHandler: function() {
-      return;
-      this.anchor()
-        .css("position", "relative")
-        .animate({width: this.state.width * this.props.scale,
-                  height: this.state.height * this.props.scale,
-                  "margin-left": "-=" + this.state.width * this.props.scale / 8,
-                  "margin-top": "-=" + this.state.width * this.props.scale / 8});
+      var $div = $(this.getDOMNode());
+      $div.find("a")
+        .finish()
+        .css("z-index", 2)
+        .animate({width: $div.width() * this.props.scale,
+                  height: $div.height() * this.props.scale,
+                  "margin-left": "-=" + ($div.width() * this.props.scale) / 12,
+                  "margin-top": "-=" + ($div.height() * this.props.scale) / 12},
+                 this.props.duration);
     },
 
     mouseOutHandler: function() {
-      return;
-      this.anchor()
-        .css("position", "initial")
-        .animate({width: this.state.width,
-                  height: this.state.height,
-                  "margin-left": "+=" + this.state.width * this.props.scale / 8,
-                  "margin-top": "+=" + this.state.width * this.props.scale / 8});
+      var $div = $(this.getDOMNode());
+      $div.find("a")
+        .finish()
+        .css("z-index", 1)
+        .animate({width: $div.width(),
+                  height: $div.height(),
+                  "margin-left": "+=" + ($div.width() * this.props.scale) / 12,
+                  "margin-top": "+=" + ($div.height() * this.props.scale) / 12},
+                 this.props.duration,
+                 function() {
+                   $(this).css("z-index", 0);
+                 });
     }
   });
 
@@ -497,30 +522,55 @@
         }
       }
       this.setState({active: active});
+
     },
 
     componentDidMount: function() {
+      // Get the image if it is not cached
       if (this.props.instagramID) {
         InstaFetch.get(this.props.instagramID).done(function(d) {
           this.setProps({instagram: d.data})
         }.bind(this));
       }
+
+      // Wire up next/prev keydown listeners
+      $(window).keydown(function(e) {
+        if ( e.keyCode === 37 ) {
+          e.preventDefault();
+          window.location.hash = this.props.prev;
+        } else if ( e.keyCode === 39 ) {
+          e.preventDefault();
+          window.location.hash = this.props.next;
+        } else if (e.keyCode === 27) {
+          e.preventDefault();
+          window.location.hash = "#";
+        }
+      }.bind(this));
+    },
+
+    componentWillUnmount: function() {
+      // Remove next/prev keydown listeners
+      $(window).unbind('keydown');
     },
 
     render: function() {
       var count = _.values(this.getSources()).length;
 
-      return (<div className="detail">
+      return (<div className="detail" onKeyPress={this.keyPressHandler}>
                 <div className="overlay"><a href="#/"></a></div>
                 <div className="detail-nav">
-                  <a className="arrow-left" href="#"><img src={EAConfig.images.arrowleft} /></a>
-                  <a className="arrow-right" href="#"><img src={EAConfig.images.arrowright} /></a>
+                  <a className="arrow-left" href={this.props.next}>
+                    <img src={EAConfig.images.arrowleft} />
+                  </a>
+                  <a className="arrow-right" href={this.props.prev}>
+                    <img src={EAConfig.images.arrowright} />
+                  </a>
                 </div>
                 <div className="image-detail">
                   <img src={this.props.image.url} className="image-large"/>
                   <div className="detail-panel">
                     <div className="detail-header">
-                      <img src={this.props.user.profile_picture} />
+                      <img  onKeyPress={this.keyPressHandler} src={this.props.user.profile_picture} />
                       <div>
                         <a href={InstaFetch.userUrl(this.props.user.username)}>
                           <h4>{this.props.user.username}</h4>
@@ -560,6 +610,10 @@
                 </div>
               </div>);
     },
+
+    keyPressHandler: function(e) {
+      console.log(e);
+    }
   });
 
   var InstagramDetails = React.createClass({
@@ -685,7 +739,11 @@
     React.renderComponent(navBar, $("header").get(0));
     React.renderComponent(gallery, $("#content").get(0));
 
-    $(window).resize(function() { gallery.forceUpdate(); });
+    // Easy peasy responsive: Just update everything on resize
+    $(window).resize(function() {
+        gallery.forceUpdate();
+        navBar.forceUpdate();
+    });
 
     /**
      * Generate the toggleable modal
@@ -766,17 +824,17 @@
         if(post) {
           Details.show(
               <ImageDetails id={id}
-            url={"#/posts/tumblr/" + id}
-            caption={post.caption}
-            created={1320232}
-            image={{url: post.photoUrl500,
-                    width: post.photoWidth500,
-                    height: post.photoHeight500}}
-            user={{profile_picture: TumblrVars.portraitUrl64,
-                   username: "jtmoulia"}}
-            tumblr={post}
-            active={type || "tumblr"}
-            instagramID="536018816062052929_145884981" />);
+                            url={"#/posts/tumblr/" + id + "/instagram"}
+                            caption={post.caption}
+                            created={1320232}
+                            image={{url: post.photoUrl500,
+                                    width: post.photoWidth500,
+                                    height: post.photoHeight500}}
+                            user={{profile_picture: TumblrVars.portraitUrl64,
+                                   username: "jtmoulia"}}
+                            tumblr={post}
+                            active={type || "tumblr"}
+                            instagramID="536018816062052929_145884981" />);
         }
       },
 
@@ -786,13 +844,16 @@
           if(post) {
             Details.show(
                 <ImageDetails id={id}
-              url={"#/posts/instagram/" + id}
-              caption={post.caption.text}
-              image={post.images.standard_resolution}
-              created={post.created_time}
-              user={post.user}
-              active={type || "instagram"}
-              instagram={post} />);
+                              url={InstaFetch.eaUrl(id)}
+                              caption={post.caption.text}
+                              image={post.images.standard_resolution}
+                              created={post.created_time}
+                              user={post.user}
+                              active={type || "instagram"}
+                              instagram={post}
+	                      next={InstaFetch.eaUrl(InstaFetch.next(id))}
+	                      prev={InstaFetch.eaUrl(InstaFetch.prev(id))}
+		            />);
           }
         });
       }

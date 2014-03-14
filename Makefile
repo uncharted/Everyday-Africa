@@ -61,10 +61,12 @@ TUMBLR_URL		= $(IMAGES_BASE_URL)/tumblr.png
 TAG_ICON_URL		= $(IMAGES_BASE_URL)/tag_icon.svg
 HEART_ICON_URL		= $(IMAGES_BASE_URL)/heart_icon.svg
 MENU_URL		= $(IMAGES_BASE_URL)/menu.svg
-AFRICA-WHITE_URL	=$(IMAGES_BASE_URL)/africa-white.svg
-PHOTOGRAPHER-WHITE_URL	=$(IMAGES_BASE_URL)/photographer-white.svg
-SEARCH-WHITE_URL	=$(IMAGES_BASE_URL)/search-white.svg
-ABOUT-WHITE_URL	=$(IMAGES_BASE_URL)/about-white.svg
+AFRICA_WHITE_URL	= $(IMAGES_BASE_URL)/africa-white.svg
+PHOTOGRAPHER_WHITE_URL	= $(IMAGES_BASE_URL)/photographer-white.svg
+SEARCH_WHITE_URL	= $(IMAGES_BASE_URL)/search-white.svg
+ABOUT_WHITE_URL	        = $(IMAGES_BASE_URL)/about-white.svg
+ARROW_LEFT_URL	        = $(IMAGES_BASE_URL)/arrow-left.svg
+ARROW_RIGHT_URL	        = $(IMAGES_BASE_URL)/arrow-right.svg
 
 SED_TEMPLATER = sed \
             -e 's|HOST|$(HOST)|g' \
@@ -89,10 +91,12 @@ SED_TEMPLATER = sed \
             -e 's|TAG_ICON_URL|$(TAG_ICON_URL)|g' \
             -e 's|MENU_URL|$(MENU_URL)|g' \
             -e 's|HEART_ICON_URL|$(HEART_ICON_URL)|g' \
-            -e 's|AFRICA-WHITE_URL|$(AFRICA-WHITE_URL)|g' \
-            -e 's|PHOTOGRAPHER-WHITE_URL|$(PHOTOGRAPHER-WHITE_URL)|g' \
-            -e 's|SEARCH-WHITE_URL|$(SEARCH-WHITE_URL)|g' \
-            -e 's|ABOUT-WHITE_URL|$(ABOUT-WHITE_URL)|g' \
+            -e 's|AFRICA_WHITE_URL|$(AFRICA_WHITE_URL)|g' \
+            -e 's|PHOTOGRAPHER_WHITE_URL|$(PHOTOGRAPHER_WHITE_URL)|g' \
+            -e 's|SEARCH_WHITE_URL|$(SEARCH_WHITE_URL)|g' \
+            -e 's|ABOUT_WHITE_URL|$(ABOUT_WHITE_URL)|g' \
+            -e 's|ARROW_LEFT_URL|$(ARROW_LEFT_URL)|g' \
+            -e 's|ARROW_RIGHT_URL|$(ARROW_RIGHT_URL)|g' \
 	    $(TUMBLRVARS)
 
 

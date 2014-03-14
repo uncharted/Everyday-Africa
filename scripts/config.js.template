@@ -13,13 +13,12 @@ EAConfig = {
     tag: "TAG_ICON_URL",
     heart: "HEART_ICON_URL",
     menu: "MENU_URL",
-    africaWhite: "AFRICA-WHITE_URL",
-    photographerWhite: "PHOTOGRAPHER-WHITE_URL",
-    searchWhite: "SEARCH-WHITE_URL",
-    aboutWhite: "ABOUT-WHITE_URL",
-    arrowleft: "ARROW-LEFT_URL",
-    arrowright: "ARROW-RIGHT_URL"
-
+    africaWhite: "AFRICA_WHITE_URL",
+    photographerWhite: "PHOTOGRAPHER_WHITE_URL",
+    searchWhite: "SEARCH_WHITE_URL",
+    aboutWhite: "ABOUT_WHITE_URL",
+    arrowleft: "ARROW_LEFT_URL",
+    arrowright: "ARROW_RIGHT_URL"
   },
 
   countries: {
