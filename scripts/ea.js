@@ -178,10 +178,10 @@
           </div>
            <h1><a href="/"><span className="everyday">Everyday</span>Africa</a></h1>
            <div id="share-buttons" className="nav-panel">
-             <a href="http://instagram.com/everydayafrica"><img src={EAConfig.images.instagram} /></a>
-             <a href="https://twitter.com/EverydayAfrica"><img src={EAConfig.images.twitter} /></a>
-             <a href="https://www.facebook.com/everydayafrica"><img src={EAConfig.images.facebook} /></a>
-             <a href="http://everydayafrica.tumblr.com/#me"><img src={EAConfig.images.tumblr} /></a>
+             <a target="_blank" href="http://instagram.com/everydayafrica"><img src={EAConfig.images.instagram} /></a>
+             <a target="_blank" href="https://twitter.com/EverydayAfrica"><img src={EAConfig.images.twitter} /></a>
+             <a target="_blank" href="https://www.facebook.com/everydayafrica"><img src={EAConfig.images.facebook} /></a>
+             <a target="_blank" href="http://everydayafrica.tumblr.com/#me"><img src={EAConfig.images.tumblr} /></a>
            </div>
          </nav>);
     },
