@@ -211,6 +211,7 @@
   var Countries = React.createClass({
     render: function() {
       return (<div className="countries grid">
+                <CloseWindow />
                 <h3>Countries</h3>
                 {_.map(this.props.data, function(data, country) {
                   return (<div className="country grid-item">
@@ -227,6 +228,7 @@
   var Photographers = React.createClass({
     render: function() {
       return (<div className="photographers grid">
+                <CloseWindow />
                 <h3>Photographers</h3>
                 {_.map(this.props.data, function(p) {
                   return (<div className="photographer grid-item">
@@ -243,6 +245,7 @@
   var Search = React.createClass({
     render: function() {
       return (<div className="search">
+                <CloseWindow />
                 <h3>Search</h3>
                 <input className="search-input"
                        placeholder="search term"
@@ -285,6 +288,7 @@
     render: function() {
       if (this.props.type in this.pages) {
         return (<div className="about">
+                  <CloseWindow />
                   <div className="about-nav nav-list">
                     <h3>About</h3>
                     <ul>
@@ -504,6 +508,18 @@
     }
   });
 
+  var CloseWindow = React.createClass({
+    render: function() {
+      return <div className="close-window">x</div>;
+    }
+  });
+
+    var CloseWindowOverlay = React.createClass({
+    render: function() {
+      return <div className="close-window-overlay">x</div>;
+    }
+  });
+
   // The Image detail view
   var ImageDetails = React.createClass({
     getSources: function() {
@@ -557,7 +573,10 @@
       var count = _.values(this.getSources()).length;
 
       return (<div className="detail" onKeyPress={this.keyPressHandler}>
-                <div className="overlay"><a href="#/"></a></div>
+                <div className="overlay">
+                  <CloseWindowOverlay />
+                  <a href="#/"></a>
+                </div>
                 <div className="detail-nav">
                   <a className="arrow-left" href={this.props.next}>
                     <img src={EAConfig.images.arrowleft} />

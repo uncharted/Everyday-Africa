@@ -31,6 +31,30 @@
   clear: both;
 }
 
+.close-window, .close-window-overlay{
+	display: block;
+	position: fixed;
+	right: 0%;
+	top: 0%;
+	margin-top: 80px;
+	margin-right: 15px;
+	z-index: 200;
+
+	cursor:pointer;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 0px;
+    padding: 11px 3px; 
+}
+
+.close-window-overlay { 
+	color: #FFF; }
+
+.close-window {
+	margin-top: 80px;
+	margin-right: 15px;
+	color: #000; }
+
 // Import other less files
 @import "details.less";
 @import "navdrawer.less";
