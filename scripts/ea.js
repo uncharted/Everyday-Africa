@@ -3,7 +3,7 @@
 
 (function($, _, React, Router) {
   Number.prototype.mod = function(n) {
-    return ((this%n)+n)%n;
+    return ((this % n) + n) % n;
   }
 
   var Settings = {
@@ -230,7 +230,25 @@
    *   - Photographers
    *   - Search
    */
+  var SlideToggleMixin = {
+    componentDidMount: function() {
+      // Slide in the drawer
+      var $node = $(this.getDOMNode());
+      $node.toggle();
+      $node.slideToggle();
+    },
+
+    dismiss: function() {
+      var node = this.getDOMNode();
+      $(node).slideToggle({complete: function() {
+	React.unmountComponentAtNode(node);
+      }.bind(this)})
+    }
+  };
+
   var Countries = React.createClass({
+    mixins: [SlideToggleMixin],
+
     render: function() {
       return (<div className="countries grid">
                 <CloseWindow />
@@ -248,6 +266,8 @@
   });
 
   var Photographers = React.createClass({
+    mixins: [SlideToggleMixin],
+
     render: function() {
       return (<div className="photographers grid">
                 <CloseWindow />
@@ -265,6 +285,8 @@
   });
 
   var Search = React.createClass({
+    mixins: [SlideToggleMixin],
+
     render: function() {
       return (<div className="search">
                 <CloseWindow />
@@ -284,6 +306,8 @@
   });
 
   var About = React.createClass({
+    mixins: [SlideToggleMixin],
+
     // Each page is a different about page
     pages: [
       {name: "default",
@@ -567,8 +591,25 @@
     }
   });
 
+  var FadeToggleMixin = {
+    componentDidMount: function() {
+      // Slide in the drawer
+      var $node = $(this.getDOMNode());
+      $node.toggle();
+      $node.fadeToggle();
+    },
+
+    dismiss: function() {
+      var node = this.getDOMNode();
+      $(node).fadeToggle({complete: function() {
+	React.unmountComponentAtNode(node);
+      }.bind(this)})
+    }
+  }
+
   // The Image detail view
   var ImageDetails = React.createClass({
+    // mixins: [FadeToggleMixin],
 
     getSources: function() {
       return _.pick(this.props, ["tumblr", "instagram"]);
@@ -589,7 +630,7 @@
 
     },
 
-    componentDidMount: function() {
+    Componentdidmount: function() {
       // Get the image if it is not cached
       if (this.props.instagramID) {
         InstaFetch.get(this.props.instagramID).done(function(d) {
@@ -816,9 +857,6 @@
 
     /**
      * Generate the toggleable modal
-     *
-     * props: {
-     * }
      */
     function ComponentHandler($root) {
       var rootElt = $root.get(0);
@@ -834,8 +872,8 @@
 
       this.dismiss = function() {
         bodyScroll.unfix();
+	if(mounted) mounted.dismiss();
         mounted = undefined;
-        return React.unmountComponentAtNode(rootElt);
       };
 
       // A helper for the routing

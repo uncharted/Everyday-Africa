@@ -36,6 +36,24 @@
   }
 }
 
+// Fade inj
+.details-enter {
+  opacity: 0.01;
+  transition: opacity .5s ease-in;
+}
+
+.details-enter.details-enter-active {
+  opacity: 1;
+}
+
+.details-leave {
+  opacity: 1;
+  transition: opacity .5s ease-in;
+}
+
+.details-leave.details-leave-active {
+  opacity: 0.01;
+}
 
 .detail {
   width: 100%;
@@ -97,7 +115,7 @@
     @media (max-width: @medium){
       max-width: 68%;
       max-height: 82%;
-      margin-left: 0px; 
+      margin-left: 0px;
       left: 15%;
       top: 16%;
       overflow-y: scroll;
