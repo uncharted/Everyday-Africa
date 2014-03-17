@@ -184,10 +184,12 @@
 	     </a>
 	   </div>
            <div id="share-buttons" className="nav-panel" style={buttonsStyle}>
-             <a target="_blank" href="http://instagram.com/everydayafrica"><img src={EAConfig.images.instagram} /></a>
-             <a target="_blank" href="https://twitter.com/EverydayAfrica"><img src={EAConfig.images.twitter} /></a>
-             <a target="_blank" href="https://www.facebook.com/everydayafrica"><img src={EAConfig.images.facebook} /></a>
-             <a target="_blank" href="http://everydayafrica.tumblr.com/#me"><img src={EAConfig.images.tumblr} /></a>
+            <ul>
+              <li><a target="_blank" href="http://instagram.com/everydayafrica"><img src={EAConfig.images.instagram} /></a></li>
+              <li><a target="_blank" href="https://twitter.com/EverydayAfrica"><img src={EAConfig.images.twitter} /></a></li>
+              <li><a target="_blank" href="https://www.facebook.com/everydayafrica"><img src={EAConfig.images.facebook} /></a></li>
+              <li><a target="_blank" href="http://everydayafrica.tumblr.com/#me"><img src={EAConfig.images.tumblr} /></a></li>
+            </ul>
            </div>
          </nav>);
     },
