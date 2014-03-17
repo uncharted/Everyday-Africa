@@ -150,9 +150,8 @@
         }
       ];
 
-      var buttonsStyle =
-	{display: $(window).width() < Settings.mediumBreakpoint ?
-	 'none' : 'inline-block' };
+      var small = $(window).width() < Settings.mediumBreakpoint;
+      var buttonsStyle = {display: small ? 'none' : 'inline-block'};
 
       return (
          <nav>
@@ -177,9 +176,14 @@
             </ul>
           </div>
           <div className="everydayafrica">
-            <h1><a href="/"><span className="everyday">Everyday</span>Africa</a></h1>
+           <h1><a href="/"><span className="everyday">Everyday</span>Africa</a></h1>
           </div>
-           <div id="share-buttons" className="nav-panel">
+	   <div id="share-button">
+	     <a href="#" onClick={this.shareHandler}>
+	       <img src={EAConfig.images.share} />
+	     </a>
+	   </div>
+           <div id="share-buttons" className="nav-panel" style={buttonsStyle}>
              <a target="_blank" href="http://instagram.com/everydayafrica"><img src={EAConfig.images.instagram} /></a>
              <a target="_blank" href="https://twitter.com/EverydayAfrica"><img src={EAConfig.images.twitter} /></a>
              <a target="_blank" href="https://www.facebook.com/everydayafrica"><img src={EAConfig.images.facebook} /></a>
@@ -191,6 +195,11 @@
     menuHandler: function(e) {
       e.preventDefault();
       $("#nav-buttons").toggle();
+    },
+
+    shareHandler: function(e) {
+      e.preventDefault();
+      $("#share-buttons").toggle();
     }
   });
 
@@ -512,13 +521,13 @@
 
   var CloseWindow = React.createClass({
     render: function() {
-      return <div className="close-window">x</div>;
+      return <div className="close-window"><a href="#">x</a></div>;
     }
   });
 
-    var CloseWindowOverlay = React.createClass({
+  var CloseWindowOverlay = React.createClass({
     render: function() {
-      return <div className="close-window-overlay">x</div>;
+      return <div className="close-window"><a href="#/">x</a></div>;
     }
   });
 
