@@ -93,8 +93,16 @@
     }
 
     .about-page {
-      float: right;
-      width: 70%;
+
+      @media (min-width: @medium) {
+        float: right;
+        width: 70%;
+      }
+
+      @media (max-width: @medium) {
+        float: inherit
+        width: 100%;
+      }
     }
   }
 
