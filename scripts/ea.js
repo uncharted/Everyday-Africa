@@ -510,13 +510,13 @@
 
   var CloseWindow = React.createClass({
     render: function() {
-      return <div className="close-window">x</div>;
+      return <div className="close-window"><a href="#">x</a></div>;
     }
   });
 
-    var CloseWindowOverlay = React.createClass({
+  var CloseWindowOverlay = React.createClass({
     render: function() {
-      return <div className="close-window-overlay">x</div>;
+      return <div className="close-window"><a href="#/">x</a></div>;
     }
   });
 
