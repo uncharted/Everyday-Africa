@@ -5,6 +5,8 @@
   position: fixed;
   width: 100%;
   border-bottom: 1px solid black;
+  padding-left: 15px;
+  padding-right: 15px;
 
 
   > div h3 {
@@ -48,10 +50,15 @@
     }
   }
 
-  .photographers img {
-    -webkit-border-radius: 150px;
-    -moz-border-radius: 150px;
-    border-radius: 150px;
+  .photographers {
+    img {
+      border-radius: 150px;
+      -webkit-border-radius: 150px;
+      -moz-border-radius: 150px;
+      .protogimg {
+      margin-top: 10px;
+      }
+    }
   }
 
   .search {
@@ -85,8 +92,16 @@
     }
 
     .about-page {
-      float: right;
-      width: 70%;
+
+      @media (min-width: @medium) {
+        float: right;
+        width: 70%;
+      }
+
+      @media (max-width: @medium) {
+        float: inherit
+        width: 100%;
+      }
     }
   }
 

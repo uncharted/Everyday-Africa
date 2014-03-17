@@ -13,6 +13,7 @@ EAConfig = {
     tag: "TAG_ICON_URL",
     heart: "HEART_ICON_URL",
     menu: "MENU_URL",
+    share: "SHARE_URL",
     africaWhite: "AFRICA_WHITE_URL",
     photographerWhite: "PHOTOGRAPHER_WHITE_URL",
     searchWhite: "SEARCH_WHITE_URL",

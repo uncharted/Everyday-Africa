@@ -13,6 +13,11 @@
 @mobile-max: 480px;
 @mobile-min: 0px;
 
+// Fix a scrollable region, apply to body on modal open
+.modal-scroll {
+    overflow: hidden;
+}
+
 .overlay {
   position: fixed;
   top: 0;
@@ -31,6 +36,24 @@
   }
 }
 
+// Fade inj
+.details-enter {
+  opacity: 0.01;
+  transition: opacity .5s ease-in;
+}
+
+.details-enter.details-enter-active {
+  opacity: 1;
+}
+
+.details-leave {
+  opacity: 1;
+  transition: opacity .5s ease-in;
+}
+
+.details-leave.details-leave-active {
+  opacity: 0.01;
+}
 
 .detail {
   width: 100%;
@@ -80,222 +103,229 @@
     img {float: left;}
   }
 }
-  .image-detail {
-    position: fixed;
-    width: @detail-width;
-    top: 20%;
-    left: 50%;
-    margin-left: -@detail-width / 2;
-    z-index: 3;
-    overflow-y: hidden;
-    max-height: @detail-height;
-    @media (max-width: @medium){
-      max-width: 68%;
-      max-height: 82%;
-      margin-left: 0px; 
-      left: 15%;
-      top: 16%;
-      overflow-y: scroll;
-      overflow-x: hidden;
-    }
-    @media (max-width: @small){
-      max-width: 100%;
-      max-height: 90%;
-      margin-left: 0px;
-      left: 0%;
-      top: 10%;
-      overflow-y: scroll;
-      overflow-x: hidden;
-    }
 
-    background-color: white;
-    box-shadow: -25px 0 100px black,
-    25px 0 100px black;
+.image-detail {
+  float: right;
+  position: fixed;
+  width: @detail-width;
+  top: 20%;
+  left: 50%;
+  margin-left: -@detail-width / 2;
+  z-index: 3;
+  overflow-y: hidden;
+  max-height: @detail-height;
 
-    > img, > div {
-      display: inline-block;
-      vertical-align: top;
-      @media (min-width: @medium){
-        max-height: @detail-height;
-      }
-    }
-
-    > img {
-      height: @detail-height;
-      margin-right: 0.5em;
-
-      @media (max-width: @medium) { 
-        width: 100%;
-        height: inherit;
-      }
-    }
-
-    > div {
-      overflow-y: scroll;
-      width: @detail-side-width;
-      margin-top: 0.5em;
-      @media (max-width: @medium){
-        width: 100%;
-        overflow-y: visible;
-      }
-
-.detail-header {
-	padding: 15px;
-	padding-bottom: 0px;
-	@media (max-width: @medium) {
-          padding-left: 20px;
-	}
-	img, div {
-          display: inline-block;
-          vertical-align: top;
-	}
-
-	img {
-          margin-right: 0.6em;
-          width: 40px;
-          @media (max-width: @medium) {
-            width: 55px;
-          }
-	}
-	a {
-          font-size: 1em;
-          letter-spacing: .07em;
-          text-decoration: none;
-	}
-
-	.follow-link {
-          position: absolute;
-          right: 1em;
-          background-color: @blue;
-          color: white;
-          border: none;
-          border-radius: 2px;
-          font-weight: 400;
-          font-size: .95em;
-          padding: 0.4em 0.8em;
-	}
-
-	h4 {
-          font-family: @font;
-          font-weight: 400;
-          color: @blue;
-          margin-top: 0;
-          margin-bottom: 0.3em;
-          @media (max-width: @medium){
-            font-size: 1.2em;
-            font-weight: 400;
-          }
-	}
-	h5 {
-    margin-top: 0.05em;
-    font-weight: 300;
-    @media (max-width: @medium){
-      font-size: 1em;
-      color: gray;
-      }
-	}
-}
-
-  .caption {
-    padding-left: 20px;
-    padding-top: 10px;
-    @media (max-width: @medium) {
-    font-size: 1.15em;
-    line-height: 1.35em;
+  @media (max-width: @medium){
+    max-width: 68%;
+    max-height: 82%;
+    margin-left: 0px;
+    left: 15%;
+    top: 16%;
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
-      }
+  @media (max-width: @small){
+    max-width: 100%;
+    max-height: 90%;
+    margin-left: 0px;
+    left: 0%;
+    top: 10%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
 
-      /*> ul {
-	margin-left: -1.95em;
-	@media (max-width: 480px){
-          margin-left: -1.80em;
-	}
-	li {
-          // float: left;
-          list-style: none;
-          font-size: 0.8em;
-          font-weight: 300;
-          @media (max-width: 480px){
-            font-size: 1.1em;
-          }
-	}
-      }*/
+  background-color: white;
+  box-shadow: -25px 0 100px black,
+              25px 0 100px black;
 
-.detail-tags,
-.detail-hearts {
-	padding-left: 0px;
-	.leftcol {
-    width: 8%;
+  > img, > div {
     display: inline-block;
     vertical-align: top;
-
-    .icon {
-      padding-top: 4px;
-      padding-right: 10px;
-      width: 30px;
-    }
-	}
-	.rightcol {
-    width: 92%;
-    display: inline-block;
-    ul { padding-left: 5px;}
-	}
-      }
-
-    }
-
-    .detail-panel {
-      overflow-x: hidden;
-
-      @media (max-width: @medium) {
-        width: 95%;
-      }
-
-      .comment {
-        margin-bottom: 30px;
-        padding-right: 15px;
-        padding-bottom: 5px;
-        .leftcol, .rightcol {
-          display: inline-block;
-          vertical-align: top;
-        }
-
-        .leftcol{
-          width: 25%;
-          text-align: center;
-	  padding-top: 0.8em;
-        }
-
-        .rightcol{
-          width: 74%;
-          margin-top: 5px;
-          p {
-            font-size: 1em;
-            font-weight: 400;
-            margin: 0 auto;
-          }
-          h4 {
-            margin: 0 auto;
-            font-size: 1em;
-            color: @blue;
-            line-height: 30px;
-            @media (max-width: @medium){
-              font-size: 1.05em;
-              font-weight: 600;
-            }
-          }
-        }
-      }
-    }
-
-    .circle_profile {
-      width: 58px;
-      height: 58px;
-      -webkit-border-radius: 150px;
-      -moz-border-radius: 150px;
-      border-radius: 150px;
+    @media (min-width: @medium){
+      max-height: @detail-height;
     }
   }
+
+  > img {
+    height: @detail-height;
+    margin-right: 0.5em;
+
+    @media (max-width: @medium) { 
+      width: 100%;
+      height: inherit;
+    }
+  }
+
+  > div {
+    overflow-y: scroll;
+    width: @detail-side-width;
+    margin-top: 0.5em;
+    @media (max-width: @medium){
+      width: 100%;
+      overflow-y: visible;
+    }
+
+    .detail-header {
+      padding: 15px;
+      padding-bottom: 0px;
+      @media (max-width: @medium) {
+        padding-left: 20px;
+      }
+      img, div {
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      img {
+        margin-right: 0.6em;
+        width: 40px;
+        @media (max-width: @medium) {
+          width: 55px;
+        }
+      }
+      a {
+        font-size: 1em;
+        letter-spacing: .07em;
+        text-decoration: none;
+      }
+
+      .follow-link {
+        position: absolute;
+        right: 1em;
+        background-color: @blue;
+        color: white;
+        border: none;
+        border-radius: 2px;
+        font-weight: 400;
+        font-size: .95em;
+        padding: 0.4em 0.8em;
+      }
+
+      h4 {
+        font-family: @font;
+        font-weight: 400;
+        color: @blue;
+        margin-top: 0;
+        margin-bottom: 0.3em;
+        @media (max-width: @medium){
+          font-size: 1.2em;
+          font-weight: 400;
+        }
+      }
+      h5 {
+	margin-top: 0.05em;
+	font-weight: 300;
+	@media (max-width: @medium){
+	  font-size: 1em;
+	  color: gray;
+	}
+      }
+    }
+
+    .caption {
+      padding-left: 20px;
+      padding-top: 10px;
+      @media (max-width: @medium) {
+	font-size: 1.15em;
+	line-height: 1.35em;
+      }
+    }
+
+    /*> ul {
+      margin-left: -1.95em;
+      @media (max-width: 480px){
+      margin-left: -1.80em;
+      }
+      li {
+      // float: left;
+      list-style: none;
+      font-size: 0.8em;
+      font-weight: 300;
+      @media (max-width: 480px){
+      font-size: 1.1em;
+      }
+      }
+      }*/
+
+    .detail-tags,
+    .detail-hearts {
+      padding-left: 0px;
+      .leftcol {
+	width: 8%;
+	display: inline-block;
+	vertical-align: top;
+
+	.icon {
+	  padding-top: 4px;
+	  padding-right: 10px;
+	  width: 30px;
+	}
+      }
+      .rightcol {
+	width: 92%;
+	display: inline-block;
+	ul { padding-left: 5px;}
+      }
+    }
+
+  }
+
+  .detail-panel {
+    overflow-x: hidden;
+
+    @media (max-width: @medium) {
+      width: 95%;
+    }
+
+    .comment {
+      margin-bottom: 30px;
+      padding-right: 15px;
+      padding-bottom: 5px;
+      padding-left: 0px;
+      p {
+        padding-left: 0px;
+      }
+      .leftcol, .rightcol {
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      .leftcol{
+        width: 25%;
+        text-align: center;
+	padding-top: 0.8em;
+      }
+
+      .rightcol{
+        width: 74%;
+        margin-top: 5px;
+        p {
+          font-size: 1em;
+          font-weight: 400;
+          margin: 0 auto;
+        }
+        h4 {
+          margin: 0 auto;
+          font-size: 1em;
+          color: @blue;
+          line-height: 30px;
+          @media (max-width: @medium){
+            font-size: 1.05em;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+
+  .circle_profile {
+    width: 58px;
+    height: 58px;
+    -webkit-border-radius: 150px;
+    -moz-border-radius: 150px;
+    border-radius: 150px;
+  }
+}
 
 }
 

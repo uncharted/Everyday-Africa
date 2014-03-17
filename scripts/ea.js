@@ -3,12 +3,16 @@
 
 (function($, _, React, Router) {
   Number.prototype.mod = function(n) {
-    return ((this%n)+n)%n;
+    return ((this % n) + n) % n;
   }
 
   var Settings = {
     galleryBreakpoint: 600,
-    mediumBreakpoint: 900
+    mediumBreakpoint: 900,
+
+    isSmall: function() {
+      return $(window).width() < this.mediumBreakpoint;
+    }
   };
 
 
@@ -285,9 +289,7 @@
         }
       ];
 
-      var buttonsStyle =
-	{display: $(window).width() < Settings.mediumBreakpoint ?
-	 'none' : 'inline-block' };
+      var buttonsStyle = {display: Settings.isSmall() ? 'none' : 'inline-block'};
 
       return (
          <nav>
@@ -305,31 +307,51 @@
                                            largeSrc={d.largeSrc}
                                            smallSrc={d.smallSrc}
                                            content={d.content}
-                                           onClick={function() {
-                                             this.forceUpdate }.bind(this)}/>
+                                           clickHandler={this.smallDismisser("#nav-buttons")} />
                         </li>);
-              })}
+              }, this)}
             </ul>
           </div>
+          <div className="everydayafrica">
            <h1><a href="/"><span className="everyday">Everyday</span>Africa</a></h1>
-           <div id="share-buttons" className="nav-panel">
-             <a href="http://instagram.com/everydayafrica"><img src={EAConfig.images.instagram} /></a>
-             <a href="https://twitter.com/EverydayAfrica"><img src={EAConfig.images.twitter} /></a>
-             <a href="https://www.facebook.com/everydayafrica"><img src={EAConfig.images.facebook} /></a>
-             <a href="http://everydayafrica.tumblr.com/#me"><img src={EAConfig.images.tumblr} /></a>
+          </div>
+	   <div id="share-button">
+	     <a href="#" onClick={this.shareHandler}>
+	       <img src={EAConfig.images.share} />
+	     </a>
+	   </div>
+           <div id="share-buttons" className="nav-panel" style={buttonsStyle}>
+            <ul>
+              <li><a target="_blank" href="http://instagram.com/everydayafrica"><img src={EAConfig.images.instagram} /></a></li>
+              <li><a target="_blank" href="https://twitter.com/EverydayAfrica"><img src={EAConfig.images.twitter} /></a></li>
+              <li><a target="_blank" href="https://www.facebook.com/everydayafrica"><img src={EAConfig.images.facebook} /></a></li>
+              <li><a target="_blank" href="http://everydayafrica.tumblr.com/#me"><img src={EAConfig.images.tumblr} /></a></li>
+            </ul>
            </div>
          </nav>);
     },
 
     menuHandler: function(e) {
       e.preventDefault();
-      $("#nav-buttons").toggle();
+      $("#nav-buttons").fadeToggle();
+    },
+
+    smallDismisser: function(sel) {
+      return function() {
+	if (Settings.isSmall()) $(sel).toggle();
+      }
+    },
+
+    shareHandler: function(e) {
+      e.preventDefault();
+      $("#share-buttons").fadeToggle();
     }
   });
 
   var NavToggleButton = React.createClass({
     render: function() {
-      return (<a className="nav-button" href={this.props.href}>
+      return (<a className="nav-button" href={this.props.href}
+	         onClick={this.props.clickHandler}>
                 <img className="hide-for-small" src={this.props.largeSrc} />
                 <img className="hide-for-large" src={this.props.smallSrc} />
                 <span className="navlist">{this.props.content}</span>
@@ -343,9 +365,28 @@
    *   - Photographers
    *   - Search
    */
+  var SlideToggleMixin = {
+    componentDidMount: function() {
+      // Slide in the drawer
+      var $node = $(this.getDOMNode());
+      $node.toggle();
+      $node.slideToggle();
+    },
+
+    dismiss: function() {
+      var node = this.getDOMNode();
+      $(node).slideToggle({complete: function() {
+	React.unmountComponentAtNode(node);
+      }.bind(this)})
+    }
+  };
+
   var Countries = React.createClass({
+    mixins: [SlideToggleMixin],
+
     render: function() {
       return (<div className="countries grid">
+                <CloseWindow />
                 <h3>Countries</h3>
                 {_.map(this.props.data, function(data, country) {
                   return (<div className="country grid-item">
@@ -360,13 +401,16 @@
   });
 
   var Photographers = React.createClass({
+    mixins: [SlideToggleMixin],
+
     render: function() {
       return (<div className="photographers grid">
+                <CloseWindow />
                 <h3>Photographers</h3>
                 {_.map(this.props.data, function(p) {
                   return (<div className="photographer grid-item">
                             <a href={p.url}>
-                              <img src="http://placehold.it/50x50" alt={p.name} />
+                              <img className="protogimg" src="http://placehold.it/50x50" alt={p.name} />
                               <h4>{p.name}</h4>
                             </a>
                           </div>);
@@ -376,8 +420,11 @@
   });
 
   var Search = React.createClass({
+    mixins: [SlideToggleMixin],
+
     render: function() {
       return (<div className="search">
+                <CloseWindow />
                 <h3>Search</h3>
                 <input className="search-input"
                        placeholder="search term"
@@ -394,43 +441,71 @@
   });
 
   var About = React.createClass({
-    pages: {
-      default: React.createClass({
-        render: function() {
-          return (<div>
-                    <img src="http://25.media.tumblr.com/f40df582632484f1bc2db7e3d00deaf1/tumblr_n0l3ujEqBi1rgx8vno1_500.jpg" />
-                    <p>
-                      Hey there! This is an about page. Let us know what
-                      content you would like to see here.
-                    </p>
-                  </div>);
-        }
-      }),
-      etc: React.createClass({
-        render: function() {
-          return <p>... and etc ...</p>;
-        }
-      })
-    },
+    mixins: [SlideToggleMixin],
+
+    // Each page is a different about page
+    pages: [
+      {name: "default",
+       component: React.createClass({
+         render: function() {
+           return (<div>
+                   <img src="http://25.media.tumblr.com/f40df582632484f1bc2db7e3d00deaf1/tumblr_n0l3ujEqBi1rgx8vno1_500.jpg" />
+                   <p>
+                   Hey there! This is an about page. Let us know what
+                   content you would like to see here.
+                   </p>
+                   </div>);
+         }
+       })},
+
+      {name: "etc",
+       component: React.createClass({
+         render: function() {
+           return <p>... and etc ...</p>;
+         }
+      })}
+    ],
 
     attrs: {
       className: "about"
     },
 
+    currentPage: function() {
+      return _.find(this.pages, function(d) {
+	return d.name === this.props.type;
+      }, this);
+    },
+
     render: function() {
-      if (this.props.type in this.pages) {
+      // Create the about page(s) based on screen size
+      if (Settings.isSmall()) {
         return (<div className="about">
-                  <div className="about-nav nav-list">
-                    <h3>About</h3>
-                    <ul>
-                      <li><a href="#/about/default">Summary</a></li>
-                      <li><a href="#/about/etc">Etc</a></li>
-                    </ul>
-                  </div>
+                  <CloseWindow />
+                  <h3>About</h3>
                   <div className="about-page">
-                    {new this.pages[this.props.type](this.attrs)}
+                    {_.map(this.pages, function(page, i) {
+                        var component = page.component;
+                        return <component className="about" />;
+                      }, this)}
                   </div>
                 </div>);
+      } else {
+        var page = this.currentPage().component;
+        if (page) {
+          return (<div className="about">
+                    <CloseWindow />
+                    <div className="about-nav nav-list">
+                      <h3>About</h3>
+                      <ul>
+                        <li><a href="#/about/default">Summary</a></li>
+                        <li><a href="#/about/etc">Etc</a></li>
+                      </ul>
+                    </div>
+                    <div className="about-page">
+                      <page className="about" />
+                    </div>
+                  </div>);
+        }
       }
     }
   });
@@ -643,8 +718,38 @@
     }
   });
 
+  var CloseWindow = React.createClass({
+    render: function() {
+      return <div className="close-window"><a href="#">x</a></div>;
+    }
+  });
+
+  var CloseWindowOverlay = React.createClass({
+    render: function() {
+      return <div className="close-window"><a href="#/">x</a></div>;
+    }
+  });
+
+  var FadeToggleMixin = {
+    componentDidMount: function() {
+      // Slide in the drawer
+      var $node = $(this.getDOMNode());
+      $node.toggle();
+      $node.fadeToggle();
+    },
+
+    dismiss: function() {
+      var node = this.getDOMNode();
+      $(node).fadeToggle({complete: function() {
+	React.unmountComponentAtNode(node);
+      }.bind(this)})
+    }
+  }
+
   // The Image detail view
   var ImageDetails = React.createClass({
+    // mixins: [FadeToggleMixin],
+
     getSources: function() {
       return _.pick(this.props, ["tumblr", "instagram"]);
     },
@@ -664,7 +769,7 @@
 
     },
 
-    componentDidMount: function() {
+    Componentdidmount: function() {
       // Get the image if it is not cached
       if (this.props.instagramID) {
         instaFetch.get(this.props.instagramID).done(function(d) {
@@ -693,7 +798,6 @@
     },
 
     render: function() {
-      console.log("Rerendering details");
       var count = _.values(this.getSources()).length;
 
       var captionText;
@@ -704,7 +808,10 @@
       }
 
       return (<div className="detail" onKeyPress={this.keyPressHandler}>
-                <div className="overlay"><a href="#/"></a></div>
+                <div className="overlay">
+                  <CloseWindowOverlay />
+                  <a href="#/"></a>
+                </div>
                 <div className="detail-nav">
                   <a className="arrow-left" href={this.props.next}>
                     <img src={EAConfig.images.arrowleft} />
@@ -895,28 +1002,33 @@
 
     tumblrNext();
 
-    // Easy peasy responsive: Just update everything on resize
-    $(window).resize(function() {
-        gallery.forceUpdate();
-        navBar.forceUpdate();
-    });
+    /**
+     * Fix/unfix body scrolling
+     */
+    var bodyScroll = {
+      fix:   function() { $("body").addClass("modal-scroll"); },
+      unfix: function() { $("body").removeClass("modal-scroll"); }
+    };
 
     /**
      * Generate the toggleable modal
-     *
-     * props: {
-     * }
      */
     function ComponentHandler($root) {
       var rootElt = $root.get(0);
+      var mounted;
 
       this.show = function(component) {
         this.dismiss();
+
+        mounted = component;
+        bodyScroll.fix();
         React.renderComponent(component, rootElt);
       };
 
       this.dismiss = function() {
-        return React.unmountComponentAtNode(rootElt);
+        bodyScroll.unfix();
+        mounted = undefined;
+	React.unmountComponentAtNode(rootElt);
       };
 
       // A helper for the routing
@@ -925,11 +1037,21 @@
           this.dismiss();
         }.bind(this);
       }
+
+      this.forceUpdate = function() {
+        if (mounted) mounted.forceUpdate();
+      }
     }
 
     var Details = new ComponentHandler($("#modal"));
     var NavDrawer = new ComponentHandler($("#nav-drawer"));
 
+    // Easy peasy responsive: Just update everything on resize
+    $(window).resize(function() {
+      gallery.forceUpdate();
+      navBar.forceUpdate();
+      NavDrawer.forceUpdate();
+    });
 
     /*********
      * Routing
@@ -976,9 +1098,8 @@
       },
 
       "/posts/tumblr/:id/?(\\w+)?": function(rawId, type) {
-        var id = parseInt(rawId)
+        var id = parseInt(rawId);
 	var post = TumblrVars.posts.photos[id];
-
         if(post) {
           Details.show(
               <ImageDetails id={id}

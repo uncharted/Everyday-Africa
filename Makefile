@@ -62,6 +62,7 @@ TUMBLR_URL		= $(IMAGES_BASE_URL)/tumblr.png
 TAG_ICON_URL		= $(IMAGES_BASE_URL)/tag_icon.svg
 HEART_ICON_URL		= $(IMAGES_BASE_URL)/heart_icon.svg
 MENU_URL		= $(IMAGES_BASE_URL)/menu.svg
+SHARE_URL		= $(IMAGES_BASE_URL)/share.svg
 AFRICA_WHITE_URL	= $(IMAGES_BASE_URL)/africa-white.svg
 PHOTOGRAPHER_WHITE_URL	= $(IMAGES_BASE_URL)/photographer-white.svg
 SEARCH_WHITE_URL	= $(IMAGES_BASE_URL)/search-white.svg
@@ -91,6 +92,7 @@ SED_TEMPLATER = sed \
             -e 's|TUMBLR_URL|$(TUMBLR_URL)|g' \
             -e 's|TAG_ICON_URL|$(TAG_ICON_URL)|g' \
             -e 's|MENU_URL|$(MENU_URL)|g' \
+            -e 's|SHARE_URL|$(SHARE_URL)|g' \
             -e 's|HEART_ICON_URL|$(HEART_ICON_URL)|g' \
             -e 's|AFRICA_WHITE_URL|$(AFRICA_WHITE_URL)|g' \
             -e 's|PHOTOGRAPHER_WHITE_URL|$(PHOTOGRAPHER_WHITE_URL)|g' \
