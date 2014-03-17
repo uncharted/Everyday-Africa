@@ -531,11 +531,14 @@
 
   // The Image detail view
   var ImageDetails = React.createClass({
+
     getSources: function() {
       return _.pick(this.props, ["tumblr", "instagram"]);
     },
 
     componentWillMount: function() {
+      $("body").addClass("modal-scroll");
+
       var active;
       if (this.props.active) {
         active = this.props.active;
@@ -576,6 +579,7 @@
     componentWillUnmount: function() {
       // Remove next/prev keydown listeners
       $(window).unbind('keydown');
+      $("body").removeClass("modal-scroll");
     },
 
     render: function() {
@@ -848,8 +852,8 @@
       },
 
       "/posts/tumblr/:id/?(\\w+)?": function(id, type) {
-        var post = TumblrVars.posts.photos[id];
         if(post) {
+	  bodyScroll.fix();
           Details.show(
               <ImageDetails id={id}
                             url={"#/posts/tumblr/" + id + "/instagram"}
