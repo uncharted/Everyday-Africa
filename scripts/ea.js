@@ -863,10 +863,10 @@
                   <a href="#/"></a>
                 </div>
                 <div className="detail-nav">
-                  <a className="arrow-left" href={this.props.next}>
+                  <a className="arrow-left" href={this.props.prev}>
                     <img src={EAConfig.images.arrowleft} />
                   </a>
-                  <a className="arrow-right" href={this.props.prev}>
+                  <a className="arrow-right" href={this.props.next}>
                     <img src={EAConfig.images.arrowright} />
                   </a>
                 </div>
@@ -1189,8 +1189,8 @@
                               user={post.user}
                               active={type || "instagram"}
                               instagram={post}
-	                      next={instaFetch.eaUrl((id - 1).mod(instaFetch.limit))}
-	                      prev={instaFetch.eaUrl((id + 1).mod(instaFetch.limit))}
+	                      next={instaFetch.eaUrl((id + 1).mod(instaFetch.limit))}
+	                      prev={instaFetch.eaUrl((id - 1).mod(instaFetch.limit))}
 		            />);
           }
         });
