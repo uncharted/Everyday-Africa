@@ -8,7 +8,11 @@
 
   var Settings = {
     galleryBreakpoint: 600,
-    mediumBreakpoint: 900
+    mediumBreakpoint: 900,
+
+    isSmall: function() {
+      return $(window).width() < this.mediumBreakpoint;
+    }
   };
 
 
@@ -150,8 +154,7 @@
         }
       ];
 
-      var small = $(window).width() < Settings.mediumBreakpoint;
-      var buttonsStyle = {display: small ? 'none' : 'inline-block'};
+      var buttonsStyle = {display: Settings.isSmall() ? 'none' : 'inline-block'};
 
       return (
          <nav>
@@ -169,10 +172,9 @@
                                            largeSrc={d.largeSrc}
                                            smallSrc={d.smallSrc}
                                            content={d.content}
-                                           onClick={function() {
-                                             this.forceUpdate }.bind(this)}/>
+                                           clickHandler={this.smallDismisser("#nav-buttons")} />
                         </li>);
-              })}
+              }, this)}
             </ul>
           </div>
           <div className="everydayafrica">
@@ -194,18 +196,25 @@
 
     menuHandler: function(e) {
       e.preventDefault();
-      $("#nav-buttons").toggle();
+      $("#nav-buttons").fadeToggle();
+    },
+
+    smallDismisser: function(sel) {
+      return function() {
+	if (Settings.isSmall()) $(sel).toggle();
+      }
     },
 
     shareHandler: function(e) {
       e.preventDefault();
-      $("#share-buttons").toggle();
+      $("#share-buttons").fadeToggle();
     }
   });
 
   var NavToggleButton = React.createClass({
     render: function() {
-      return (<a className="nav-button" href={this.props.href}>
+      return (<a className="nav-button" href={this.props.href}
+	         onClick={this.props.clickHandler}>
                 <img className="hide-for-small" src={this.props.largeSrc} />
                 <img className="hide-for-large" src={this.props.smallSrc} />
                 <span className="navlist">{this.props.content}</span>
@@ -273,44 +282,69 @@
   });
 
   var About = React.createClass({
-    pages: {
-      default: React.createClass({
-        render: function() {
-          return (<div>
-                    <img src="http://25.media.tumblr.com/f40df582632484f1bc2db7e3d00deaf1/tumblr_n0l3ujEqBi1rgx8vno1_500.jpg" />
-                    <p>
-                      Hey there! This is an about page. Let us know what
-                      content you would like to see here.
-                    </p>
-                  </div>);
-        }
-      }),
-      etc: React.createClass({
-        render: function() {
-          return <p>... and etc ...</p>;
-        }
-      })
-    },
+    // Each page is a different about page
+    pages: [
+      {name: "default",
+       component: React.createClass({
+         render: function() {
+           return (<div>
+                   <img src="http://25.media.tumblr.com/f40df582632484f1bc2db7e3d00deaf1/tumblr_n0l3ujEqBi1rgx8vno1_500.jpg" />
+                   <p>
+                   Hey there! This is an about page. Let us know what
+                   content you would like to see here.
+                   </p>
+                   </div>);
+         }
+       })},
+
+      {name: "etc",
+       component: React.createClass({
+         render: function() {
+           return <p>... and etc ...</p>;
+         }
+      })}
+    ],
 
     attrs: {
       className: "about"
     },
 
+    currentPage: function() {
+      return _.find(this.pages, function(d) {
+	return d.name === this.props.type;
+      }, this);
+    },
+
     render: function() {
-      if (this.props.type in this.pages) {
+      // Create the about page(s) based on screen size
+      if (Settings.isSmall()) {
         return (<div className="about">
                   <CloseWindow />
-                  <div className="about-nav nav-list">
-                    <h3>About</h3>
-                    <ul>
-                      <li><a href="#/about/default">Summary</a></li>
-                      <li><a href="#/about/etc">Etc</a></li>
-                    </ul>
-                  </div>
+                  <h3>About</h3>
                   <div className="about-page">
-                    {new this.pages[this.props.type](this.attrs)}
+                    {_.map(this.pages, function(page, i) {
+                        var component = page.component;
+                        return <component className="about" />;
+                      }, this)}
                   </div>
                 </div>);
+      } else {
+        var page = this.currentPage().component;
+        if (page) {
+          return (<div className="about">
+                    <CloseWindow />
+                    <div className="about-nav nav-list">
+                      <h3>About</h3>
+                      <ul>
+                        <li><a href="#/about/default">Summary</a></li>
+                        <li><a href="#/about/etc">Etc</a></li>
+                      </ul>
+                    </div>
+                    <div className="about-page">
+                      <page className="about" />
+                    </div>
+                  </div>);
+        }
       }
     }
   });
@@ -539,8 +573,6 @@
     },
 
     componentWillMount: function() {
-      $("body").addClass("modal-scroll");
-
       var active;
       if (this.props.active) {
         active = this.props.active;
@@ -581,7 +613,6 @@
     componentWillUnmount: function() {
       // Remove next/prev keydown listeners
       $(window).unbind('keydown');
-      $("body").removeClass("modal-scroll");
     },
 
     render: function() {
@@ -773,11 +804,13 @@
     React.renderComponent(navBar, $("header").get(0));
     React.renderComponent(gallery, $("#content").get(0));
 
-    // Easy peasy responsive: Just update everything on resize
-    $(window).resize(function() {
-        gallery.forceUpdate();
-        navBar.forceUpdate();
-    });
+    /**
+     * Fix/unfix body scrolling
+     */
+    var bodyScroll = {
+      fix:   function() { $("body").addClass("modal-scroll"); },
+      unfix: function() { $("body").removeClass("modal-scroll"); }
+    };
 
     /**
      * Generate the toggleable modal
@@ -787,13 +820,19 @@
      */
     function ComponentHandler($root) {
       var rootElt = $root.get(0);
+      var mounted;
 
       this.show = function(component) {
         this.dismiss();
+
+        mounted = component;
+        bodyScroll.fix();
         React.renderComponent(component, rootElt);
       };
 
       this.dismiss = function() {
+        bodyScroll.unfix();
+        mounted = undefined;
         return React.unmountComponentAtNode(rootElt);
       };
 
@@ -803,11 +842,21 @@
           this.dismiss();
         }.bind(this);
       }
+
+      this.forceUpdate = function() {
+        if (mounted) mounted.forceUpdate();
+      }
     }
 
     var Details = new ComponentHandler($("#modal"));
     var NavDrawer = new ComponentHandler($("#nav-drawer"));
 
+    // Easy peasy responsive: Just update everything on resize
+    $(window).resize(function() {
+      gallery.forceUpdate();
+      navBar.forceUpdate();
+      NavDrawer.forceUpdate();
+    });
 
     /*********
      * Routing
@@ -855,7 +904,6 @@
 
       "/posts/tumblr/:id/?(\\w+)?": function(id, type) {
         if(post) {
-	  bodyScroll.fix();
           Details.show(
               <ImageDetails id={id}
                             url={"#/posts/tumblr/" + id + "/instagram"}
