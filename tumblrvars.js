@@ -33,6 +33,10 @@
           photoHeight100: '{PhotoHeight-100}',
           photoUrl75sq: '{PhotoURL-75sq}',
           {/block:Photo}
+	  {block:Date}date: {
+	    timestamp: {Timestamp},
+	    timeAgo: {TimeAgo}
+	  },{/block:Date}
           {block:HasTags} tags: [
             {block:Tags} {
               tag: '{Tag}',

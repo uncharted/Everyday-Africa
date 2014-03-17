@@ -20,8 +20,11 @@
    * Internal Helpers
    */
 
-  function tumblrTagUrl(tag) {
-    return TumblrVars.blogUrl + "/tagged/" + tag;
+  /*
+   * Wraparound array get element
+   */
+  function getMod(array, i) {
+    return array[i.mod(array.length)];
   }
 
   /**
@@ -45,84 +48,278 @@
     return partitioned;
   }
 
-  /***************
-   * Instagram API
+  /*
+   * A basic lock
    */
-  var InstaFetch = {
-    CLIENT_ID: "57dbff39f8dc4b659e6489ac6dd68b45",
-    API_URL: "https://api.instagram.com/v1",
-    cache: {},
-    _order: [],
+  function Lock() {
+    var locked = false;
 
-    _params: function() {
-      return $.param({client_id: this.CLIENT_ID, callback: "?"});
-    },
-
-    _push: function(data) {
-      this.cache[data.id] = data;
-      this._order.push(data.id);
-    },
-
-    _fetcher: function(tag, total, url, deferred) {
-      $.ajax({url: url, dataType: "jsonp"})
-        .done(function(d) {
-          d.data.forEach(function(datum) {
-	    this._push(datum);
-            deferred.notifyWith(this, [datum]);
-          }.bind(this));
-          if (total > _.size(this.cache)) {
-            this._fetcher(tag, total, d.pagination.next_url, deferred)
-          } else {
-            deferred.resolveWith(this, [this.cache]);
-          }
-        }.bind(this))
-        .fail(function(d) { deferred.rejectWith(this, [d]); });
-    },
-
-    populate: function(tag, total) {
-      var url = this.API_URL + "/tags/" + tag + "/media/recent?" + this._params();
-      var deferred = $.Deferred();
-
-      this._fetcher(tag, total || 20, url, deferred);
-      return deferred.promise();
-    },
-
-    /**
-     * Get a single instagram media item, from the cache if possible
-     *
-     * Returns {meta: {...}, data: {...}} where `data` contains the data,
-     * and meta is optional
-     *  http://instagram.com/developer/endpoints/media/#get_media
-     */
-    get: function(id) {
-      if (id in this.cache) {
-        var resp = {data: this.cache[id]};
-        return $.Deferred().resolveWith(this, [resp]).promise();
+    this.lock = function() {
+      if (locked) {
+        return false;
       } else {
-        var url = this.API_URL + "/media/" + id + "?" + this._params();
-        return $.ajax({url: url, dataType: "jsonp"})
-          .done(function(d) {
-            this._push(d.data);
-          }.bind(this));
+        locked = true;
+        return true;
       }
+    }
+
+    this.release = function() {
+      locked = false;
+      return true;
+    }
+
+    this.withLock = function(f) {
+      if (this.lock()) {
+        var result = f();
+        this.release()
+        return result;
+      } else {
+        return false;
+      }
+    }
+
+    return this;
+  }
+
+
+  /*
+   * TumblrFetch -- Tumblr API Client
+   *
+   */
+  var TumblrUtils = {
+    toImage: function(d) {
+      return d.photos[0].alt_sizes[1];
     },
 
-    userUrl: function(user) {
-      return ["http://instagram.com", user].join("/");
+    toTags: function(post) {
+      return _.map(post.tags, function(tag) {
+        return {
+          tag: tag,
+          url: this.externalTagURL(tag)
+        }
+      }, this);
     },
 
-    eaUrl: function(id) {
-      return "#/posts/instagram/" + id;
+    externalTagURL: function(tag) {
+      return TumblrVars.blogUrl + "/tagged/" + tag;
     },
 
-    next: function(id, steps) {
-      return this._order[(this._order.indexOf(id) + (steps || 1)).mod(this._order.length)];
+    internalPostURL: function(id) {
+      return "#/posts/tumblr/" + id + "/instagram";
     },
 
-    prev: function(id, steps) {
-      return this._order[(this._order.indexOf(id) - (steps || 1)).mod(this._order.length)];
+    fetchAvatar: function(args) {
+      var apiURL = "https://api.tumblr.com/v2";
+      var params = $.param({callback: "?"});
+      var url = apiURL + "/blog/" + args.source + "/avatar/" + args.size || 128;
+      return $.ajax({url: url + "?" + params, dataType: "jsonp"});
     }
   };
+
+  function TumblrFetch(config) {
+    this.prototype = TumblrUtils;
+    // The publically accessible list of tumblr items
+    this.items = [];
+
+    var API_KEY = "xIPlTUhKQUEnxFtWbL6A98VFRs8v0qHXSULaRbFuRX2GZnaHio";
+    var API_URL = "https://api.tumblr.com/v2/blog/" + config.source;
+
+    // How many posts to fetch per update
+    var limit  = config.limit || 10;
+    var offset = config.offset || 0;
+    var tag    = config.tag || "everydayafrica";
+    var type   = "photo";
+    // The total number of posts, set on fetch
+    var posts;
+
+    var fetchLock = new Lock();
+
+    function onFetchDone(d) {
+      console.log(d);
+      var posts = d.response.posts;
+      for (var i = 0; i < posts.length; i++) {
+        this.items.push(posts[i]);
+      }
+
+      // Set the total number of posts
+    }
+
+    this.fetchNext = function(args) {
+      // Don't attempt to fetch if no more posts are available
+      if (offset >= posts) return false;
+
+      if(fetchLock.lock()) {
+        var params = $.param({
+          limit: limit,
+          offset: offset,
+          tag: config.tag,
+          type: type,
+          api_key: API_KEY,
+          callback: "?"
+        });
+
+        var url = API_URL + "/posts?" + params;
+        return $.ajax({url: url, dataType: "jsonp"})
+          .done(onFetchDone.bind(this))
+          .then(function() {
+            offset += limit;
+            fetchLock.release();
+          });
+      } else {
+        // console.log("LOCKED");
+        return false;
+      }
+    };
+
+    /*
+     * External API
+     */
+    this.get = function(i) {
+      return getMod(this.items, i);
+    };
+
+    this.take = function(n, index) {
+      var taken = [], start = index || 0;
+      for(var i = start; i < start + n; i++) {
+        taken.push(this.get(i));
+      }
+      return taken;
+    }
+
+    return this;
+  }
+
+  /*
+   * InstaFetch -- Instagram API Client
+   *
+   * Handles lazily fetching instagram images.
+   */
+  var InstaUtils = {
+    /**
+     * Extract the image data
+     */
+    toImage: function(d) {
+      var img = d.images.low_resolution;
+      return {
+	id: d.id,
+	url: img.url,
+	width: img.width,
+	height: img.height
+      }
+    }
+  }
+
+  function InstaFetch(o) {
+    this.prototype = InstaUtils;
+    this.tag   = "tag" in o ? o["tag"] : "everydayafrica";
+    this.limit = "limit" in o ? o["limit"] : 20;
+
+    var CLIENT_ID = "57dbff39f8dc4b659e6489ac6dd68b45";
+    var API_URL   = "https://api.instagram.com/v1";
+    var items = [];
+    var cache = {};
+
+    /*
+     * Internal Functions
+     */
+    function params() {
+      return $.param({client_id: CLIENT_ID, callback: "?"});
+    }
+
+    function _resolve(deferred, item) {
+      return deferred.resolveWith(this, [item]).promise();
+    }
+
+    function fetch(pendingDeferreds, url) {
+      $.ajax({url: url, dataType: "jsonp"})
+        .done(function(d) {
+          _.each(d.data, function(item) {
+            var deferred = pendingDeferreds.shift()
+            if (deferred) {
+              // Resolve it
+              deferred.resolveWith(this, [item]);
+              return true;
+            } else {
+              // If there are no more deferreds, terminate
+              return false;
+            }
+          }.bind(this));
+
+          // Recur as necessary
+          if (d.pagination.next_url && pendingDeferreds.length > 0) {
+            fetch(pendingDeferreds, d.pagination.next_url);
+          }
+        }.bind(this))
+        .fail(function(d) {
+          console.log("Instagram API Fetch failed, retrying")
+          setTimeout(function() {this._populate(remaining, url, index)}, 1000)
+        }.bind(this));
+      return this;
+    }
+
+    /*
+     * External API
+     */
+    this.populate = function(limit) {
+      // Set all of the deferreds
+      items = _.times(limit || 20, function() {
+        return $.Deferred().done(function (d) {
+          // Add to the cache when done
+          cache[d.id] = d;
+        });
+      });
+
+      this.get = function(i) {
+        return getMod(items, i);
+      }
+
+      this.getByID = function(id) {
+        if (!(id in cache)) {
+          var url = API_URL + "/media/" + id + "?" + params();
+          cache[id] = $.ajax({url: url, dataType: "jsonp"});
+        }
+        return cache[id];
+      }
+
+      this.take = function(n, index) {
+        var taken = [], start = index || 0;
+        for(var i = start; i < start + n; i++) {
+          taken.push(this.get(i));
+        }
+        return taken;
+      }
+
+      return fetch(items.slice(), API_URL + "/tags/" + this.tag + "/media/recent?" + params());
+    }
+
+    this.userUrl = function(user) {
+      return ["http://instagram.com", user].join("/");
+    };
+
+    this.eaUrl = function(id) {
+      return "#/posts/instagram/" + id;
+    };
+
+    /**
+     * Extract the image data
+     */
+    this.toImage = function(d) {
+      var img = d.images.low_resolution;
+      return {
+	id: d.id,
+	url: img.url,
+	width: img.width,
+	height: img.height
+      }
+    }
+
+    return this.populate(this.limit);
+  }
+
+  // The global Fetchers
+  var instaFetch = new InstaFetch({tag: "everydayafrica", limit: 30});
+  var tumblrFetch = new TumblrFetch({source: "everydayafrica.tumblr.com"});
+
 
   /************
    * Navigation
@@ -381,76 +578,51 @@
 
   // The gallery of ALL images
   var Gallery = React.createClass({
-    getInitialState: function() {
-      return {data: []};
-    },
-
-    componentWillMount: function() {
-      var total = TumblrVars.posts.photos.length * 24;
-      InstaFetch.populate(this.props.tag, total)
-        .done(function(d) {
-          this.setState({
-            data: _(d).values().first(total).map(function(media) {
-              var img = media.images.low_resolution;
-              return {
-                id: media.id,
-                url: img.url,
-                width: img.width,
-                height: img.height};
-            })
-            .value()
-          });
-        }.bind(this))
-        .fail(function(d) {
-            console.log("Failed to fetch tagged photos")
-          });
-
-      this.state.tumblrData = TumblrVars.posts.photos.map(function(photo, i) {
-        function sizedProp(prop) {
-          return photo[prop + "500"];
-        };
-
-        return {
-          id: i,
-          url: sizedProp('photoUrl'),
-          width: sizedProp('photoWidth'),
-          height: sizedProp('photoHeight')};
-      });
-    },
-
     render: function() {
       // Divide the images which fall on the left and the right
       var width = $(window).width();
 
       if (width > Settings.galleryBreakpoint) {
-        var imageGroups = partition(this.state.data, 3);
+        var total = this.props.tumblr ? this.props.tumblr.length * 24 : 0;
+        var imageGroups = partition(instaFetch.take(total).map(function(d, i) {
+          return {key: i, deferred: d};
+        }), 3);
         var sideLength = 0.1 * width;
         var centerLength = 0.4 * width;
         return (<div className="gallery desktop">
                   <GalleryColumn type="instagram" position="left" imageLength={sideLength} data={imageGroups[0]} />
-                  <GalleryColumn type="tumblr" position="center" imageLength={centerLength} data={this.state.tumblrData} />
+		  <div className="gallery-column center-column">
+                    {_.map(this.props.tumblr, function(d, i) {
+                      var classes = React.addons.classSet({
+                        'tagged-image': true, image: true});
+                      return (<TaggedImage key={i}
+                                           className={classes}
+                                           imageLength={centerLength}
+                                           type="tumblr"
+                                           image={TumblrUtils.toImage(d)} />);
+                        }, this)}
+		  </div>
                   <GalleryColumn type="instagram" position="right" imageLength={sideLength} data={imageGroups[1]} />
               </div>);
+
         } else {
           var single = width / 3;
           var dbl = single * 2;
 
-          var instaGen = (function(data) {
+          var instaGen = (function(instaFetch) {
             var index = 0;
             return function() {
-              if (index < data.length) {
-                var insta = data[++index];
-                return <TaggedImage className="mobile image instagram"
-                                    key={insta.id}
-                                    imageLength={single}
-                                    type="instagram"
-                                    image={insta} />;
-              }
+              var deferred = instaFetch.get(++index);
+              return <TaggedImage className="mobile image instagram"
+                                  key={index}
+                                  imageLength={single}
+                                  type="instagram"
+                                  deferred={deferred} />;
             };
-          })(this.state.data);
+          })(instaFetch);
 
           return (<div className="gallery mobile">
-                    {_.map(this.state.tumblrData, function(p, i) {
+                    {_.map(this.props.tumblr, function(p, i) {
                       var even = i % 2 === 0;
                       return (<div>
                                 <div className="mobile-row dbl-row">
@@ -463,7 +635,7 @@
                                                key={i}
                                                imageLength={dbl}
                                                type="tumblr"
-                                               image={p} />
+                                               image={TumblrUtils.toImage(p)} />
                                   {even &&
                                    <div className="single-col right">
                                      {instaGen()}
@@ -485,6 +657,11 @@
 
   // A column of images
   var GalleryColumn = React.createClass({
+
+    getDefaultProps: function() {
+      return {data: []};
+    },
+
     render: function() {
       var classes = React.addons.classSet({
         'gallery-column': true,
@@ -495,18 +672,14 @@
 
       return (<div className={classes}>
                 {_(this.props.data).map(function(d) {
-                  var isPortrait = d.height > d.width,
-                      classes = React.addons.classSet({
-                    'tagged-image': true,
-                    image: true,
-                    portrait: isPortrait,
-                    landscape: !isPortrait});
+                  var classes = React.addons.classSet({
+                    'tagged-image': true, image: true});
 
-                  return (<TaggedImage key={d.id}
+                  return (<TaggedImage key={d.key}
                                        className={classes}
                                        imageLength={this.props.imageLength}
                                        type={this.props.type}
-                                       image={d} />);
+                                       deferred={d.deferred} />);
                 }.bind(this))}
               </div>);
     }
@@ -518,6 +691,17 @@
       return {scale: 1.2, duration: 200};
     },
 
+    componentWillMount: function() {
+      // If provided a deferred, set the image when done
+      if (this.props.deferred) {
+	this.props.deferred.done(function(d) {
+          this.setState({image: InstaUtils.toImage(d)});
+	}.bind(this));
+      } else if (this.props.image){
+	this.setState({image: this.props.image});
+      }
+    },
+
     render: function() {
       var divStyle = {
         width: this.props.imageLength,
@@ -525,20 +709,25 @@
         opacity: 0};
       var aStyle = _.pick(divStyle, ['width', 'height']);
 
+      // If the image has been set
       var imgStyle = {};
-
-      if (this.props.image.width > this.props.image.height) {
-        imgStyle.width = "140%";
-      } else {
-        imgStyle.height = "140%";
+      var url = "#";
+      if (this.state && this.state.image) {
+	url = this.state.image.url;
+        if (this.state.image.width > this.state.image.height) {
+          imgStyle.width = "140%";
+        } else {
+          imgStyle.height = "140%";
+        }
       }
 
       return (<div ref={this.props.key} className={this.props.className} style={divStyle}>
-                 <a href={"#/posts/" + this.props.type + "/" + this.props.key}
+                 <a href={"#/posts/" + this.props.type + "/" + this.props.key + "/instagram"}
                     style={aStyle}
-                    onMouseEnter={this.mouseEnterHandler}
-                    onMouseOut={this.mouseOutHandler}>
-                   <img src={this.props.image.url} style={imgStyle} />
+                    // onMouseEnter={this.mouseEnterHandler}
+                    // onMouseOut={this.mouseOutHandler}
+	          >
+                   <img src={url} style={imgStyle} />
                  </a>
               </div>);
     },
@@ -630,10 +819,10 @@
 
     },
 
-    Componentdidmount: function() {
+    componentDidMount: function() {
       // Get the image if it is not cached
       if (this.props.instagramID) {
-        InstaFetch.get(this.props.instagramID).done(function(d) {
+        instaFetch.getByID(this.props.instagramID).done(function(d) {
           this.setProps({instagram: d.data})
         }.bind(this));
       }
@@ -661,6 +850,13 @@
     render: function() {
       var count = _.values(this.getSources()).length;
 
+      var captionText;
+      if (this.props.caption) {
+        captionText = this.props.caption.replace("<p>", "").replace("</p>", "")
+      } else {
+        captionText = "";
+      }
+
       return (<div className="detail" onKeyPress={this.keyPressHandler}>
                 <div className="overlay">
                   <CloseWindowOverlay />
@@ -680,7 +876,7 @@
                     <div className="detail-header">
                       <img  onKeyPress={this.keyPressHandler} src={this.props.user.profile_picture} />
                       <div>
-                        <a href={InstaFetch.userUrl(this.props.user.username)}>
+                        <a href={instaFetch.userUrl(this.props.user.username)}>
                           <h4>{this.props.user.username}</h4>
                         </a>
                         <h5>{moment.unix(this.props.created).fromNow()}</h5>
@@ -688,7 +884,7 @@
                       <a href="http://www.tumblr.com/follow/everydayafrica"
                          className="follow-link">Follow</a>
                     </div>
-                    <p className="caption">{this.props.caption.replace("<p>", "").replace("</p>", "")}</p>
+                    <p className="caption">{captionText}</p>
                     <div>
                       <ul className="sources">
                         {_(this.getSources())
@@ -706,8 +902,8 @@
                       </ul>
                     </div>
                     {this.props.active === "tumblr" && this.props.tumblr &&
-                      <TumblrDetails tags={this.props.tumblr.tags}
-                                     notes={this.props.tumblr.notes}
+                      <TumblrDetails tags={TumblrUtils.toTags(this.props.tumblr)}
+                                     notes={this.props.tumblr.note_count}
                                      likeButton={this.props.tumblr.likeButton}
                                      reblogButton={this.props.tumblr.reblogButton} />}
                     {this.props.active === "instagram" && this.props.instagram &&
@@ -738,7 +934,7 @@
                    <ul className="detail-hearts">
                      {this.props.likes.data.map(function(d) {
                         return <li>
-                                 <a href={InstaFetch.userUrl(d.username)}>
+                                 <a href={instaFetch.userUrl(d.username)}>
                                    {d.username}
                                  </a>&emsp;
                                </li>; })}
@@ -757,7 +953,7 @@
                   return {tag: t.tag, url: t.tagUrl};
                 })} />
                 <div className="reblogs" dangerouslySetInnerHTML={{__html: this.props.reblogButton}} />
-                <p>{this.props.notes ? this.props.notes.count : "0"} Photo Reblogs</p>
+                <p>{this.props.notes ? this.props.notes : 0} Photo Reblogs</p>
               </div>);
     }
   });
@@ -872,8 +1068,8 @@
 
       this.dismiss = function() {
         bodyScroll.unfix();
-	if(mounted) mounted.dismiss();
         mounted = undefined;
+	React.unmountComponentAtNode(rootElt);
       };
 
       // A helper for the routing
@@ -896,6 +1092,23 @@
       gallery.forceUpdate();
       navBar.forceUpdate();
       NavDrawer.forceUpdate();
+    });
+
+    // Infinite scroll
+    // Fetch the next set of tumblr images, update the gallery
+    function tumblrNext() {
+      var deferred = tumblrFetch.fetchNext();
+      if (deferred) {
+        deferred.done(function() {
+          gallery.setProps({tumblr: tumblrFetch.items.slice()})
+        });
+      }
+    }
+    tumblrNext();
+
+    $(window).scroll(function() {
+      var scrollBot = $(".gallery").height() - $(window).height() - $(window).scrollTop();
+      if (scrollBot < 100) tumblrNext();
     });
 
     /*********
@@ -942,39 +1155,42 @@
         after: NavDrawer.dissmissFn
       },
 
-      "/posts/tumblr/:id/?(\\w+)?": function(id, type) {
+      "/posts/tumblr/:id/?(\\w+)?": function(rawId, type) {
+        var id = parseInt(rawId);
+	var post = tumblrFetch.get(id);
         if(post) {
           Details.show(
               <ImageDetails id={id}
-                            url={"#/posts/tumblr/" + id + "/instagram"}
+                            url={"#/posts/tumblr/" + id}
                             caption={post.caption}
                             created={1320232}
-                            image={{url: post.photoUrl500,
-                                    width: post.photoWidth500,
-                                    height: post.photoHeight500}}
+                            image={TumblrUtils.toImage(post)}
                             user={{profile_picture: TumblrVars.portraitUrl64,
                                    username: "jtmoulia"}}
                             tumblr={post}
-                            active={type || "tumblr"}
-                            instagramID="536018816062052929_145884981" />);
+                            active={type || "instagram"}
+                            instagramID="536018816062052929_145884981"
+	                    next={TumblrUtils.internalPostURL((id + 1).mod(tumblrFetch.items.length))}
+		            prev={TumblrUtils.internalPostURL((id - 1).mod(tumblrFetch.items.length))}
+	                   />);
         }
       },
 
-      "/posts/instagram/:id/?(\\w+)?": function(id, type) {
-        InstaFetch.get(id).done(function(d) {
-          var post = d.data
+      "/posts/instagram/:id/?(\\w+)?": function(rawId, type) {
+        var id = parseInt(rawId);
+        instaFetch.get(id).done(function(post) {
           if(post) {
             Details.show(
                 <ImageDetails id={id}
-                              url={InstaFetch.eaUrl(id)}
-                              caption={post.caption.text}
+                              url={instaFetch.eaUrl(id)}
+                              caption={post.caption ? post.caption.text : undefined}
                               image={post.images.standard_resolution}
                               created={post.created_time}
                               user={post.user}
                               active={type || "instagram"}
                               instagram={post}
-	                      next={InstaFetch.eaUrl(InstaFetch.next(id))}
-	                      prev={InstaFetch.eaUrl(InstaFetch.prev(id))}
+	                      next={instaFetch.eaUrl((id - 1).mod(instaFetch.limit))}
+	                      prev={instaFetch.eaUrl((id + 1).mod(instaFetch.limit))}
 		            />);
           }
         });
