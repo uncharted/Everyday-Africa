@@ -97,6 +97,13 @@
   var TumblrUtils = {
     toImage: function(d) {
       return d.photos[0].alt_sizes[1];
+    },
+
+    fetchAvatar: function(args) {
+      var apiURL = "https://api.tumblr.com/v2";
+      var params = $.param({callback: "?"});
+      var url = apiURL + "/blog/" + args.source + "/avatar/" + args.size || 128;
+      return $.ajax({url: url + "?" + params, dataType: "jsonp"});
     }
   };
 
@@ -119,6 +126,7 @@
     var fetchLock = new Lock();
 
     function onFetchDone(d) {
+      console.log(d);
       var posts = d.response.posts;
       for (var i = 0; i < posts.length; i++) {
         this.items.push(posts[i]);
@@ -794,7 +802,7 @@
 
     },
 
-    Componentdidmount: function() {
+    componentDidMount: function() {
       // Get the image if it is not cached
       if (this.props.instagramID) {
         instaFetch.get(this.props.instagramID).done(function(d) {
@@ -1126,7 +1134,6 @@
         var id = parseInt(rawId);
 	var post = tumblrFetch.get(id);
         if(post) {
-          console.log(post);
           Details.show(
               <ImageDetails id={id}
                             url={"#/posts/tumblr/" + id}
@@ -1138,8 +1145,8 @@
                             tumblr={post}
                             active={type || "instagram"}
                             instagramID="536018816062052929_145884981"
-	                    next={tumblrIdUrl((id + 1).mod(TumblrVars.posts.photos.length))}
-		            prev={tumblrIdUrl((id - 1).mod(TumblrVars.posts.photos.length))}
+	                    next={tumblrIdUrl((id + 1).mod(tumblrFetch.items.length))}
+		            prev={tumblrIdUrl((id - 1).mod(tumblrFetch.items.length))}
 	                   />);
         }
       },
