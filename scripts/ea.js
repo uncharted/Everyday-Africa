@@ -770,13 +770,13 @@
 
   var CloseWindow = React.createClass({
     render: function() {
-      return <div className="close-window"><a href="#">x</a></div>;
+      return <div className="close-window"><a href="#"><h3>x</h3></a></div>;
     }
   });
 
   var CloseWindowOverlay = React.createClass({
     render: function() {
-      return <div className="close-window"><a href="#/">x</a></div>;
+      return <div className="close-window-overlay"><a href="#/"><h3>x</h3></a></div>;
     }
   });
 
@@ -858,10 +858,8 @@
       }
 
       return (<div className="detail" onKeyPress={this.keyPressHandler}>
-                <div className="overlay">
-                  <CloseWindowOverlay />
-                  <a href="#/"></a>
-                </div>
+                <CloseWindowOverlay />
+                <a href="#/"></a>
                 <div className="detail-nav">
                   <a className="arrow-left" href={this.props.next}>
                     <img src={EAConfig.images.arrowleft} />
