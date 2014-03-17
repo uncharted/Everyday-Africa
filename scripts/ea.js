@@ -94,7 +94,14 @@
    * TumblrFetch -- Tumblr API Client
    *
    */
+  var TumblrUtils = {
+    toImage: function(d) {
+      return d.photos[0].alt_sizes[1];
+    }
+  };
+
   function TumblrFetch(config) {
+    this.prototype = TumblrUtils;
     // The publically accessible list of tumblr items
     this.items = [];
 
@@ -151,7 +158,7 @@
      * External API
      */
     this.get = function(i) {
-      return getMod(items, i);
+      return getMod(this.items, i);
     };
 
     this.take = function(n, index) {
@@ -170,7 +177,23 @@
    *
    * Handles lazily fetching instagram images.
    */
+  var InstaUtils = {
+    /**
+     * Extract the image data
+     */
+    toImage: function(d) {
+      var img = d.images.low_resolution;
+      return {
+	id: d.id,
+	url: img.url,
+	width: img.width,
+	height: img.height
+      }
+    }
+  }
+
   function InstaFetch(o) {
+    this.prototype = InstaUtils;
     this.tag   = "tag" in o ? o["tag"] : "everydayafrica";
     this.limit = "limit" in o ? o["limit"] : 20;
 
@@ -252,11 +275,25 @@
       return "#/posts/instagram/" + id;
     };
 
+    /**
+     * Extract the image data
+     */
+    this.toImage = function(d) {
+      var img = d.images.low_resolution;
+      return {
+	id: d.id,
+	url: img.url,
+	width: img.width,
+	height: img.height
+      }
+    }
+
     return this.populate(this.limit);
   }
 
-  // The global instaFetch
-  var instaFetch = new InstaFetch({tag: "amsterdam", limit: 114});
+  // The global Fetchers
+  var instaFetch = new InstaFetch({tag: "everydayafrica", limit: 30});
+  var tumblrFetch = new TumblrFetch({source: "pocketknife-prototype.tumblr.com"});
 
 
   /************
@@ -516,30 +553,12 @@
 
   // The gallery of ALL images
   var Gallery = React.createClass({
-    componentWillMount: function() {
-      var tumblrData = TumblrVars.posts.photos.map(function(photo, i) {
-        function sizedProp(prop) {
-          return photo[prop + "500"];
-        };
-
-        return {
-          id: i,
-          url: sizedProp('photoUrl'),
-          width: sizedProp('photoWidth'),
-          height: sizedProp('photoHeight')};
-      });
-
-      this.setState({
-        tumblrData: tumblrData
-      });
-    },
-
     render: function() {
       // Divide the images which fall on the left and the right
       var width = $(window).width();
 
       if (width > Settings.galleryBreakpoint) {
-        var total = TumblrVars.posts.photos.length * 24;
+        var total = this.props.tumblr ? this.props.tumblr.length * 24 : 0;
         var imageGroups = partition(instaFetch.take(total).map(function(d, i) {
           return {key: i, deferred: d};
         }), 3);
@@ -547,7 +566,17 @@
         var centerLength = 0.4 * width;
         return (<div className="gallery desktop">
                   <GalleryColumn type="instagram" position="left" imageLength={sideLength} data={imageGroups[0]} />
-                  <GalleryColumn type="tumblr" position="center" imageLength={centerLength} data={this.props.tumblr} />
+		  <div className="gallery-column center-column">
+                    {_.map(this.props.tumblr, function(d, i) {
+                      var classes = React.addons.classSet({
+                        'tagged-image': true, image: true});
+                      return (<TaggedImage key={i}
+                                           className={classes}
+                                           imageLength={centerLength}
+                                           type="tumblr"
+                                           image={TumblrUtils.toImage(d)} />);
+                        }, this)}
+		  </div>
                   <GalleryColumn type="instagram" position="right" imageLength={sideLength} data={imageGroups[1]} />
               </div>);
 
@@ -555,22 +584,20 @@
           var single = width / 3;
           var dbl = single * 2;
 
-          var instaGen = (function(data) {
+          var instaGen = (function(instaFetch) {
             var index = 0;
             return function() {
-              if (index < data.length) {
-                var insta = data[++index];
-                return <TaggedImage className="mobile image instagram"
-                                    key={insta.id}
-                                    imageLength={single}
-                                    type="instagram"
-                                    image={insta} />;
-              }
+              var deferred = instaFetch.get(++index);
+              return <TaggedImage className="mobile image instagram"
+                                  key={index}
+                                  imageLength={single}
+                                  type="instagram"
+                                  deferred={deferred} />;
             };
-          })(this.state.data);
+          })(instaFetch);
 
           return (<div className="gallery mobile">
-                    {_.map(this.state.tumblr, function(p, i) {
+                    {_.map(this.props.tumblr, function(p, i) {
                       var even = i % 2 === 0;
                       return (<div>
                                 <div className="mobile-row dbl-row">
@@ -583,7 +610,7 @@
                                                key={i}
                                                imageLength={dbl}
                                                type="tumblr"
-                                               image={p} />
+                                               image={TumblrUtils.toImage(p)} />
                                   {even &&
                                    <div className="single-col right">
                                      {instaGen()}
@@ -620,12 +647,8 @@
 
       return (<div className={classes}>
                 {_(this.props.data).map(function(d) {
-                  var isPortrait = d.height > d.width,
-                      classes = React.addons.classSet({
-                    'tagged-image': true,
-                    image: true,
-                    portrait: isPortrait,
-                    landscape: !isPortrait});
+                  var classes = React.addons.classSet({
+                    'tagged-image': true, image: true});
 
                   return (<TaggedImage key={d.key}
                                        className={classes}
@@ -644,10 +667,14 @@
     },
 
     componentWillMount: function() {
-      this.props.deferred.done(function(d) {
-        this.setState({media: d});
-        this.forceUpdate();
-      }.bind(this));
+      // If provided a deferred, set the image when done
+      if (this.props.deferred) {
+	this.props.deferred.done(function(d) {
+          this.setState({image: InstaUtils.toImage(d)});
+	}.bind(this));
+      } else if (this.props.image){
+	this.setState({image: this.props.image});
+      }
     },
 
     render: function() {
@@ -657,14 +684,12 @@
         opacity: 0};
       var aStyle = _.pick(divStyle, ['width', 'height']);
 
+      // If the image has been set
       var imgStyle = {};
       var url = "#";
-
-      // If the image has been set
-      if (this.state && this.state.media) {
-        var img = this.state.media.images.low_resolution;
-        url = this.state.media.images.low_resolution.url;
-        if (img.width > img.height) {
+      if (this.state && this.state.image) {
+	url = this.state.image.url;
+        if (this.state.image.width > this.state.image.height) {
           imgStyle.width = "140%";
         } else {
           imgStyle.height = "140%";
@@ -987,13 +1012,13 @@
    * Mount components, and wire up responsive layout
    */
   (function() {
-    var tumblrFetch = new TumblrFetch({source: "pocketknife-prototype.tumblr.com"});
     var gallery = <Gallery tag="everydayafrica" />;
     var navBar = <NavBar />;
 
     React.renderComponent(navBar, $("header").get(0));
     React.renderComponent(gallery, $("#content").get(0));
 
+    // Fetch the next set of tumblr images, update the gallery
     function tumblrNext() {
       tumblrFetch.fetchNext().done(function() {
         gallery.setProps({tumblr: tumblrFetch.items.slice()})
@@ -1099,16 +1124,15 @@
 
       "/posts/tumblr/:id/?(\\w+)?": function(rawId, type) {
         var id = parseInt(rawId);
-	var post = TumblrVars.posts.photos[id];
+	var post = tumblrFetch.get(id);
         if(post) {
+          console.log(post);
           Details.show(
               <ImageDetails id={id}
                             url={"#/posts/tumblr/" + id}
                             caption={post.caption}
                             created={1320232}
-                            image={{url: post.photoUrl500,
-                                    width: post.photoWidth500,
-                                    height: post.photoHeight500}}
+                            image={TumblrUtils.toImage(post)}
                             user={{profile_picture: TumblrVars.portraitUrl64,
                                    username: "jtmoulia"}}
                             tumblr={post}
@@ -1133,8 +1157,8 @@
                               user={post.user}
                               active={type || "instagram"}
                               instagram={post}
-	                      next={instaFetch.eaUrl((id + 1).mod(instaFetch.limit))}
-	                      prev={instaFetch.eaUrl((id - 1).mod(instaFetch.limit))}
+	                      next={instaFetch.eaUrl((id - 1).mod(instaFetch.limit))}
+	                      prev={instaFetch.eaUrl((id + 1).mod(instaFetch.limit))}
 		            />);
           }
         });
