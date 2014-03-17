@@ -176,7 +176,9 @@
               })}
             </ul>
           </div>
-           <h1><a href="/"><span className="everyday">Everyday</span>Africa</a></h1>
+          <div className="everydayafrica">
+            <h1><a href="/"><span className="everyday">Everyday</span>Africa</a></h1>
+          </div>
            <div id="share-buttons" className="nav-panel">
              <a target="_blank" href="http://instagram.com/everydayafrica"><img src={EAConfig.images.instagram} /></a>
              <a target="_blank" href="https://twitter.com/EverydayAfrica"><img src={EAConfig.images.twitter} /></a>
@@ -233,7 +235,7 @@
                 {_.map(this.props.data, function(p) {
                   return (<div className="photographer grid-item">
                             <a href={p.url}>
-                              <img src="http://placehold.it/50x50" alt={p.name} />
+                              <img className="protogimg" src="http://placehold.it/50x50" alt={p.name} />
                               <h4>{p.name}</h4>
                             </a>
                           </div>);
