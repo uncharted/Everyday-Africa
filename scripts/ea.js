@@ -20,14 +20,6 @@
    * Internal Helpers
    */
 
-  function tumblrTagUrl(tag) {
-    return TumblrVars.blogUrl + "/tagged/" + tag;
-  }
-
-  function tumblrIdUrl(id) {
-    return "#/posts/tumblr/" + id + "/instagram";
-  }
-
   /*
    * Wraparound array get element
    */
@@ -97,6 +89,23 @@
   var TumblrUtils = {
     toImage: function(d) {
       return d.photos[0].alt_sizes[1];
+    },
+
+    toTags: function(post) {
+      return _.map(post.tags, function(tag) {
+        return {
+          tag: tag,
+          url: this.externalTagURL(tag)
+        }
+      }, this);
+    },
+
+    externalTagURL: function(tag) {
+      return TumblrVars.blogUrl + "/tagged/" + tag;
+    },
+
+    internalPostURL: function(id) {
+      return "#/posts/tumblr/" + id + "/instagram";
     },
 
     fetchAvatar: function(args) {
@@ -207,8 +216,8 @@
 
     var CLIENT_ID = "57dbff39f8dc4b659e6489ac6dd68b45";
     var API_URL   = "https://api.instagram.com/v1";
-    var cache = {};
     var items = [];
+    var cache = {};
 
     /*
      * Internal Functions
@@ -262,6 +271,14 @@
 
       this.get = function(i) {
         return getMod(items, i);
+      }
+
+      this.getByID = function(id) {
+        if (!(id in cache)) {
+          var url = API_URL + "/media/" + id + "?" + params();
+          cache[id] = $.ajax({url: url, dataType: "jsonp"});
+        }
+        return cache[id];
       }
 
       this.take = function(n, index) {
@@ -805,7 +822,7 @@
     componentDidMount: function() {
       // Get the image if it is not cached
       if (this.props.instagramID) {
-        instaFetch.get(this.props.instagramID).done(function(d) {
+        instaFetch.getByID(this.props.instagramID).done(function(d) {
           this.setProps({instagram: d.data})
         }.bind(this));
       }
@@ -885,8 +902,8 @@
                       </ul>
                     </div>
                     {this.props.active === "tumblr" && this.props.tumblr &&
-                      <TumblrDetails tags={this.props.tumblr.tags}
-                                     notes={this.props.tumblr.notes}
+                      <TumblrDetails tags={TumblrUtils.toTags(this.props.tumblr)}
+                                     notes={this.props.tumblr.note_count}
                                      likeButton={this.props.tumblr.likeButton}
                                      reblogButton={this.props.tumblr.reblogButton} />}
                     {this.props.active === "instagram" && this.props.instagram &&
@@ -936,7 +953,7 @@
                   return {tag: t.tag, url: t.tagUrl};
                 })} />
                 <div className="reblogs" dangerouslySetInnerHTML={{__html: this.props.reblogButton}} />
-                <p>{this.props.notes ? this.props.notes.count : "0"} Photo Reblogs</p>
+                <p>{this.props.notes ? this.props.notes : 0} Photo Reblogs</p>
               </div>);
     }
   });
@@ -1153,8 +1170,8 @@
                             tumblr={post}
                             active={type || "instagram"}
                             instagramID="536018816062052929_145884981"
-	                    next={tumblrIdUrl((id + 1).mod(tumblrFetch.items.length))}
-		            prev={tumblrIdUrl((id - 1).mod(tumblrFetch.items.length))}
+	                    next={TumblrUtils.internalPostURL((id + 1).mod(tumblrFetch.items.length))}
+		            prev={TumblrUtils.internalPostURL((id - 1).mod(tumblrFetch.items.length))}
 	                   />);
         }
       },
