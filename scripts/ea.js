@@ -136,12 +136,14 @@
 
     function onFetchDone(d) {
       console.log(d);
-      var posts = d.response.posts;
+      posts = d.response.posts;
+      // Set publically accessible blog data
+      if(!("blog" in this)) {
+	this.blog = d.response.blog;
+      }
       for (var i = 0; i < posts.length; i++) {
         this.items.push(posts[i]);
       }
-
-      // Set the total number of posts
     }
 
     this.fetchNext = function(args) {
@@ -452,7 +454,7 @@
                 <h3>Countries</h3>
                 {_.map(this.props.data, function(data, country) {
                   return (<div className="country grid-item">
-                            <a href={tumblrTagUrl(country)}>
+                            <a href={TumblrUtils.externalTagURL(country)}>
                               <img src={data.flag} alt={data.name} />
                               <h4>{data.name}</h4>
                             </a>
@@ -874,12 +876,12 @@
                   <img src={this.props.image.url} className="image-large"/>
                   <div className="detail-panel">
                     <div className="detail-header">
-                      <img  onKeyPress={this.keyPressHandler} src={this.props.user.profile_picture} />
+                      <img src={this.props.user.profile_picture} />
                       <div>
                         <a href={instaFetch.userUrl(this.props.user.username)}>
                           <h4>{this.props.user.username}</h4>
                         </a>
-                        <h5>{moment.unix(this.props.created).fromNow()}</h5>
+                        <h5>{this.props.created.fromNow()}</h5>
                       </div>
                       <a href="http://www.tumblr.com/follow/everydayafrica"
                          className="follow-link">Follow</a>
@@ -1067,9 +1069,13 @@
       };
 
       this.dismiss = function() {
+        if (mounted && mounted.dismiss) {
+          mounted.dismiss();
+        } else {
+          React.unmountComponentAtNode(rootElt);
+        }
         bodyScroll.unfix();
         mounted = undefined;
-	React.unmountComponentAtNode(rootElt);
       };
 
       // A helper for the routing
@@ -1163,10 +1169,10 @@
               <ImageDetails id={id}
                             url={"#/posts/tumblr/" + id}
                             caption={post.caption}
-                            created={1320232}
+                            created={moment(post.date)}
                             image={TumblrUtils.toImage(post)}
                             user={{profile_picture: TumblrVars.portraitUrl64,
-                                   username: "jtmoulia"}}
+                                   username: tumblrFetch.blog.name}}
                             tumblr={post}
                             active={type || "instagram"}
                             instagramID="536018816062052929_145884981"
@@ -1185,8 +1191,8 @@
                               url={instaFetch.eaUrl(id)}
                               caption={post.caption ? post.caption.text : undefined}
                               image={post.images.standard_resolution}
-                              created={post.created_time}
-                              user={post.user}
+                              created={moment.unix(post.created_time)}
+                              user={post.user} // TODO -- needs correct user data
                               active={type || "instagram"}
                               instagram={post}
 	                      next={instaFetch.eaUrl((id + 1).mod(instaFetch.limit))}
