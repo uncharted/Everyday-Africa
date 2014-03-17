@@ -11,6 +11,7 @@ PORT		= 8000
 NODE_MODULES	= node_modules
 LESSC		= $(NODE_MODULES)/less/bin/lessc
 JSX		= $(NODE_MODULES)/react-tools/bin/jsx --cache-dir=$(VAR)/.module-cache
+UGLIFY		= $(NODE_MODULES)/uglify-js/bin/uglifyjs
 
 # Project structure
 VAR				= var
@@ -100,9 +101,11 @@ SED_TEMPLATER = sed \
 	    $(TUMBLRVARS)
 
 
-.PHONY: all build push serve open
+.PHONY: all build push serve open deps
 
 all: build
+
+deps: $(NODE_MODULES)
 
 build: $(VAR)/ea.html $(PUBLIC_SCRIPTS)/ea.js $(PUBLIC_SCRIPTS)/config.js $(PUBLIC_STYLESHEETS)/ea.css tumblrvars.js local.js
 
