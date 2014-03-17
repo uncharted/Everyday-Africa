@@ -112,7 +112,7 @@
     // The publically accessible list of tumblr items
     this.items = [];
 
-    var API_KEY = "o2uD0E0HxQIRfWM20U9E7srwuoIOQxVO2fYtMuCfea6BHN809S";
+    var API_KEY = "xIPlTUhKQUEnxFtWbL6A98VFRs8v0qHXSULaRbFuRX2GZnaHio";
     var API_URL = "https://api.tumblr.com/v2/blog/" + config.source;
 
     // How many posts to fetch per update
@@ -154,10 +154,10 @@
           .done(onFetchDone.bind(this))
           .then(function() {
             offset += limit;
-            fetchLock.release
+            fetchLock.release();
           });
       } else {
-        console.log("LOCKED");
+        // console.log("LOCKED");
         return false;
       }
     };
@@ -301,7 +301,7 @@
 
   // The global Fetchers
   var instaFetch = new InstaFetch({tag: "everydayafrica", limit: 30});
-  var tumblrFetch = new TumblrFetch({source: "pocketknife-prototype.tumblr.com"});
+  var tumblrFetch = new TumblrFetch({source: "everydayafrica.tumblr.com"});
 
 
   /************
@@ -1026,15 +1026,6 @@
     React.renderComponent(navBar, $("header").get(0));
     React.renderComponent(gallery, $("#content").get(0));
 
-    // Fetch the next set of tumblr images, update the gallery
-    function tumblrNext() {
-      tumblrFetch.fetchNext().done(function() {
-        gallery.setProps({tumblr: tumblrFetch.items.slice()})
-      });
-    }
-
-    tumblrNext();
-
     /**
      * Fix/unfix body scrolling
      */
@@ -1084,6 +1075,23 @@
       gallery.forceUpdate();
       navBar.forceUpdate();
       NavDrawer.forceUpdate();
+    });
+
+    // Infinite scroll
+    // Fetch the next set of tumblr images, update the gallery
+    function tumblrNext() {
+      var deferred = tumblrFetch.fetchNext();
+      if (deferred) {
+        deferred.done(function() {
+          gallery.setProps({tumblr: tumblrFetch.items.slice()})
+        });
+      }
+    }
+    tumblrNext();
+
+    $(window).scroll(function() {
+      var scrollBot = $(".gallery").height() - $(window).height() - $(window).scrollTop();
+      if (scrollBot < 100) tumblrNext();
     });
 
     /*********
