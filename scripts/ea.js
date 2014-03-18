@@ -139,7 +139,7 @@ $(function(){
     var fetchLock = new Lock();
 
     function onFetchDone(d) {
-      console.log(d);
+      // console.log(d);
       posts = d.response.posts;
       // Set publically accessible blog data
       if(!("blog" in this)) {
@@ -271,9 +271,9 @@ $(function(){
       items = _.times(limit, function() {
         return $.Deferred().done(function (d) {
           // Add to the cache when done
-          cache[d.id] = d;
-        });
-      });
+          cache[d.id] = $.Deferred().resolveWith(this, [{data: d}]).promise();
+        }.bind(this));
+      }, this);
 
       this.get = function(i) {
         return getMod(items, i);
@@ -919,10 +919,6 @@ $(function(){
                   </div>
                 </div>
               </div>);
-    },
-
-    keyPressHandler: function(e) {
-      console.log(e);
     }
   });
 
