@@ -1,6 +1,10 @@
 /** @jsx React.DOM */
 "use strict";
 
+$(function(){
+  FastClick.attach(document.body);
+}, false);
+
 (function($, _, React, Router) {
   Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
