@@ -264,7 +264,7 @@
      */
     this.populate = function(limit) {
       // Set all of the deferreds
-      items = _.times(limit || 20, function() {
+      items = _.times(limit, function() {
         return $.Deferred().done(function (d) {
           // Add to the cache when done
           cache[d.id] = d;
@@ -319,7 +319,7 @@
   }
 
   // The global Fetchers
-  var instaFetch = new InstaFetch({tag: "everydayafrica", limit: 30});
+  var instaFetch = new InstaFetch({tag: "everydayafrica", limit: 400});
   var tumblrFetch = new TumblrFetch({source: "everydayafrica.tumblr.com"});
 
 
@@ -861,7 +861,9 @@
 
       return (<div className="detail" onKeyPress={this.keyPressHandler}>
                 <CloseWindowOverlay />
-                <a href="#/"></a>
+                <div className="overlay">
+                  <a href="#/"></a>
+                </div>
                 <div className="detail-nav">
                   <a className="arrow-left" href={this.props.prev}>
                     <img src={EAConfig.images.arrowleft} />
