@@ -1,6 +1,10 @@
 /** @jsx React.DOM */
 "use strict";
 
+$(function(){
+  FastClick.attach(document.body);
+}, false);
+
 (function($, _, React, Router) {
   Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -135,7 +139,7 @@
     var fetchLock = new Lock();
 
     function onFetchDone(d) {
-      console.log(d);
+      // console.log(d);
       posts = d.response.posts;
       // Set publically accessible blog data
       if(!("blog" in this)) {
@@ -264,12 +268,12 @@
      */
     this.populate = function(limit) {
       // Set all of the deferreds
-      items = _.times(limit || 20, function() {
+      items = _.times(limit, function() {
         return $.Deferred().done(function (d) {
           // Add to the cache when done
-          cache[d.id] = d;
-        });
-      });
+          cache[d.id] = $.Deferred().resolveWith(this, [{data: d}]).promise();
+        }.bind(this));
+      }, this);
 
       this.get = function(i) {
         return getMod(items, i);
@@ -319,7 +323,7 @@
   }
 
   // The global Fetchers
-  var instaFetch = new InstaFetch({tag: "everydayafrica", limit: 30});
+  var instaFetch = new InstaFetch({tag: "everydayafrica", limit: 400});
   var tumblrFetch = new TumblrFetch({source: "everydayafrica.tumblr.com"});
 
 
@@ -861,7 +865,9 @@
 
       return (<div className="detail" onKeyPress={this.keyPressHandler}>
                 <CloseWindowOverlay />
-                <a href="#/"></a>
+                <div className="overlay">
+                  <a href="#/"></a>
+                </div>
                 <div className="detail-nav">
                   <a className="arrow-left" href={this.props.prev}>
                     <img src={EAConfig.images.arrowleft} />
@@ -913,10 +919,6 @@
                   </div>
                 </div>
               </div>);
-    },
-
-    keyPressHandler: function(e) {
-      console.log(e);
     }
   });
 
