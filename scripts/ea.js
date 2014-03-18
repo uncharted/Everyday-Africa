@@ -117,8 +117,13 @@ $(function(){
       var params = $.param({callback: "?"});
       var url = apiURL + "/blog/" + args.source + "/avatar/" + args.size || 128;
       return $.ajax({url: url + "?" + params, dataType: "jsonp"});
+    },
+
+    instagramID: function(post) {
+      return post.link_url.match(/http:\/\/instagram\.com\/p\/(.*)\//)[1];
     }
   };
+
 
   function TumblrFetch(config) {
     this.prototype = TumblrUtils;
@@ -139,7 +144,7 @@ $(function(){
     var fetchLock = new Lock();
 
     function onFetchDone(d) {
-      // console.log(d);
+      console.log(d);
       posts = d.response.posts;
       // Set publically accessible blog data
       if(!("blog" in this)) {
@@ -300,6 +305,25 @@ $(function(){
       if (!(id in cache)) {
         var url = API_URL + "/media/" + id + "?" + params();
         cache[id] = $.ajax({url: url, dataType: "jsonp"});
+      }
+      return cache[id];
+    };
+
+    this.getByURL = function(url) {
+      var id = url.match(/http:\/\/instagram\.com\/p\/(.*)\//)[1];
+      if (!id) throw "badURL";
+      if (!cache[id]) {
+	cache[id] = $.Deferred();
+	var params = $.param({callback: "?", url: url});
+	var getURL = "https://api.instagram.com/oembed?" + params;
+
+	$.ajax({url: getURL, dataType: "jsonp"})
+          .done(function(d) {
+	    this.getByID(d.media_id)
+	      .done(function(d) {
+		cache[id].resolveWith(this, [d]);
+	      }.bind(this))
+	  }.bind(this));
       }
       return cache[id];
     };
@@ -491,7 +515,7 @@ $(function(){
                 <h3>Photographers</h3>
                 {_.map(this.props.data, function(p) {
                   return (<div className="photographer grid-item">
-                            <a href={p.url}>
+                            <a href={TumblrUtils.externalTagURL(p.tag)}>
                               <img className="protogimg" src="http://placehold.it/50x50" alt={p.name} />
                               <h4>{p.name}</h4>
                             </a>
@@ -841,10 +865,11 @@ $(function(){
 
     componentDidMount: function() {
       // Get the image if it is not cached
-      if (this.props.instagramID) {
-        instaFetch.getByID(this.props.instagramID).done(function(d) {
-          this.setProps({instagram: d.data})
-        }.bind(this));
+      if (this.props.instagramURL && !this.props.instagram) {
+        instaFetch.getByURL(this.props.instagramURL)
+	  .done(function(d) {
+            this.setProps({instagram: d.data});
+          }.bind(this));
       }
 
       // Wire up next/prev keydown listeners
@@ -869,6 +894,7 @@ $(function(){
 
     render: function() {
       var count = _.values(this.getSources()).length;
+      var instaUserURL = instaFetch.userUrl(this.props.user.username);
 
       var captionText;
       if (this.props.caption) {
@@ -891,18 +917,22 @@ $(function(){
                   </a>
                 </div>
                 <div className="image-detail">
-                  <img src={this.props.image.url} className="image-large"/>
+	          <a target="_blank" href={this.props.instagramURL}>
+                    <img src={this.props.image.url} className="image-large"/>
+	          </a>
                   <div className="detail-panel">
                     <div className="detail-header">
-                      <img src={this.props.user.profile_picture} />
+	              <a target="_blank" href={instaUserURL}>
+                        <img src={this.props.user.profile_picture} />
+	              </a>
                       <div>
-                        <a target="_blank" href={instaFetch.userUrl(this.props.user.username)}>
+                        <a target="_blank" href={instaUserURL}>
                           <h4>{this.props.user.username}</h4>
                         </a>
                         <h5>{this.props.created.fromNow()}</h5>
                       </div>
-                      <a href="http://www.tumblr.com/follow/everydayafrica"
-                         className="follow-link">Follow</a>
+                      <a href={instaUserURL} target="_blank"
+	                 className="follow-link">Follow</a>
                     </div>
                     <p className="caption">{captionText}</p>
                     <div>
@@ -1190,7 +1220,7 @@ $(function(){
                                    username: tumblrFetch.blog.name}}
                             tumblr={post}
                             active={type || "instagram"}
-                            instagramID="536018816062052929_145884981"
+                            instagramURL={post.link_url}
 	                    next={TumblrUtils.internalPostURL((id + 1).mod(tumblrFetch.items.length))}
 		            prev={TumblrUtils.internalPostURL((id - 1).mod(tumblrFetch.items.length))}
 	                   />);
@@ -1201,6 +1231,7 @@ $(function(){
         var id = parseInt(rawId);
         instaFetch.get(id).done(function(post) {
           if(post) {
+	    console.log(post);
             Details.show(
                 <ImageDetails id={id}
                               url={instaFetch.eaUrl(id)}
@@ -1210,6 +1241,7 @@ $(function(){
                               user={post.user} // TODO -- needs correct user data
                               active={type || "instagram"}
                               instagram={post}
+	                      instagramURL={post.link}
 	                      next={instaFetch.eaUrl((id + 1).mod(instaFetch.limit))}
 	                      prev={instaFetch.eaUrl((id - 1).mod(instaFetch.limit))}
 		            />);

@@ -211,49 +211,65 @@ EAConfig = {
   photographers: [
     {
       name: "Peter DiCampo",
+      tag: "pdicampo",
       url: "http://www.peterdicampo.com/"
     }, {
-      name: "Austin Merrell"
+      name: "Austin Merrell",
+      tag: "amerrell"
     }, {
       name: "Nana Kofi Acquah",
+      tag: "nkacquah",
       url: "http://www.nkaphoto.com/en/"
     }, {
       name: "Jide Alakija",
+      tag: "jalakija",
       url: "http://www.alakija.com/"
     }, {
       name: "Andrew Esiebo",
+      tag: "aesiebo",
       url: "http://www.andrewesiebo.com/"
     }, {
       name: "Glenna Gordon",
+      tag: "ggordon",
       url: "http://www.glennagordon.com/"
     }, {
       name: "Jane Hahn",
+      tag: "jhahn",
       url: "http://www.janehahn.com/"
     }, {
-      name: "Idil Ibrahim"
+      name: "Idil Ibrahim",
+      tag: "iibrahim"
     }, {
       name: "Shannon Jenson",
+      tag: "sjenson",
       url: "http://www.shannon-jensen.com/"
     }, {
       name: "Lindsay Mackenzie",
+      tag: "lmackenzie",
       url: "http://lindsaymackenzie.com/"
     }, {
       name: "Holly Pickett",
+      tag: "hpickett",
       url: "http://www.hollypickett.com/"
     }, {
       name: "Allison Shelley",
+      tag: "ashelley",
       url: "http://allisonshelley.photoshelter.com/#!/index"
     }, {
       name: "Charlie Shoemaker",
+      tag: "cshoemaker",
       url: "http://www.charlieshoemaker.com/"
     }, {
       name: "Nichole Sobecki",
+      tag: "nsobecki",
       url: "http://www.nicholesobecki.com/"
     }, {
       name: "Laura El-Tantawy",
+      tag: "leltantawy",
       url: "http://www.lauraeltantawy.com/"
     }, {
-      name: "Sara Terry"
+      name: "Sara Terry",
+      tag: "sterry"
     }
   ]
 };
