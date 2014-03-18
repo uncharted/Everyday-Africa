@@ -882,7 +882,7 @@ $(function(){
                     <div className="detail-header">
                       <img src={this.props.user.profile_picture} />
                       <div>
-                        <a href={instaFetch.userUrl(this.props.user.username)}>
+                        <a target="_blank" href={instaFetch.userUrl(this.props.user.username)}>
                           <h4>{this.props.user.username}</h4>
                         </a>
                         <h5>{this.props.created.fromNow()}</h5>
@@ -936,7 +936,7 @@ $(function(){
                    <ul className="detail-hearts">
                      {this.props.likes.data.map(function(d) {
                         return <li>
-                                 <a href={instaFetch.userUrl(d.username)}>
+                                 <a target="_blank" href={instaFetch.userUrl(d.username)}>
                                    {d.username}
                                  </a>&emsp;
                                </li>; })}
