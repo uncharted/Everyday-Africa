@@ -223,6 +223,7 @@ $(function(){
     var CLIENT_ID = "57dbff39f8dc4b659e6489ac6dd68b45";
     var API_URL   = "https://api.instagram.com/v1";
     var items = [];
+    var pendingItems = [];
     var cache = {};
 
     /*
@@ -246,8 +247,8 @@ $(function(){
               deferred.resolveWith(this, [item]);
               return true;
             } else {
-              // If there are no more deferreds, terminate
-              return false;
+              // If there are no more deferreds, queue up in pending
+	      pendingItems.push(item);
             }
           }.bind(this));
 
@@ -263,40 +264,53 @@ $(function(){
       return this;
     }
 
+    function flush(pendingDeferreds) {
+      while (pendingItems.length > 0 && pendingDeferreds.length > 0) {
+	pendingDeferreds.shift().resolveWith(this, [pendingItems.shift()]);
+      }
+      return this;
+    }
+
     /*
      * External API
      */
-    this.populate = function(limit) {
+    this.fetchNext = function(count) {
+      var corrected = items.length + count >= this.limit ? this.limit - items.length : count;
+      var newItems = [];
+
       // Set all of the deferreds
-      items = _.times(limit, function() {
-        return $.Deferred().done(function (d) {
+      _.times(corrected, function() {
+        var deferred = $.Deferred().done(function (d) {
           // Add to the cache when done
           cache[d.id] = $.Deferred().resolveWith(this, [{data: d}]).promise();
         }.bind(this));
+	newItems.push(deferred);
+	items.push(deferred);
       }, this);
 
-      this.get = function(i) {
-        return getMod(items, i);
-      }
-
-      this.getByID = function(id) {
-        if (!(id in cache)) {
-          var url = API_URL + "/media/" + id + "?" + params();
-          cache[id] = $.ajax({url: url, dataType: "jsonp"});
-        }
-        return cache[id];
-      }
-
-      this.take = function(n, index) {
-        var taken = [], start = index || 0;
-        for(var i = start; i < start + n; i++) {
-          taken.push(this.get(i));
-        }
-        return taken;
-      }
-
+      flush();
       return fetch(items.slice(), API_URL + "/tags/" + this.tag + "/media/recent?" + params());
     }
+
+    this.get = function(i) {
+      return getMod(items, i);
+    };
+
+    this.getByID = function(id) {
+      if (!(id in cache)) {
+        var url = API_URL + "/media/" + id + "?" + params();
+        cache[id] = $.ajax({url: url, dataType: "jsonp"});
+      }
+      return cache[id];
+    };
+
+    this.take = function(n, index) {
+      var taken = [], start = index || 0;
+      for(var i = start; i < start + n; i++) {
+        taken.push(this.get(i));
+      }
+      return taken;
+    };
 
     this.userUrl = function(user) {
       return ["http://instagram.com", user].join("/");
@@ -317,13 +331,13 @@ $(function(){
 	width: img.width,
 	height: img.height
       }
-    }
+    };
 
-    return this.populate(this.limit);
+    return this.fetchNext(this.limit);
   }
 
   // The global Fetchers
-  var instaFetch = new InstaFetch({tag: "everydayafrica", limit: 400});
+  var instaFetch = new InstaFetch({tag: "everydayafrica", limit: 100});
   var tumblrFetch = new TumblrFetch({source: "everydayafrica.tumblr.com"});
 
 
@@ -1103,6 +1117,7 @@ $(function(){
     // Infinite scroll
     // Fetch the next set of tumblr images, update the gallery
     function tumblrNext() {
+      instaFetch.fetchNext(8 * 10);
       var deferred = tumblrFetch.fetchNext();
       if (deferred) {
         deferred.done(function() {
