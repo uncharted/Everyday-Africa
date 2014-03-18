@@ -517,7 +517,7 @@ $(function(){
     keyPressHandler: function(e) {
       if (e.key === "Enter") {
         var input = $(this.getDOMNode()).find("input").val();
-        if (input) location.href = tumblrTagUrl(input);
+        if (input) location.href = TumblrUtils.externalTagURL(input);
       }
     }
   });
