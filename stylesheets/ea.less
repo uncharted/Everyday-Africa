@@ -50,17 +50,20 @@ body {
     line-height: 0px;
     padding: 11px 3px; 
     text-decoration: none;
+
+    @media (max-width: @small) {
+    	margin-top: 35px;
+		margin-right: 5px;
+    }
 }
 
 .close-window-overlay { 
-	a { text-decoration: none;}
+	a { 
+		text-decoration: none;
+	}
 	h3 {
 		font-size: 30px;
 		color: #FFFFFF;
-
-		@media (max-width: @small){
-			color: #000000
-		}
 	}
 }
 
