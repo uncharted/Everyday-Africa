@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Lato:300,400);
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400,900);
 
 @nav-background: rgba(255, 255, 255, 0.95);
 @nav-height: 64px;
@@ -36,47 +36,47 @@ body {
 }
 
 .close-window, .close-window-overlay{
-	display: block;
-	position: fixed;
-	right: 0%;
-	top: 0%;
-	margin-top: 60px;
-	margin-right: 15px;
-	z-index: 200;
+  display: block;
+  position: fixed;
+  right: 0%;
+  top: 0%;
+  margin-top: 60px;
+  margin-right: 15px;
+  z-index: 200;
 
-	cursor:pointer;
-    font-size: 24px;
-    font-weight: 300;
-    line-height: 0px;
-    padding: 11px 3px; 
-    text-decoration: none;
+  cursor:pointer;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 0px;
+  padding: 11px 3px;
+  text-decoration: none;
 
-    @media (max-width: @small) {
-    	margin-top: 35px;
-		margin-right: 5px;
-    }
+  @media (max-width: @small) {
+    margin-top: 35px;
+    margin-right: 5px;
+  }
 }
 
-.close-window-overlay { 
-	a { 
-		text-decoration: none;
-	}
-	h3 {
-		font-size: 30px;
-		color: #FFFFFF;
-	}
+.close-window-overlay {
+  a {
+    text-decoration: none;
+  }
+  h3 {
+    font-size: 30px;
+    color: #FFFFFF;
+  }
 }
 
 .close-window {
-	margin-top: 60px;
-	margin-right: 15px;
-	color: #000;
-	a { text-decoration: none;}
+  margin-top: 60px;
+  margin-right: 15px;
+  color: #000;
+  a { text-decoration: none;}
 
-	h3 {
-	font-size: 20px;
-	color: #000000;
-	} 
+  h3 {
+    font-size: 20px;
+    color: #000000;
+  }
 }
 
 // Import other less files

@@ -35,7 +35,7 @@
           {/block:Photo}
 	  {block:Date}date: {
 	    timestamp: {Timestamp},
-	    timeAgo: {TimeAgo}
+	    timeAgo: '{TimeAgo}'
 	  },{/block:Date}
           {block:HasTags} tags: [
             {block:Tags} {

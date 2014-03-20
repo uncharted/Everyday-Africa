@@ -92,8 +92,27 @@
       float: left;
     }
 
-    .about-page {
+    .nav-list {
+      list-style: none;
+      text-transform: uppercase;
 
+      li {
+	margin: 0.2em;
+	font-family: @font;
+	font-weight: 400;
+	color: @blue;
+      }
+
+      .active a {
+	color: black;
+      }
+
+      .inactive a {
+	color: @blue;
+      }
+    }
+
+    .about-page {
       @media (min-width: @medium) {
         float: right;
         width: 70%;

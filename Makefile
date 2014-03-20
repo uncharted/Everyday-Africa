@@ -69,6 +69,7 @@ SEARCH_WHITE_URL	= $(IMAGES_BASE_URL)/search-white.svg
 ABOUT_WHITE_URL	        = $(IMAGES_BASE_URL)/about-white.svg
 ARROW_LEFT_URL	        = $(IMAGES_BASE_URL)/arrow-left.svg
 ARROW_RIGHT_URL	        = $(IMAGES_BASE_URL)/arrow-right.svg
+CIRCLE_ARROW_DOWN_URL   = $(IMAGES_BASE_URL)/circle-arrow-down.svg
 
 SED_TEMPLATER = sed \
             -e 's|HOST|$(HOST)|g' \
@@ -100,6 +101,7 @@ SED_TEMPLATER = sed \
             -e 's|ABOUT_WHITE_URL|$(ABOUT_WHITE_URL)|g' \
             -e 's|ARROW_LEFT_URL|$(ARROW_LEFT_URL)|g' \
             -e 's|ARROW_RIGHT_URL|$(ARROW_RIGHT_URL)|g' \
+            -e 's|CIRCLE_ARROW_DOWN_URL|$(CIRCLE_ARROW_DOWN_URL)|g' \
 	    $(TUMBLRVARS)
 
 

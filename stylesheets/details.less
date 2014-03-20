@@ -8,7 +8,7 @@
 @detail-side-width: @detail-width - @detail-image-width - 10px;
 @inactive-color: @grey;
 
-@tablet-max: 830px;
+@tablet-max: 820px;
 @tablet-min: 480px;
 @mobile-max: 480px;
 @mobile-min: 0px;
@@ -145,11 +145,11 @@
     }
   }
 
-  > img {
-    height: @detail-height;
+  > a > img {
+    height: 100%;
     margin-right: 0.5em;
 
-    @media (max-width: @medium) { 
+    @media (max-width: @medium) {
       width: 100%;
       height: inherit;
     }
@@ -423,4 +423,16 @@
     padding-top: 17px;
     padding-left: 6px;
   }
+}
+
+.more-indicator {
+  position: absolute;
+  width: 40px;
+  left: 48%;
+  bottom: 10px;
+
+  -webkit-transition: opacity 0.5s ease-in;
+  -moz-transition: opacity 0.5s ease-in;
+  -o-transition: opacity 0.5s ease-in;
+  transition: opacity 0.5s ease-in;
 }

@@ -19,7 +19,8 @@ EAConfig = {
     searchWhite: "SEARCH_WHITE_URL",
     aboutWhite: "ABOUT_WHITE_URL",
     arrowleft: "ARROW_LEFT_URL",
-    arrowright: "ARROW_RIGHT_URL"
+    arrowright: "ARROW_RIGHT_URL",
+    arrowdown: "CIRCLE_ARROW_DOWN_URL"
   },
 
   countries: {

@@ -1,6 +1,12 @@
 /** @jsx React.DOM */
 "use strict";
 
+(function($) {
+  $.fn.scrollable = function() {
+    return this.get(0).scrollHeight > this.innerHeight() + 10;
+  }
+}(jQuery));
+
 $(function(){
   FastClick.attach(document.body);
 }, false);
@@ -144,7 +150,7 @@ $(function(){
     var fetchLock = new Lock();
 
     function onFetchDone(d) {
-      console.log(d);
+      // console.log(d);
       posts = d.response.posts;
       // Set publically accessible blog data
       if(!("blog" in this)) {
@@ -597,14 +603,23 @@ $(function(){
                 </div>);
       } else {
         var page = this.currentPage().component;
+        var currentType = this.props.type;
+        var classes = function(type) {
+          return React.addons.classSet({active: type === currentType,
+                                        inactive: type !== currentType});
+        }
+
         if (page) {
           return (<div className="about">
                     <CloseWindow />
-                    <div className="about-nav nav-list">
-                      <h3>About</h3>
-                      <ul>
-                        <li><a href="#/about/default">Summary</a></li>
-                        <li><a href="#/about/etc">Etc</a></li>
+                    <div className="about-nav">
+                      <ul className="nav-list">
+                        <li className={classes("default")}>
+                          <a href="#/about/default">Summary</a>
+                        </li>
+                        <li className={classes("etc")}>
+                          <a href="#/about/etc">Etc</a>
+                        </li>
                       </ul>
                     </div>
                     <div className="about-page">
@@ -885,6 +900,16 @@ $(function(){
           window.location.hash = "#";
         }
       }.bind(this));
+
+      var $imageDetail = $(this.refs.imageDetail.getDOMNode());
+      var $moreIndicator = $(this.refs.moreIndicator.getDOMNode());
+      if ($imageDetail.scrollable()) {
+        $imageDetail.scroll(function(e) {
+          $moreIndicator.css("opacity", 0);
+        }.bind(this));
+      } else {
+        $moreIndicator.css("display", "none");
+      }
     },
 
     componentWillUnmount: function() {
@@ -916,7 +941,7 @@ $(function(){
                     <img src={EAConfig.images.arrowright} />
                   </a>
                 </div>
-                <div className="image-detail">
+                <div ref="imageDetail" className="image-detail">
 	          <a target="_blank" href={this.props.instagramURL}>
                     <img src={this.props.image.url} className="image-large"/>
 	          </a>
@@ -961,6 +986,9 @@ $(function(){
                                         likes={this.props.instagram.likes}
                                         comments={this.props.instagram.comments} />}
                   </div>
+	          <img ref="moreIndicator"
+                       className="more-indicator"
+                       src={EAConfig.images.arrowdown} />
                 </div>
               </div>);
     }
@@ -1231,7 +1259,7 @@ $(function(){
         var id = parseInt(rawId);
         instaFetch.get(id).done(function(post) {
           if(post) {
-	    console.log(post);
+	    // console.log(post);
             Details.show(
                 <ImageDetails id={id}
                               url={instaFetch.eaUrl(id)}
