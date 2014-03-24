@@ -27,10 +27,6 @@
     <!-- A modal containing the image details -->
     <div id="modal"></div>
 
-    <script type="text/javascript">
-    TUMBLRVARS
-    </script>
-
     <script type="text/javascript" src="CONFIG_URL"></script>
     <script type="text/javascript" src="EA_JS_URL"></script>
   </body>

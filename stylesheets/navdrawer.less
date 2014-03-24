@@ -142,4 +142,35 @@
       text-decoration: underline;
     }
   }
+
+  .tumblr-share {
+    height: 48px;
+    margin-right: 28px;
+    text-align: right;
+
+    > * {
+      height: 28px;
+      margin-top: 10px;
+      display: inline-block;
+      vertical-align: top;
+      margin-left: 0.5em;
+      border-radius: 2px;
+    }
+
+    > a > img {
+      border-radius: 2px;
+      height: 28px;
+    }
+
+    .follow {
+      background-color: @blue;
+
+      a {
+	margin: 5px;
+	display: inline-block;
+	color: white;
+	text-decoration: none;
+      }
+    }
+  }
 }

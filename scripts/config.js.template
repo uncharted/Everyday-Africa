@@ -1,6 +1,11 @@
 // -*- mode: javascript -*-
 
 EAConfig = {
+  account: "everydayafrica",
+  follow: "http://tumblr.com/follow/everydayafrica",
+  profile: "PROFILE",
+  profilePic: "http://images.ak.instagram.com/profiles/profile_220885929_75sq_1367867072.jpg",
+
   images: {
     africa: "AFRICA_URL",
     photographer: "PHOTOGRAPHER_URL",
@@ -10,6 +15,8 @@ EAConfig = {
     twitter: "TWITTER_URL",
     facebook: "FACEBOOK_URL",
     tumblr: "TUMBLR_URL",
+    tumblrLogotype28: "TUMBLR_LOGOTYPE_28_URL",
+    tumblrLogotype64: "TUMBLR_LOGOTYPE_64_URL",
     tag: "TAG_ICON_URL",
     heart: "HEART_ICON_URL",
     menu: "MENU_URL",

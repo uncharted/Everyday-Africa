@@ -59,6 +59,8 @@ INSTAGRAM_URL		= $(IMAGES_BASE_URL)/instagram.png
 TWITTER_URL		= $(IMAGES_BASE_URL)/twitter.png
 FACEBOOK_URL		= $(IMAGES_BASE_URL)/facebook.png
 TUMBLR_URL		= $(IMAGES_BASE_URL)/tumblr.png
+TUMBLR_LOGOTYPE_28_URL  = $(IMAGES_BASE_URL)/tumblr_logotype_white_blue_28.png
+TUMBLR_LOGOTYPE_64_URL  = $(IMAGES_BASE_URL)/tumblr_logotype_white_blue_64.png
 TAG_ICON_URL		= $(IMAGES_BASE_URL)/tag_icon.svg
 HEART_ICON_URL		= $(IMAGES_BASE_URL)/heart_icon.svg
 MENU_URL		= $(IMAGES_BASE_URL)/menu.svg
@@ -72,6 +74,7 @@ ARROW_RIGHT_URL	        = $(IMAGES_BASE_URL)/arrow-right.svg
 CIRCLE_ARROW_DOWN_URL   = $(IMAGES_BASE_URL)/circle-arrow-down.svg
 
 SED_TEMPLATER = sed \
+            -e 's|PROFILE|$(PROFILE)|g' \
             -e 's|HOST|$(HOST)|g' \
             -e 's|PORT|$(PORT)|g' \
             -e 's|STYLESHEET_URL|$(STYLESHEET_URL)|g' \
@@ -91,6 +94,8 @@ SED_TEMPLATER = sed \
             -e 's|TWITTER_URL|$(TWITTER_URL)|g' \
             -e 's|FACEBOOK_URL|$(FACEBOOK_URL)|g' \
             -e 's|TUMBLR_URL|$(TUMBLR_URL)|g' \
+            -e 's|TUMBLR_LOGOTYPE_28_URL|$(TUMBLR_LOGOTYPE_28_URL)|g' \
+            -e 's|TUMBLR_LOGOTYPE_64_URL|$(TUMBLR_LOGOTYPE_64_URL)|g' \
             -e 's|TAG_ICON_URL|$(TAG_ICON_URL)|g' \
             -e 's|MENU_URL|$(MENU_URL)|g' \
             -e 's|SHARE_URL|$(SHARE_URL)|g' \
@@ -101,8 +106,8 @@ SED_TEMPLATER = sed \
             -e 's|ABOUT_WHITE_URL|$(ABOUT_WHITE_URL)|g' \
             -e 's|ARROW_LEFT_URL|$(ARROW_LEFT_URL)|g' \
             -e 's|ARROW_RIGHT_URL|$(ARROW_RIGHT_URL)|g' \
-            -e 's|CIRCLE_ARROW_DOWN_URL|$(CIRCLE_ARROW_DOWN_URL)|g' \
-	    $(TUMBLRVARS)
+            -e 's|CIRCLE_ARROW_DOWN_URL|$(CIRCLE_ARROW_DOWN_URL)|g'
+	    # $(TUMBLRVARS)
 
 
 .PHONY: all build push serve open deps

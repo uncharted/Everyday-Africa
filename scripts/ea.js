@@ -1,6 +1,20 @@
 /** @jsx React.DOM */
 "use strict";
 
+// Set up Google Analytics Tracking
+(function(EAConfig) {
+  if (EAConfig.profile === "prod") {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-49130314-1', 'tumblr.com');
+    ga('send', 'pageview');
+  }
+})(EAConfig);
+
+// XXX - notice that +10? this function's name is a bit misleading.
 (function($) {
   $.fn.scrollable = function() {
     return this.get(0).scrollHeight > this.innerHeight() + 10;
@@ -110,8 +124,16 @@ $(function(){
       }, this);
     },
 
+    /**
+     * Returns the tag for the current page, or none if not available
+     */
+    currentTag: function(pathname) {
+      var matches = pathname.match(/\/tagged\/(.*)$/);
+      if (matches) return matches[1];
+    },
+
     externalTagURL: function(tag) {
-      return TumblrVars.blogUrl + "/tagged/" + tag;
+      return "/tagged/" + tag;
     },
 
     internalPostURL: function(id) {
@@ -150,11 +172,11 @@ $(function(){
     var fetchLock = new Lock();
 
     function onFetchDone(d) {
-      // console.log(d);
-      posts = d.response.posts;
+      offset += limit;
+      posts = d.posts;
       // Set publically accessible blog data
       if(!("blog" in this)) {
-	this.blog = d.response.blog;
+	this.blog = d.blog;
       }
       for (var i = 0; i < posts.length; i++) {
         this.items.push(posts[i]);
@@ -177,11 +199,9 @@ $(function(){
 
         var url = API_URL + "/posts?" + params;
         return $.ajax({url: url, dataType: "jsonp"})
+          .then(function(d) { return d.response; })
           .done(onFetchDone.bind(this))
-          .then(function() {
-            offset += limit;
-            fetchLock.release();
-          });
+          .always(function() { fetchLock.release(); });
       } else {
         // console.log("LOCKED");
         return false;
@@ -319,17 +339,18 @@ $(function(){
       var id = url.match(/http:\/\/instagram\.com\/p\/(.*)\//)[1];
       if (!id) throw "badURL";
       if (!cache[id]) {
-	cache[id] = $.Deferred();
-	var params = $.param({callback: "?", url: url});
-	var getURL = "https://api.instagram.com/oembed?" + params;
+        cache[id] = $.Deferred();
+        var params = $.param({callback: "?", url: url});
+        var getURL = "https://api.instagram.com/oembed?" + params;
 
-	$.ajax({url: getURL, dataType: "jsonp"})
+        $.ajax({url: getURL, dataType: "jsonp"})
           .done(function(d) {
-	    this.getByID(d.media_id)
-	      .done(function(d) {
-		cache[id].resolveWith(this, [d]);
-	      }.bind(this))
-	  }.bind(this));
+            this.getByID(d.media_id)
+              .done(function(d) {
+                console.log(d);
+                cache[id].resolveWith(this, [d]);
+              }.bind(this))
+          }.bind(this));
       }
       return cache[id];
     };
@@ -367,8 +388,11 @@ $(function(){
   }
 
   // The global Fetchers
-  var instaFetch = new InstaFetch({tag: "everydayafrica", limit: 100});
-  var tumblrFetch = new TumblrFetch({source: "everydayafrica.tumblr.com"});
+  // Check for being on a tagged page
+  var currentTag = TumblrUtils.currentTag(window.location.pathname);
+  var instaFetch = new InstaFetch({tag: currentTag || "everydayafrica", limit: 100});
+  var tumblrFetch = new TumblrFetch({source: "everydayafrica.tumblr.com",
+                                     tag: currentTag});
 
 
   /************
@@ -437,7 +461,13 @@ $(function(){
               <li><a target="_blank" href="http://instagram.com/everydayafrica"><img src={EAConfig.images.instagram} /></a></li>
               <li><a target="_blank" href="https://twitter.com/EverydayAfrica"><img src={EAConfig.images.twitter} /></a></li>
               <li><a target="_blank" href="https://www.facebook.com/everydayafrica"><img src={EAConfig.images.facebook} /></a></li>
-              <li><a target="_blank" href="http://everydayafrica.tumblr.com/#me"><img src={EAConfig.images.tumblr} /></a></li>
+              <li>
+                <NavToggleButton href={window.location.hash.indexOf("#/tumblr/share") === - 1 ? "#/tumblr/share" : "#/"}
+                                 largeSrc={EAConfig.images.tumblr}
+                                 smallSrc={EAConfig.images.tumblr}
+                                 //content="Tumblr Share"
+                                 clickHandler={this.smallDismisser("#share-buttons")} />
+              </li>
             </ul>
            </div>
          </nav>);
@@ -476,6 +506,7 @@ $(function(){
    *   - Countries
    *   - Photographers
    *   - Search
+   *   - Tumblr Share
    */
   var SlideToggleMixin = {
     componentDidMount: function() {
@@ -498,7 +529,6 @@ $(function(){
 
     render: function() {
       return (<div className="countries grid">
-                <CloseWindow />
                 <h3>Countries</h3>
                 {_.map(this.props.data, function(data, country) {
                   return (<div className="country grid-item">
@@ -631,6 +661,23 @@ $(function(){
     }
   });
 
+  var TumblrShare = React.createClass({
+    mixins: [SlideToggleMixin],
+
+    render: function() {
+      return (<div className="tumblr-share">
+                <a target="_blank" href={"http://instagram.com/" + EAConfig.account}>
+                  <img src={EAConfig.profilePic} />
+                </a>
+                <div className="follow">
+                  <a target="_blank" href={EAConfig.follow}>+ Follow {EAConfig.account}</a>
+                </div>
+                <a href="http://tumblr.com">
+                  <img src={EAConfig.images.tumblrLogotype64} />
+                </a>
+              </div>);
+    }
+  });
   /********
    * Images
    */
@@ -774,9 +821,9 @@ $(function(){
       if (this.state && this.state.image) {
 	url = this.state.image.url;
         if (this.state.image.width > this.state.image.height) {
-          imgStyle.width = "140%";
+          imgStyle.width = "120%";
         } else {
-          imgStyle.height = "140%";
+          imgStyle.height = "120%";
         }
       }
 
@@ -1178,8 +1225,10 @@ $(function(){
       instaFetch.fetchNext(8 * 10);
       var deferred = tumblrFetch.fetchNext();
       if (deferred) {
-        deferred.done(function() {
-          gallery.setProps({tumblr: tumblrFetch.items.slice()})
+        deferred.done(function(resp) {
+          // cache the instagram data
+          _.each(resp.posts, function(post) { instaFetch.getByURL(post.link_url); });
+          gallery.setProps({tumblr: tumblrFetch.items.slice()});
         });
       }
     }
@@ -1234,6 +1283,13 @@ $(function(){
         after: NavDrawer.dissmissFn
       },
 
+      "/tumblr/share": {
+        on: function() {
+          NavDrawer.show(<TumblrShare />);
+        },
+        after: NavDrawer.dissmissFn
+      },
+
       "/posts/tumblr/:id/?(\\w+)?": function(rawId, type) {
         var id = parseInt(rawId);
 	var post = tumblrFetch.get(id);
@@ -1244,7 +1300,8 @@ $(function(){
                             caption={post.caption}
                             created={moment(post.date)}
                             image={TumblrUtils.toImage(post)}
-                            user={{profile_picture: TumblrVars.portraitUrl64,
+                            // Warning: pic is hardcoded
+                            user={{profile_picture: EAConfig.profilePic,
                                    username: tumblrFetch.blog.name}}
                             tumblr={post}
                             active={type || "instagram"}
