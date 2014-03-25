@@ -297,7 +297,7 @@ $(function(){
 
     function flush(pendingDeferreds) {
       while (pendingItems.length > 0 && pendingDeferreds.length > 0) {
-	pendingDeferreds.shift().resolveWith(this, [pendingItems.shift()]);
+        pendingDeferreds.shift().resolveWith(this, [pendingItems.shift()]);
       }
       return this;
     }
@@ -319,7 +319,6 @@ $(function(){
 	items.push(deferred);
       }, this);
 
-      flush();
       return fetch(items.slice(), API_URL + "/tags/" + this.tag + "/media/recent?" + params());
     }
 
@@ -390,7 +389,7 @@ $(function(){
   // The global Fetchers
   // Check for being on a tagged page
   var currentTag = TumblrUtils.currentTag(window.location.pathname);
-  var instaFetch = new InstaFetch({tag: currentTag || "everydayafrica", limit: 100});
+  var instaFetch = new InstaFetch({tag: currentTag || "everydayafrica", limit: 30});
   var tumblrFetch = new TumblrFetch({source: "everydayafrica.tumblr.com",
                                      tag: currentTag});
 
@@ -691,13 +690,15 @@ $(function(){
       var width = $(window).width();
 
       if (width > Settings.galleryBreakpoint) {
-        var total = this.props.tumblr ? this.props.tumblr.length * 24 : 0;
-        var imageGroups = partition(instaFetch.take(total).map(function(d, i) {
-          return {key: i, deferred: d};
-        }), 3);
         var singleRatio = 0.12
         var sideLength = singleRatio * width;
         var centerLength = (1 - (singleRatio * 6)) * width;
+
+        
+        var total = this.props.tumblr ? this.props.tumblr.length * (centerLength / sideLength * 6) : 0;
+        var imageGroups = partition(instaFetch.take(total).map(function(d, i) {
+          return {key: i, deferred: d};
+        }), 3);
         return (<div className="gallery desktop">
                   <GalleryColumn type="instagram" position="left" imageLength={sideLength} data={imageGroups[0]} />
 		  <div className="gallery-column center-column">
@@ -824,9 +825,11 @@ $(function(){
       if (this.state && this.state.image) {
 	url = this.state.image.url;
         if (this.state.image.width > this.state.image.height) {
-          imgStyle.width = "120%";
+          // imgStyle.width = "120%";
+          imgStyle.width = "101%";
         } else {
-          imgStyle.height = "120%";
+          // imgStyle.height = "120%";
+          imgStyle.height = "101%";
         }
       }
 
@@ -971,13 +974,6 @@ $(function(){
       var count = _.values(this.getSources()).length;
       var instaUserURL = instaFetch.userUrl(this.props.user.username);
 
-      var captionText;
-      if (this.props.caption) {
-        captionText = this.props.caption.replace("<p>", "").replace("</p>", "")
-      } else {
-        captionText = "";
-      }
-
       return (<div className="detail" onKeyPress={this.keyPressHandler}>
                 <CloseWindowOverlay />
                 <div className="overlay">
@@ -1009,7 +1005,8 @@ $(function(){
                       <a href={instaUserURL} target="_blank"
 	                 className="follow-link">Follow</a>
                     </div>
-                    <p className="caption">{captionText}</p>
+                    <div className="caption"
+                         dangerouslySetInnerHTML={{__html: this.props.caption}} />
                     <div>
                       <ul className="sources">
                         {_(this.getSources())
