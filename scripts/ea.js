@@ -678,6 +678,8 @@ $(function(){
               </div>);
     }
   });
+
+
   /********
    * Images
    */
@@ -693,8 +695,9 @@ $(function(){
         var imageGroups = partition(instaFetch.take(total).map(function(d, i) {
           return {key: i, deferred: d};
         }), 3);
-        var sideLength = 0.1 * width;
-        var centerLength = 0.4 * width;
+        var singleRatio = 0.12
+        var sideLength = singleRatio * width;
+        var centerLength = (1 - (singleRatio * 6)) * width;
         return (<div className="gallery desktop">
                   <GalleryColumn type="instagram" position="left" imageLength={sideLength} data={imageGroups[0]} />
 		  <div className="gallery-column center-column">
@@ -1045,7 +1048,7 @@ $(function(){
     render: function() {
       return(<div className="instagram source-details">
                <TagList tags={_.map(this.props.tags, function(t) {
-                 return {tag: t, url: "#"};
+                 return {tag: t, url: "/tagged/" + t};
                })} />
                <div className="detail-hearts detail-list">
                  <div className="leftcol">
