@@ -640,7 +640,7 @@ $(function(){
          render: function() {
            var img = function(file) {
              return (<img className="tearsheet"
-                          src={EAConfig.tearsheetBase + "/" + file} />);
+                          src={EAConfig.tearsheetBase + "/resized/" + file} />);
            };
            return (<div className="about-tearsheets">
                      <h4>Written work / Interviews</h4>
