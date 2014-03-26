@@ -437,7 +437,7 @@ $(function(){
             <ul>
               {_.map(navData, function(d) {
                 var href = (window.location.href.indexOf(d.href) == -1) ? d.href : "#/";
-                return (<li>
+                return (<li key={d.href}>
                           <NavToggleButton href={href}
                                            largeSrc={d.largeSrc}
                                            smallSrc={d.smallSrc}
@@ -532,7 +532,7 @@ $(function(){
       return (<div className="countries grid">
                 <h3>Countries</h3>
                 {_.map(this.props.data, function(data, country) {
-                  return (<div className="country grid-item">
+                  return (<div key={country} className="country grid-item">
                             <a href={TumblrUtils.externalTagURL(country)}>
                               <img src={data.flag} alt={data.name} />
                               <h4>{data.name}</h4>
@@ -552,7 +552,7 @@ $(function(){
                 <h3>Photographers</h3>
                 {_.map(this.props.data, function(p) {
                   var image = p.image || EAConfig.images.photographer;
-                  return (<div className="photographer grid-item">
+                  return (<div key={p.name} className="photographer grid-item">
                             <a href={TumblrUtils.externalTagURL(p.tag)}>
                               <img className="protogimg" src={image} alt={p.name} />
                               <h4>{p.name}</h4>
@@ -628,7 +628,7 @@ $(function(){
            return (<div className="about-photographers">
                      <ul>
                        {_.map(EAConfig.photographers, function(p) {
-                         return <li><a href={p.url}>{p.name}</a> @{p.username}</li>;
+                         return <li key={p.name}><a href={p.url}>{p.name}</a> @{p.username}</li>;
                        })}
                      </ul>
                    </div>);
@@ -646,7 +646,7 @@ $(function(){
                      <h4>Written work / Interviews</h4>
                      <ul>
                        {_.map(EAConfig.writtenWork, function(w) {
-                         return (<li>
+                         return (<li key={w.body}>
                                    {w.body}
                                    <a href={w.url}>{w.url}</a>
                                  </li>);
@@ -743,7 +743,7 @@ $(function(){
                   <div className="about-page">
                     {_.map(this.pages, function(page, i) {
                         var component = page.component;
-                        return <component className="about" />;
+                        return <component key={page.name} className="about" />;
                       }, this)}
                   </div>
                 </div>);
