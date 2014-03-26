@@ -172,6 +172,7 @@ $(function(){
     var fetchLock = new Lock();
 
     function onFetchDone(d) {
+      console.log(d);
       offset += limit;
       posts = d.posts;
       // Set publically accessible blog data
@@ -346,7 +347,6 @@ $(function(){
           .done(function(d) {
             this.getByID(d.media_id)
               .done(function(d) {
-                console.log(d);
                 cache[id].resolveWith(this, [d]);
               }.bind(this))
           }.bind(this));
@@ -695,7 +695,6 @@ $(function(){
         var sideLength = singleRatio * width;
         var centerLength = (1 - (singleRatio * 6)) * width;
 
-        
         var total = this.props.tumblr ? this.props.tumblr.length * (centerLength / sideLength * 6) : 0;
         var imageGroups = partition(instaFetch.take(total).map(function(d, i) {
           return {key: i, deferred: d};
@@ -975,6 +974,16 @@ $(function(){
       var count = _.values(this.getSources()).length;
       var instaUserURL = instaFetch.userUrl(this.props.user.username);
 
+      var media = <img src={this.props.image.url} className="image-large" />;
+
+      if (this.props.instagram && this.props.instagram.type === "video") {
+        media = (<video width="320" height="240" controls>
+                  <source src={this.props.instagram.videos.standard_resolution.url}
+                          type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>);
+      }
+
       return (<div className="detail" onKeyPress={this.keyPressHandler}>
                 <CloseWindowOverlay />
                 <div className="overlay">
@@ -990,7 +999,7 @@ $(function(){
                 </div>
                 <div ref="imageDetail" className="image-detail">
 	          <a target="_blank" href={this.props.instagramURL}>
-                    <img src={this.props.image.url} className="image-large"/>
+                    {media}
 	          </a>
                   <div className="detail-panel">
                     <div className="detail-header">
@@ -1295,13 +1304,13 @@ $(function(){
         var id = parseInt(rawId);
 	var post = tumblrFetch.get(id);
         if(post) {
+          console.log(post)
           Details.show(
               <ImageDetails id={id}
                             url={"#/posts/tumblr/" + id}
                             caption={post.caption}
                             created={moment(post.date)}
                             image={TumblrUtils.toImage(post)}
-                            // Warning: pic is hardcoded
                             user={{profile_picture: EAConfig.profilePic,
                                    username: tumblrFetch.blog.name}}
                             tumblr={post}
