@@ -587,15 +587,32 @@ $(function(){
 
     // Each page is a different about page
     pages: [
-      {name: "default",
+      {name: "info",
        component: React.createClass({
          render: function() {
-           return (<div>
-                   <img src="http://25.media.tumblr.com/f40df582632484f1bc2db7e3d00deaf1/tumblr_n0l3ujEqBi1rgx8vno1_500.jpg" />
-                   <p>
-                   Hey there! This is an about page. Let us know what
-                   content you would like to see here.
-                   </p>
+           return (<div className="about-info">
+		   <p>
+		   Everyday Africa, a collection of images shot on mobile phones across the continent, is an attempt to re-direct focus toward a more accurate understanding of what the majority of Africans experience on a day-to-day basis: normal life. Conceived by Peter DiCampo and Austin Merrill, and featuring numerous contributing photographers, the project is a response to the common media portrayal of the African continent as a place consumed by war, poverty, and disease. As journalists who are native to Africa or have lived and worked on the continent for years at a time, we find the extreme not nearly as prevalent as the familiar, the everyday.
+		   </p>
+		   <p>
+		   Our home page: The images in the middle column were taken by official Everyday Africa photographers and include perspectives from Africans and non-Africans alike. To the left and right of the middle column are images taken by our thousands of followers, who have hash-tagged their photos #everydayafrica—the view points and information contained in those images are theirs alone.
+		   </p>
+
+		   <h4>Contact:</h4>
+		   <ul>
+		     <li>everydayafrica@gmail.com</li>
+		     <li>Peter DiCampo: peter@peterdicampo.com</li>
+		     <li>Austin Merrill: austinmerrill@gmail.com</li>
+		   </ul>
+
+		   <p>
+		   This website was made possible thanks to the generous support of the Pulitzer Center on Crisis Reporting and the Open Society Foundations.
+		   [include Pulitzer and OSF logos]
+		   </p>
+
+		   <p>
+		   Everyday Africa is also honored to acknowledge its collaborative partnerships with Uncharted Digital, The LAMP, and the Bronx Documentary Center. [include logos]
+		   </p>
                    </div>);
          }
        })},
@@ -1279,7 +1296,7 @@ $(function(){
           after: NavDrawer.dissmissFn
         },
         on: function() {
-          NavDrawer.show(<About type="default" />);
+          NavDrawer.show(<About type="info" />);
         },
         after: NavDrawer.dissmissFn
       },
