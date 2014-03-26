@@ -43,9 +43,6 @@ EAConfig = {
     botswana: {
       name: "Botswana",
       flag: "FLAG_BASE/Botswana.png"},
-    benin: {
-      name: "Benin",
-      flag: "FLAG_BASE/Benin.png"},
     burkinaFaso: {
       name: "Burkina Faso",
       flag: "FLAG_BASE/Burkina-Faso.png"},
@@ -55,15 +52,18 @@ EAConfig = {
     cameroon: {
       name: "Cameroon",
       flag: "FLAG_BASE/Cameroon.png"},
-    canaryIslands: {
+    /*canaryIslands: {
       name: "Canary Islands",
-      flag: "FLAG_BASE/Canary-Islands.png"},
+      flag: "FLAG_BASE/Canary-Islands.png"},*/
     capeVerde: {
       name: "Cape Verde",
       flag: "FLAG_BASE/Cape-Verde.png"},
     centralAfricanRepublic: {
       name: "Central African Republic",
       flag: "FLAG_BASE/Central-African-Republic.png"},
+    centralAfricanRepublic: {
+      name: "Chad",
+      flag: "FLAG_BASE/Chad.png"},
     /*ceuta: {
       name: "Ceuta",
       flag: "FLAG_BASE/Ceuta.png"},*/
@@ -71,7 +71,7 @@ EAConfig = {
       name: "Comoros",
       flag: "FLAG_BASE/Comoros.png"},
     cotedIvoire: {
-      name: "Cote d'Ivoire",
+      name: "Côte d'Ivoire",
       flag: "FLAG_BASE/Cote-dIvoire.png"},
     democraticRepublicoftheCongo: {
       name: "Democratic Republic of the Congo",
@@ -136,9 +136,9 @@ EAConfig = {
     mauritius: {
       name: "Mauritius",
       flag: "FLAG_BASE/Mauritius.png"},
-    mayotte: {
+    /*mayotte: {
       name: "Mayotte",
-      flag: "FLAG_BASE/Mayotte.png"},
+      flag: "FLAG_BASE/Mayotte.png"},*/
     /*melilla: {
       name: "Melilla",
       flag: "FLAG_BASE/Melilla.png"},*/
@@ -158,7 +158,7 @@ EAConfig = {
       name: "Nigeria",
       flag: "FLAG_BASE/Nigeria.png"},
     republicoftheCongo: {
-      name: "Republic of the Congo",
+      name: "Republic of Congo",
       flag: "FLAG_BASE/Republic-of-the-Congo.png"},
     /*reunion: {
       name: "Reunion",
@@ -166,11 +166,11 @@ EAConfig = {
     rwanda: {
       name: "Rwanda",
       flag: "FLAG_BASE/Rwanda.png"},
-    saintHelena: {
-      name: "Saint Helena",
-      flag: "FLAG_BASE/Saint-Helena.png"},
+    // saintHelena: {
+    //   name: "Saint Helena",
+    //   flag: "FLAG_BASE/Saint-Helena.png"},
     saoTomeandPrincipe: {
-      name: "Sao Tome and Principe",
+      name: "São Tomé and Príncipe",
       flag: "FLAG_BASE/Sao-Tome-and-Principe.png"},
     senegal: {
       name: "Senegal",
@@ -179,7 +179,7 @@ EAConfig = {
       name: "Seychelles",
       flag: "FLAG_BASE/Seychelles.png"},
     sierraLeone: {
-      name: "SierraLeone",
+      name: "Sierra Leone",
       flag: "FLAG_BASE/Sierra-Leone.png"},
     somalia: {
       name: "Somalia",
@@ -219,79 +219,85 @@ EAConfig = {
   photographers: [
     {
       name: "Peter DiCampo",
-      tag: "pdicampo",
+      username: "pdicampo",
       url: "http://www.peterdicampo.com/",
       image: "PHOTOGRAPHER_BASE/Peter_DiCampo.jpg"
     }, {
-      name: "Austin Merrell",
-      tag: "amerrell",
+      name: "Austin Merrill",
+      username: "austin_merrill",
       image: "PHOTOGRAPHER_BASE/Austin_Merrill.jpg"
     }, {
       name: "Nana Kofi Acquah",
-      tag: "nkacquah",
+      username: "africashowboy",
       url: "http://www.nkaphoto.com/en/",
       image: "PHOTOGRAPHER_BASE/Nana_Kofi_Acquah.jpg"
     }, {
       name: "Jide Alakija",
-      tag: "jalakija",
+      username: "alakija",
       url: "http://www.alakija.com/",
     }, {
       name: "Andrew Esiebo",
-      tag: "aesiebo",
+      username: "andrewesiebo",
       url: "http://www.andrewesiebo.com/",
       image: "PHOTOGRAPHER_BASE/Andrew_Esiebo.jpg"
     }, {
       name: "Glenna Gordon",
-      tag: "ggordon",
+      username: "glennagordon",
       url: "http://www.glennagordon.com/",
       image: "PHOTOGRAPHER_BASE/Glenna_Gordon.jpg"
     }, {
       name: "Jane Hahn",
-      tag: "jhahn",
+      username: "janehahn",
       url: "http://www.janehahn.com/",
       image: "PHOTOGRAPHER_BASE/Jane_Hahn.jpg"
     }, {
       name: "Idil Ibrahim",
-      tag: "iibrahim",
+      username: "i_am_idil",
       image: "PHOTOGRAPHER_BASE/Idil_Ibrahim.jpg"
     }, {
       name: "Shannon Jenson",
-      tag: "sjenson",
+      username: "shannonje",
       url: "http://www.shannon-jensen.com/",
       image: "PHOTOGRAPHER_BASE/Shannon_Jensen.jpg"
     }, {
       name: "Lindsay Mackenzie",
-      tag: "lmackenzie",
+      username: "lindsay_mackenzie",
       url: "http://lindsaymackenzie.com/",
       image: "PHOTOGRAPHER_BASE/Lindsay_Mackenzie.jpg"
     }, {
       name: "Holly Pickett",
-      tag: "hpickett",
+      username: "hollypickettpix",
       url: "http://www.hollypickett.com/",
       image: "PHOTOGRAPHER_BASE/Holly_Pickett.jpg"
     }, {
       name: "Allison Shelley",
-      tag: "ashelley",
+      username: "allisonshelley",
       url: "http://allisonshelley.photoshelter.com/#!/index"
     }, {
       name: "Charlie Shoemaker",
-      tag: "cshoemaker",
+      username: "charlieshoemaker",
       url: "http://www.charlieshoemaker.com/",
       image: "PHOTOGRAPHER_BASE/Charlie_Shoemaker.jpg"
     }, {
       name: "Nichole Sobecki",
-      tag: "nsobecki",
+      username: "nicholesobecki",
       url: "http://www.nicholesobecki.com/",
       image: "PHOTOGRAPHER_BASE/Nichole_Sobecki.jpg"
     }, {
       name: "Laura El-Tantawy",
-      tag: "leltantawy",
+      username: "laura_eltantawy",
       url: "http://www.lauraeltantawy.com/",
       image: "PHOTOGRAPHER_BASE/Laura_El-Tantawy.jpg"
     }, {
       name: "Sara Terry",
-      tag: "sterry",
+      username: "asenbrennerova",
       image: "PHOTOGRAPHER_BASE/Sara_Terry.jpg"
+    }, {
+      name: "Jana Ašenbrennerová",
+      username: "asenbrennerova"
+    }, {
+      name: "Emeka Okereke",
+      username: "emekaokereke"
     }
   ]
 };
