@@ -346,7 +346,7 @@ $(function(){
           .done(function(d) {
             this.getByID(d.media_id)
               .done(function(d) {
-                console.log(d);
+                //console.log(d);
                 cache[id].resolveWith(this, [d]);
               }.bind(this))
           }.bind(this));
@@ -515,11 +515,13 @@ $(function(){
       $node.slideToggle();
     },
 
-    dismiss: function() {
-      var node = this.getDOMNode();
-      $(node).slideToggle({complete: function() {
-	React.unmountComponentAtNode(node);
-      }.bind(this)})
+    statics: {
+      dismiss: function() {
+        var node = this.getDOMNode();
+        $(node).slideToggle({complete: function() {
+	  React.unmountComponentAtNode(node);
+        }.bind(this)})
+      }
     }
   };
 
@@ -597,19 +599,22 @@ $(function(){
 		   <p>
 		   Our home page: The images in the middle column were taken by official Everyday Africa photographers and include perspectives from Africans and non-Africans alike. To the left and right of the middle column are images taken by our thousands of followers, who have hash-tagged their photos #everydayafrica—the view points and information contained in those images are theirs alone.
 		   </p>
-
 		   <h4>Contact:</h4>
 		   <ul>
-		     <li>everydayafrica@gmail.com</li>
-		     <li>Peter DiCampo: peter@peterdicampo.com</li>
-		     <li>Austin Merrill: austinmerrill@gmail.com</li>
+		     <li>
+		       <a href="mailto:everydayafrica@gmail.com">everydayafrica@gmail.com</a>
+		     </li>
+		     <li>
+		       <a href="mailto:peter@peterdicampo.com">Peter DiCampo</a>
+		     </li>
+		     <li>
+		       <a href="mailto:austinmerrill@gmail.com">Austin Merrill</a>
+		     </li>
 		   </ul>
-
 		   <p>
 		   This website was made possible thanks to the generous support of the Pulitzer Center on Crisis Reporting and the Open Society Foundations.
 		   [include Pulitzer and OSF logos]
 		   </p>
-
 		   <p>
 		   Everyday Africa is also honored to acknowledge its collaborative partnerships with Uncharted Digital, The LAMP, and the Bronx Documentary Center. [include logos]
 		   </p>
@@ -617,12 +622,106 @@ $(function(){
          }
        })},
 
-      {name: "etc",
+      {name: "photographers",
        component: React.createClass({
          render: function() {
-           return <p>... and etc ...</p>;
+           return (<div className="about-photographers">
+                     <ul>
+                       {_.map(EAConfig.photographers, function(p) {
+                         return <li><a href={p.url}>{p.name}</a> @{p.username}</li>;
+                       })}
+                     </ul>
+                   </div>);
          }
-      })}
+      })},
+
+      {name: "tearsheets",
+       component: React.createClass({
+         render: function() {
+           var img = function(file) {
+             return (<img className="tearsheet"
+                          src={EAConfig.tearsheetBase + "/" + file} />);
+           };
+           return (<div className="about-tearsheets">
+                     <h4>Written work / Interviews</h4>
+                     <ul>
+                       {_.map(EAConfig.writtenWork, function(w) {
+                         return (<li>
+                                   {w.body}
+                                   <a href={w.url}>{w.url}</a>
+                                 </li>);
+                        })}
+                     </ul>
+                     <h4>Tearsheets</h4>
+                     <ol>
+                       <li>
+                         {img("001.jpg")}
+                         Aperture Magazine, Spring 2014 "Documentary, Expanded" Issue
+                         Accompanying article "Toward a New Documentary Expression" by Stephen Mayes:
+                         http://www.aperture.org/blog/toward-new-documentary-expression/
+                         Photos by Charlie Shoemaker, Peter DiCampo, Glenna Gordon Photography, and Nana Kofi Acquah (Clockwise from top left)
+                       </li>
+                         {img("002.jpg")}
+                         National Geographic, October 2013, “The Photography Issue”
+                         http://ngm.nationalgeographic.com/2013/10/digital-village/everyday-africa-photography
+                       <li>
+                         {img("003.jpg")}
+                         Departures, October 2013
+                       </li>
+                         {img("004.jpg")}
+                         The New York Times - Lens blog, September 2013
+                         http://lens.blogs.nytimes.com/2013/09/16/everyday-nigeria-not-idealized-not-debased/?_php=true&_type=blogs&_r=0
+                       <li>
+                       </li>
+                         {img("005a.jpg")}
+                         {img("005b.jpg")}
+                         {img("005c.jpg")}
+                         Newsweek Japan, March 2013 (3 total)
+                       <li>
+                       </li>
+                         {img("006.jpg")}
+                         China City Zine Magazine, March 2013
+                       <li>
+                         {img("007.jpg")}
+                         Interview with co-founder Austin Merrill on Around the World With Christiane Amanpour for ABC / Yahoo! News. April 2013.
+                         http://news.yahoo.com/blogs/around-the-world-abc-news/surprising-images-life-africa-040640315.html#more-id
+                       </li>
+                       <li>
+                         {img("008.jpg")}
+                         The Sunday Times (Johannesburg), March 2013
+                       </li>
+                         {img("009.jpg")}
+                         The New Yorker - Photo Booth, February 2013
+                         http://www.newyorker.com/online/blogs/photobooth/2013/02/slide-show-across-the-continent-with-everyday-africa.html#slide_ss_0=1
+                       <li>
+                       </li>
+                         {img("010.jpg")}
+                         The New Yorker - Instagram takeover, February 2013
+                         http://www.newyorker.com/online/blogs/photobooth/2013/02/slide-show-across-the-continent-with-everyday-africa.html#slide_ss_0=1
+                       <li>
+                         {img("011.jpg")}
+                         Article by co-founder Peter DiCampo in Salon, February 2013
+                         http://www.salon.com/2013/02/04/introducing_africa_to_the_omg_crowd/
+                       </li>
+                       <li>
+                         {img("012a.jpg")}
+                         {img("012b.jpg")}
+                         {img("012c.jpg")}
+                         Internazionale, January 2013 (3 total)
+                       </li>
+                       <li>
+                         {img("013.jpg")}
+                         The New York Times - Lens Blog, September 2012
+                         http://lens.blogs.nytimes.com/2012/09/17/picturing-everyday-life-in-africa/
+                       </li>
+                       <li>
+                         {img("014.jpg")}
+                         Bloomberg Businessweek, August 2012
+                       </li>
+                     </ol>
+                   </div>);
+           }
+       })}
     ],
 
     attrs: {
@@ -661,12 +760,9 @@ $(function(){
                     <CloseWindow />
                     <div className="about-nav">
                       <ul className="nav-list">
-                        <li className={classes("default")}>
-                          <a href="#/about/default">Summary</a>
-                        </li>
-                        <li className={classes("etc")}>
-                          <a href="#/about/etc">Etc</a>
-                        </li>
+                        {_(this.pages).pluck("name").map(function(p) {
+                          return <li className={classes(p)}><a href={"#/about/" + p}>{p}</a></li>
+                         })}
                       </ul>
                     </div>
                     <div className="about-page">
@@ -1206,10 +1302,12 @@ $(function(){
       };
 
       this.dismiss = function() {
-        if (mounted && mounted.dismiss) {
-          mounted.dismiss();
-        } else {
-          React.unmountComponentAtNode(rootElt);
+        if (mounted) {
+          if ("dismiss" in mounted) {
+            mounted.dismiss();
+          } else {
+            React.unmountComponentAtNode(rootElt);
+          }
         }
         bodyScroll.unfix();
         mounted = undefined;

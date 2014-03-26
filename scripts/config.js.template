@@ -6,6 +6,8 @@ EAConfig = {
   profile: "PROFILE",
   profilePic: "http://images.ak.instagram.com/profiles/profile_220885929_75sq_1367867072.jpg",
 
+  tearsheetBase: "TEARSHEET_BASE",
+
   images: {
     africa: "AFRICA_URL",
     photographer: "PHOTOGRAPHER_URL",
@@ -298,6 +300,19 @@ EAConfig = {
     }, {
       name: "Emeka Okereke",
       username: "emekaokereke"
+    }
+  ],
+
+  writtenWork: [
+    {
+      body: "Interview with co-founder Peter DiCampo on Africa is a Country blog. 10th March 2014.",
+      url: "http://africasacountry.com/instagramming-africa/"
+    }, {
+      body: "\"Introducing Africa to the OMG Crowd\" by Peter DiCampo for Salon.com. 4th February 2013.",
+      url: "http://www.salon.com/2013/02/04/introducing_africa_to_the_omg_crowd/"
+    }, {
+      body: "\"Photographing Everyday Life in Africa\", by Peter DiCampo for the Pulitzer Center on Crisis Reporting. 15th May 2012.",
+      url: "http://pulitzercenter.org/reporting/ivory-coast-africa-photos-iphone-united-nations-refugees"
     }
   ]
 };

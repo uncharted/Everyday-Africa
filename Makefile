@@ -52,6 +52,7 @@ endif
 
 FLAG_BASE		= $(IMAGES_BASE_URL)/flags/flat/64
 PHOTOGRAPHER_BASE       = $(IMAGES_BASE_URL)/photographers
+TEARSHEET_BASE          = $(IMAGES_BASE_URL)/tearsheets
 AFRICA_URL		= $(IMAGES_BASE_URL)/africa.svg
 PHOTOGRAPHER_URL	= $(IMAGES_BASE_URL)/photographer.svg
 SEARCH_URL		= $(IMAGES_BASE_URL)/search.svg
@@ -88,6 +89,7 @@ SED_TEMPLATER = sed \
             -e 's|LODASH_URL|$(LODASH_URL)|g' \
             -e 's|FLAG_BASE|$(FLAG_BASE)|g' \
             -e 's|PHOTOGRAPHER_BASE|$(PHOTOGRAPHER_BASE)|g' \
+            -e 's|TEARSHEET_BASE|$(TEARSHEET_BASE)|g' \
             -e 's|AFRICA_URL|$(AFRICA_URL)|g' \
             -e 's|PHOTOGRAPHER_URL|$(PHOTOGRAPHER_URL)|g' \
             -e 's|SEARCH_URL|$(SEARCH_URL)|g' \

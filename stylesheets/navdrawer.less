@@ -92,6 +92,12 @@
 
   .about {
     margin-top: 1em;
+    font-size: 1.2em;
+    line-height: 1.2em;
+
+    li {
+      list-style: none;
+    }
 
     .about-nav {
       width: 20%;
@@ -104,7 +110,7 @@
 
       li {
 	margin: 0.2em;
-	font-size: 1.4em;
+	font-size: 1em;
 	font-family: @font;
 	font-weight: 400;
 	color: @blue;
@@ -112,6 +118,7 @@
 
       .active a {
 	color: black;
+	text-decoration: none;
       }
 
       .inactive a {
@@ -120,6 +127,9 @@
     }
 
     .about-page {
+      max-height: 640px;
+      overflow-y: scroll;
+
       @media (min-width: @medium) {
         float: right;
         width: 70%;
@@ -151,9 +161,15 @@
     }
   }
 
-  .about-info {
-    font-size: 1.2em;
-    line-height: 1.2em;
+  .about-tearsheets {
+    li {
+      margin-bottom: 1em;
+    }
+  }
+
+  .tearsheet {
+    width: 92%;
+    display: block;
   }
 
   .tumblr-share {
