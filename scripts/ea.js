@@ -549,9 +549,10 @@ $(function(){
                 <CloseWindow />
                 <h3>Photographers</h3>
                 {_.map(this.props.data, function(p) {
+                  var image = p.image || EAConfig.images.photographer;
                   return (<div className="photographer grid-item">
                             <a href={TumblrUtils.externalTagURL(p.tag)}>
-                              <img className="protogimg" src="http://placehold.it/50x50" alt={p.name} />
+                              <img className="protogimg" src={image} alt={p.name} />
                               <h4>{p.name}</h4>
                             </a>
                           </div>);

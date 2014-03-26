@@ -220,45 +220,55 @@ EAConfig = {
     {
       name: "Peter DiCampo",
       tag: "pdicampo",
-      url: "http://www.peterdicampo.com/"
+      url: "http://www.peterdicampo.com/",
+      image: "PHOTOGRAPHER_BASE/Peter_DiCampo.jpg"
     }, {
       name: "Austin Merrell",
-      tag: "amerrell"
+      tag: "amerrell",
+      image: "PHOTOGRAPHER_BASE/Austin_Merrill.jpg"
     }, {
       name: "Nana Kofi Acquah",
       tag: "nkacquah",
-      url: "http://www.nkaphoto.com/en/"
+      url: "http://www.nkaphoto.com/en/",
+      image: "PHOTOGRAPHER_BASE/Nana_Kofi_Acquah.jpg"
     }, {
       name: "Jide Alakija",
       tag: "jalakija",
-      url: "http://www.alakija.com/"
+      url: "http://www.alakija.com/",
     }, {
       name: "Andrew Esiebo",
       tag: "aesiebo",
-      url: "http://www.andrewesiebo.com/"
+      url: "http://www.andrewesiebo.com/",
+      image: "PHOTOGRAPHER_BASE/Andrew_Esiebo.jpg"
     }, {
       name: "Glenna Gordon",
       tag: "ggordon",
-      url: "http://www.glennagordon.com/"
+      url: "http://www.glennagordon.com/",
+      image: "PHOTOGRAPHER_BASE/Glenna_Gordon.jpg"
     }, {
       name: "Jane Hahn",
       tag: "jhahn",
-      url: "http://www.janehahn.com/"
+      url: "http://www.janehahn.com/",
+      image: "PHOTOGRAPHER_BASE/Jane_Hahn.jpg"
     }, {
       name: "Idil Ibrahim",
-      tag: "iibrahim"
+      tag: "iibrahim",
+      image: "PHOTOGRAPHER_BASE/Idil_Ibrahim.jpg"
     }, {
       name: "Shannon Jenson",
       tag: "sjenson",
-      url: "http://www.shannon-jensen.com/"
+      url: "http://www.shannon-jensen.com/",
+      image: "PHOTOGRAPHER_BASE/Shannon_Jensen.jpg"
     }, {
       name: "Lindsay Mackenzie",
       tag: "lmackenzie",
-      url: "http://lindsaymackenzie.com/"
+      url: "http://lindsaymackenzie.com/",
+      image: "PHOTOGRAPHER_BASE/Lindsay_Mackenzie.jpg"
     }, {
       name: "Holly Pickett",
       tag: "hpickett",
-      url: "http://www.hollypickett.com/"
+      url: "http://www.hollypickett.com/",
+      image: "PHOTOGRAPHER_BASE/Holly_Pickett.jpg"
     }, {
       name: "Allison Shelley",
       tag: "ashelley",
@@ -266,18 +276,22 @@ EAConfig = {
     }, {
       name: "Charlie Shoemaker",
       tag: "cshoemaker",
-      url: "http://www.charlieshoemaker.com/"
+      url: "http://www.charlieshoemaker.com/",
+      image: "PHOTOGRAPHER_BASE/Charlie_Shoemaker.jpg"
     }, {
       name: "Nichole Sobecki",
       tag: "nsobecki",
-      url: "http://www.nicholesobecki.com/"
+      url: "http://www.nicholesobecki.com/",
+      image: "PHOTOGRAPHER_BASE/Nichole_Sobecki.jpg"
     }, {
       name: "Laura El-Tantawy",
       tag: "leltantawy",
-      url: "http://www.lauraeltantawy.com/"
+      url: "http://www.lauraeltantawy.com/",
+      image: "PHOTOGRAPHER_BASE/Laura_El-Tantawy.jpg"
     }, {
       name: "Sara Terry",
-      tag: "sterry"
+      tag: "sterry",
+      image: "PHOTOGRAPHER_BASE/Sara_Terry.jpg"
     }
   ]
 };
