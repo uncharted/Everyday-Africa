@@ -56,6 +56,39 @@
   }
 }
 
+.img-overlay {
+  @height: 24px;
+
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  border-radius: 2px;
+  overflow: hidden;
+  background-color: @blue;
+
+  height: @height;
+
+  -webkit-transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease;
+
+  pointer-events: none;
+
+
+  img {
+    height: @height;
+    vertical-align: middle;
+  }
+
+  span {
+    display: inline-block;
+    font-family: "Lato";
+    vertical-align: middle;
+    font-size: 14px;
+    color: @black;
+    padding: 0 4px;
+  }
+}
+
 .mobile-row {
   float: left;
 }

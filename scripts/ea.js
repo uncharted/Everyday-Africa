@@ -553,7 +553,7 @@ $(function(){
                 {_.map(this.props.data, function(p) {
                   var image = p.image || EAConfig.images.photographer;
                   return (<div key={p.name} className="photographer grid-item">
-                            <a href={TumblrUtils.externalTagURL(p.tag)}>
+                            <a href={TumblrUtils.externalTagURL(p.username)}>
                               <img className="protogimg" src={image} alt={p.name} />
                               <h4>{p.name}</h4>
                             </a>
@@ -617,6 +617,9 @@ $(function(){
 		   </p>
 		   <p>
 		   Everyday Africa is also honored to acknowledge its collaborative partnerships with Uncharted Digital, The LAMP, and the Bronx Documentary Center. [include logos]
+		   </p>
+		   <p>
+		   This site was designed by Uncharted Digital, and built by <a href="http://pocketknife.io">Pocketknife</a>.
 		   </p>
                    </div>);
          }
@@ -847,6 +850,7 @@ $(function(){
 
           return (<div className="gallery mobile">
                     {_.map(this.props.tumblr, function(p, i) {
+                      console.log(p)
                       var even = i % 2 === 0;
                       return (<div>
                                 <div className="mobile-row dbl-row">
@@ -950,10 +954,14 @@ $(function(){
       return (<div ref={this.props.key} className={this.props.className} style={divStyle}>
                  <a href={"#/posts/" + this.props.type + "/" + this.props.key + "/instagram"}
                     style={aStyle}
-                    // onMouseEnter={this.mouseEnterHandler}
-                    // onMouseOut={this.mouseOutHandler}
+                    onMouseEnter={this.mouseEnterHandler}
+                    onMouseOut={this.mouseOutHandler}
 	          >
                    <img src={url} style={imgStyle} />
+	           {this.props.type == "tumblr" && <div className="img-overlay">
+                     <img src={EAConfig.profilePic} />
+                     <span>{EAConfig.account}</span>
+	           </div>}
                  </a>
               </div>);
     },
@@ -961,36 +969,18 @@ $(function(){
     componentDidMount: function() {
       // Fade in the image
       var $node = $(this.getDOMNode());
+      $node.find(".img-overlay").css("opacity", 0);
       $node.find("img").load(function(d) {
         $node.css("opacity", 1);
       });
     },
 
     mouseEnterHandler: function() {
-      var $div = $(this.getDOMNode());
-      $div.find("a")
-        .finish()
-        .css("z-index", 2)
-        .animate({width: $div.width() * this.props.scale,
-                  height: $div.height() * this.props.scale,
-                  "margin-left": "-=" + ($div.width() * this.props.scale) / 12,
-                  "margin-top": "-=" + ($div.height() * this.props.scale) / 12},
-                 this.props.duration);
+      $(this.getDOMNode()).find(".img-overlay").css("opacity", 1);
     },
 
     mouseOutHandler: function() {
-      var $div = $(this.getDOMNode());
-      $div.find("a")
-        .finish()
-        .css("z-index", 1)
-        .animate({width: $div.width(),
-                  height: $div.height(),
-                  "margin-left": "+=" + ($div.width() * this.props.scale) / 12,
-                  "margin-top": "+=" + ($div.height() * this.props.scale) / 12},
-                 this.props.duration,
-                 function() {
-                   $(this).css("z-index", 0);
-                 });
+      $(this.getDOMNode()).find(".img-overlay").css("opacity", 0);
     }
   });
 
