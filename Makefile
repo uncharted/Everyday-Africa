@@ -57,10 +57,10 @@ AFRICA_URL		= $(IMAGES_BASE_URL)/africa.svg
 PHOTOGRAPHER_URL	= $(IMAGES_BASE_URL)/photographer.svg
 SEARCH_URL		= $(IMAGES_BASE_URL)/search.svg
 ABOUT_URL		= $(IMAGES_BASE_URL)/about.svg
-INSTAGRAM_URL		= $(IMAGES_BASE_URL)/instagram.png
-TWITTER_URL		= $(IMAGES_BASE_URL)/twitter.png
-FACEBOOK_URL		= $(IMAGES_BASE_URL)/facebook.png
-TUMBLR_URL		= $(IMAGES_BASE_URL)/tumblr.png
+INSTAGRAM_URL		= $(IMAGES_BASE_URL)/instagram.svg
+TWITTER_URL		= $(IMAGES_BASE_URL)/twitter.svg
+FACEBOOK_URL		= $(IMAGES_BASE_URL)/facebook.svg
+TUMBLR_URL		= $(IMAGES_BASE_URL)/tumblr.svg
 TUMBLR_LOGOTYPE_28_URL  = $(IMAGES_BASE_URL)/tumblr_logotype_white_blue_28.png
 TUMBLR_LOGOTYPE_64_URL  = $(IMAGES_BASE_URL)/tumblr_logotype_white_blue_64.png
 TAG_ICON_URL		= $(IMAGES_BASE_URL)/tag_icon.svg
@@ -68,9 +68,13 @@ HEART_ICON_URL		= $(IMAGES_BASE_URL)/heart_icon.svg
 MENU_URL		= $(IMAGES_BASE_URL)/menu.svg
 SHARE_URL		= $(IMAGES_BASE_URL)/share.svg
 AFRICA_WHITE_URL	= $(IMAGES_BASE_URL)/africa-white.svg
+AFRICA_BLACK_URL	= $(IMAGES_BASE_URL)/africa-black.svg
 PHOTOGRAPHER_WHITE_URL	= $(IMAGES_BASE_URL)/photographer-white.svg
+PHOTOGRAPHER_BLACK_URL	= $(IMAGES_BASE_URL)/photographer-black.svg
 SEARCH_WHITE_URL	= $(IMAGES_BASE_URL)/search-white.svg
+SEARCH_BLACK_URL	= $(IMAGES_BASE_URL)/search-black.svg
 ABOUT_WHITE_URL	        = $(IMAGES_BASE_URL)/about-white.svg
+ABOUT_BLACK_URL	        = $(IMAGES_BASE_URL)/about-black.svg
 ARROW_LEFT_URL	        = $(IMAGES_BASE_URL)/arrow-left.svg
 ARROW_RIGHT_URL	        = $(IMAGES_BASE_URL)/arrow-right.svg
 CIRCLE_ARROW_DOWN_URL   = $(IMAGES_BASE_URL)/circle-arrow-down.svg
@@ -105,9 +109,13 @@ SED_TEMPLATER = sed \
             -e 's|SHARE_URL|$(SHARE_URL)|g' \
             -e 's|HEART_ICON_URL|$(HEART_ICON_URL)|g' \
             -e 's|AFRICA_WHITE_URL|$(AFRICA_WHITE_URL)|g' \
+            -e 's|AFRICA_BLACK_URL|$(AFRICA_BLACK_URL)|g' \
             -e 's|PHOTOGRAPHER_WHITE_URL|$(PHOTOGRAPHER_WHITE_URL)|g' \
+            -e 's|PHOTOGRAPHER_BLACK_URL|$(PHOTOGRAPHER_BLACK_URL)|g' \
             -e 's|SEARCH_WHITE_URL|$(SEARCH_WHITE_URL)|g' \
+            -e 's|SEARCH_BLACK_URL|$(SEARCH_BLACK_URL)|g' \
             -e 's|ABOUT_WHITE_URL|$(ABOUT_WHITE_URL)|g' \
+            -e 's|ABOUT_BLACK_URL|$(ABOUT_BLACK_URL)|g' \
             -e 's|ARROW_LEFT_URL|$(ARROW_LEFT_URL)|g' \
             -e 's|ARROW_RIGHT_URL|$(ARROW_RIGHT_URL)|g' \
             -e 's|CIRCLE_ARROW_DOWN_URL|$(CIRCLE_ARROW_DOWN_URL)|g'

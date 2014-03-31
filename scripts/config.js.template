@@ -24,9 +24,13 @@ EAConfig = {
     menu: "MENU_URL",
     share: "SHARE_URL",
     africaWhite: "AFRICA_WHITE_URL",
+    africaBlack: "AFRICA_BLACK_URL",
     photographerWhite: "PHOTOGRAPHER_WHITE_URL",
+    photographerBlack: "PHOTOGRAPHER_BLACK_URL",
     searchWhite: "SEARCH_WHITE_URL",
+    searchBlack: "SEARCH_BLACK_URL",
     aboutWhite: "ABOUT_WHITE_URL",
+    aboutBlack: "ABOUT_BLACK_URL",
     arrowleft: "ARROW_LEFT_URL",
     arrowright: "ARROW_RIGHT_URL",
     arrowdown: "CIRCLE_ARROW_DOWN_URL"

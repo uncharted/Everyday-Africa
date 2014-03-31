@@ -2,3 +2,7 @@ var
 node_modules
 scripts/config.js
 local.js
+
+.DS_Store
+# temp
+EA_for_JV

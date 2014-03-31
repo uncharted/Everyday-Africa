@@ -405,21 +405,25 @@ $(function(){
           href: "#/countries",
           largeSrc: EAConfig.images.africa,
           smallSrc: EAConfig.images.africaWhite,
+          activeSrc: EAConfig.images.africaBlack,
           content: "COUNTRIES"
         }, {
           href: "#/photographers",
           largeSrc: EAConfig.images.photographer,
           smallSrc: EAConfig.images.photographerWhite,
+          activeSrc: EAConfig.images.photographerBlack,
           content: "PHOTOGRAPHERS"
         }, {
           href: "#/search",
           largeSrc: EAConfig.images.search,
           smallSrc: EAConfig.images.searchWhite,
+          activeSrc: EAConfig.images.searchBlack,
           content: "SEARCH"
         }, {
           href: "#/about",
           largeSrc: EAConfig.images.about,
           smallSrc: EAConfig.images.aboutWhite,
+          activeSrc: EAConfig.images.aboutBlack,
           content: "ABOUT"
         }
       ];
@@ -436,10 +440,12 @@ $(function(){
           <div id="nav-buttons" className="nav-panel" style={buttonsStyle} >
             <ul>
               {_.map(navData, function(d) {
-                var href = (window.location.href.indexOf(d.href) == -1) ? d.href : "#/";
+                var active = window.location.href.indexOf(d.href) !== -1;
+                var href =  active ? "#/" : d.href;
                 return (<li key={d.href}>
                           <NavToggleButton href={href}
-                                           largeSrc={d.largeSrc}
+                                           largeSrc={active ? d.activeSrc : d.largeSrc}
+                                           activeSrc={d.activeSrc}
                                            smallSrc={d.smallSrc}
                                            content={d.content}
                                            clickHandler={this.smallDismisser("#nav-buttons")} />
@@ -493,10 +499,20 @@ $(function(){
     render: function() {
       return (<a className="nav-button" href={this.props.href}
 	         onClick={this.props.clickHandler}>
-                <img className="hide-for-small" src={this.props.largeSrc} />
+                <img className="large-img hide-for-small" src={this.props.largeSrc}
+                     onMouseEnter={this.mouseEnterHandler}
+                     onMouseOut={this.mouseOutHandler} />
                 <img className="hide-for-large" src={this.props.smallSrc} />
                 <span className="navlist">{this.props.content}</span>
               </a>);
+    },
+
+    mouseEnterHandler: function(e) {
+      $(this.getDOMNode()).find(".large-img").attr("src", this.props.activeSrc);
+    },
+
+    mouseOutHandler: function(e) {
+      $(this.getDOMNode()).find(".large-img").attr("src", this.props.largeSrc);
     }
   });
 
@@ -850,7 +866,6 @@ $(function(){
 
           return (<div className="gallery mobile">
                     {_.map(this.props.tumblr, function(p, i) {
-                      console.log(p)
                       var even = i % 2 === 0;
                       return (<div>
                                 <div className="mobile-row dbl-row">
@@ -923,7 +938,6 @@ $(function(){
       // If provided a deferred, set the image when done
       if (this.props.deferred) {
 	this.props.deferred.done(function(d) {
-          console.log(d);
           this.setState({image: InstaUtils.toImage(d),
                          user: d.user});
 	}.bind(this));
