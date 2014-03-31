@@ -496,23 +496,35 @@ $(function(){
   });
 
   var NavToggleButton = React.createClass({
+    getInitialState: function() {
+      return {mouseOver: false};
+    },
+
     render: function() {
+      // The weird <div><img class="active-img ..." ...</div> nesting is to
+      // get around a safari bug where the image became smaller on src change
       return (<a className="nav-button" href={this.props.href}
 	         onClick={this.props.clickHandler}>
-                <img className="large-img hide-for-small" src={this.props.largeSrc}
-                     onMouseEnter={this.mouseEnterHandler}
-                     onMouseOut={this.mouseOutHandler} />
+                {this.state.mouseOver ?
+                 <div><img className="active-img large-img hide-for-small"
+                      src={this.props.activeSrc}
+                      onMouseEnter={this.mouseEnterHandler}
+                      onMouseLeave={this.mouseLeaveHandler} /></div> :
+                 <img className="large-img hide-for-small"
+                      src={this.props.largeSrc}
+                      onMouseEnter={this.mouseEnterHandler}
+                      onMouseLeave={this.mouseLeaveHandler} /> }
                 <img className="hide-for-large" src={this.props.smallSrc} />
                 <span className="navlist">{this.props.content}</span>
               </a>);
     },
 
     mouseEnterHandler: function(e) {
-      $(this.getDOMNode()).find(".large-img").attr("src", this.props.activeSrc);
+      this.setState({mouseOver: true});
     },
 
-    mouseOutHandler: function(e) {
-      $(this.getDOMNode()).find(".large-img").attr("src", this.props.largeSrc);
+    mouseLeaveHandler: function(e) {
+      this.setState({mouseOver: false});
     }
   });
 
