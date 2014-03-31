@@ -923,7 +923,9 @@ $(function(){
       // If provided a deferred, set the image when done
       if (this.props.deferred) {
 	this.props.deferred.done(function(d) {
-          this.setState({image: InstaUtils.toImage(d)});
+          console.log(d);
+          this.setState({image: InstaUtils.toImage(d),
+                         user: d.user});
 	}.bind(this));
       } else if (this.props.image){
 	this.setState({image: this.props.image});
@@ -958,10 +960,13 @@ $(function(){
                     onMouseOut={this.mouseOutHandler}
 	          >
                    <img src={url} style={imgStyle} />
-	           {this.props.type == "tumblr" && <div className="img-overlay">
-                     <img src={EAConfig.profilePic} />
-                     <span>{EAConfig.account}</span>
-	           </div>}
+	           {this.props.type === "tumblr" && <div className="img-overlay">
+                      <img src={EAConfig.profilePic} />
+                      <span>{EAConfig.account}</span>
+	            </div>}
+                   {this.props.type === "instagram" && this.state && this.state.user && <div className="img-overlay">
+                      <img src={this.state.user.profile_picture} />
+                    </div>}
                  </a>
               </div>);
     },
@@ -969,7 +974,7 @@ $(function(){
     componentDidMount: function() {
       // Fade in the image
       var $node = $(this.getDOMNode());
-      $node.find(".img-overlay").css("opacity", 0);
+      // $node.find(".img-overlay").css("opacity", 0);
       $node.find("img").load(function(d) {
         $node.css("opacity", 1);
       });
