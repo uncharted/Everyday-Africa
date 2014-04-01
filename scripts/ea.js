@@ -1113,6 +1113,16 @@ $(function(){
         }
       }.bind(this));
 
+      // Swipe listeners
+      $(this.getDOMNode()).swipe({
+        swipeLeft: function() {
+          window.location.hash = this.props.next;
+        }.bind(this),
+        swipeRight: function() {
+          window.location.hash = this.props.prev;
+        }.bind(this)
+      });
+
       var $imageDetail = $(this.refs.imageDetail.getDOMNode());
       var $moreIndicator = $(this.refs.moreIndicator.getDOMNode());
       if ($imageDetail.scrollable()) {
@@ -1127,6 +1137,7 @@ $(function(){
     componentWillUnmount: function() {
       // Remove next/prev keydown listeners
       $(window).unbind('keydown');
+      $(this.getDOMNode()).swipe("destroy");
     },
 
     instaUserURL: function()  {
@@ -1221,8 +1232,8 @@ $(function(){
                  </div>
                  <div className="rightcol">
                    <ul className="detail-hearts">
-                     {this.props.likes.data.map(function(d) {
-                        return <li>
+                     {this.props.likes.data.map(function(d, i) {
+                        return <li key={i}>
                                  <a target="_blank" href={instaFetch.userUrl(d.username)}>
                                    {d.username}
                                  </a>&emsp;

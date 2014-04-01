@@ -16,6 +16,7 @@
     <script type="text/javascript" src="BLUR_URL"></script>
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/fastclick/0.6.11/fastclick.min.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.4/jquery.touchSwipe.js"></script>
   </head>
   <body>
     <!-- Nav + Title + Social -->
