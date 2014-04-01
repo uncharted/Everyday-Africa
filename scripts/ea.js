@@ -346,7 +346,6 @@ $(function(){
           .done(function(d) {
             this.getByID(d.media_id)
               .done(function(d) {
-                //console.log(d);
                 cache[id].resolveWith(this, [d]);
               }.bind(this))
           }.bind(this));
@@ -519,19 +518,26 @@ $(function(){
     render: function() {
       // The weird <div><img class="active-img ..." ...</div> nesting is to
       // get around a safari bug where the image became smaller on src change
+      var activeClassSet = React.addons.classSet({
+        "active-img": true,
+        "large-img": true,
+        "hide-for-small": true,
+        "hide": !this.state.mouseOver});
+      var largeClassSet = React.addons.classSet({
+        "large-img": true,
+        "hide-for-small": true,
+        "hide": this.state.mouseOver});
+
       return (<a className="nav-button" href={this.props.href}
 	         onClick={this.props.clickHandler}>
-                {this.state.mouseOver ?
-                 <img key="active"
-                      className="active-img large-img hide-for-small"
+                 <img className={activeClassSet}
                       src={this.props.activeSrc}
                       onMouseEnter={this.mouseEnterHandler}
-                      onMouseLeave={this.mouseLeaveHandler} /> :
-                 <img key="large"
-                      className="large-img hide-for-small"
+                      onMouseLeave={this.mouseLeaveHandler} />
+                 <img className={largeClassSet}
                       src={this.props.largeSrc}
                       onMouseEnter={this.mouseEnterHandler}
-                      onMouseLeave={this.mouseLeaveHandler} /> }
+                      onMouseLeave={this.mouseLeaveHandler} />
                 <img className="hide-for-large" src={this.props.smallSrc} />
                 <span className="navlist">{this.props.content}</span>
               </a>);
