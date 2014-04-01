@@ -11,6 +11,7 @@
     posts: {
       photos: [
 	{
+	  photoId: 12312,
 	  photoAlt: "Cleaning dust out of computers",
 	  caption: "<p>Cleaning dust out of computers</p>",
 	  linkUrl: "http://instagram.com/p/lIuDOajovN/",

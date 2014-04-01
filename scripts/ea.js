@@ -463,13 +463,29 @@ $(function(){
 	   </div>
            <div id="share-buttons" className="nav-panel" style={buttonsStyle}>
             <ul>
-              <li><a target="_blank" href="http://instagram.com/everydayafrica"><img src={EAConfig.images.instagram} /></a></li>
-              <li><a target="_blank" href="https://twitter.com/EverydayAfrica"><img src={EAConfig.images.twitter} /></a></li>
-              <li><a target="_blank" href="https://www.facebook.com/everydayafrica"><img src={EAConfig.images.facebook} /></a></li>
+              <li>
+                <NavToggleButton href={"http://instagram.com/everydayafrica"}
+                                 largeSrc={EAConfig.images.from("instagram.svg")}
+                                 smallSrc={EAConfig.images.from("instagram.svg")}
+                                 activeSrc={EAConfig.images.from("instagram-black.svg")} />
+              </li>
+              <li>
+                <NavToggleButton href={"https://twitter.com/EverydayAfrica"}
+                                 largeSrc={EAConfig.images.from("twitter.svg")}
+                                 smallSrc={EAConfig.images.from("twitter.svg")}
+                                 activeSrc={EAConfig.images.from("twitter-black.svg")} />
+              </li>
+              <li>
+                <NavToggleButton href={"https://www.facebook.com/everydayafrica"}
+                                 largeSrc={EAConfig.images.from("facebook.svg")}
+                                 smallSrc={EAConfig.images.from("facebook.svg")}
+                                 activeSrc={EAConfig.images.from("facebook-black.svg")} />
+              </li>
               <li>
                 <NavToggleButton href={window.location.hash.indexOf("#/tumblr/share") === - 1 ? "#/tumblr/share" : "#/"}
-                                 largeSrc={EAConfig.images.tumblr}
-                                 smallSrc={EAConfig.images.tumblr}
+                                 largeSrc={EAConfig.images.from("tumblr.svg")}
+                                 smallSrc={EAConfig.images.from("tumblr.svg")}
+                                 activeSrc={EAConfig.images.from("tumblr-black.svg")}
                                  //content="Tumblr Share"
                                  clickHandler={this.smallDismisser("#share-buttons")} />
               </li>
@@ -506,11 +522,13 @@ $(function(){
       return (<a className="nav-button" href={this.props.href}
 	         onClick={this.props.clickHandler}>
                 {this.state.mouseOver ?
-                 <div><img className="active-img large-img hide-for-small"
+                 <img key="active"
+                      className="active-img large-img hide-for-small"
                       src={this.props.activeSrc}
                       onMouseEnter={this.mouseEnterHandler}
-                      onMouseLeave={this.mouseLeaveHandler} /></div> :
-                 <img className="large-img hide-for-small"
+                      onMouseLeave={this.mouseLeaveHandler} /> :
+                 <img key="large"
+                      className="large-img hide-for-small"
                       src={this.props.largeSrc}
                       onMouseEnter={this.mouseEnterHandler}
                       onMouseLeave={this.mouseLeaveHandler} /> }
@@ -1105,9 +1123,21 @@ $(function(){
       $(window).unbind('keydown');
     },
 
+    instaUserURL: function()  {
+      return instaFetch.userUrl(this.props.user.username);
+    },
+
+    topRightButton: function() {
+      if (this.props.tumblr) {
+        return <a href={"http://www.tumblr.com/reblog/" + this.props.tumblr.id + "/" + this.props.tumblr.reblog_key} className="follow-link">Reblog</a>;
+      } else {
+        return <a href={this.instaUserURL()} target="_blank" className="follow-link">Follow</a>
+      }
+    },
+
     render: function() {
       var count = _.values(this.getSources()).length;
-      var instaUserURL = instaFetch.userUrl(this.props.user.username);
+      var instaUserURL = this.instaUserURL();
 
       return (<div className="detail" onKeyPress={this.keyPressHandler}>
                 <CloseWindowOverlay />
@@ -1137,8 +1167,7 @@ $(function(){
                         </a>
                         <h5>{this.props.created.fromNow()}</h5>
                       </div>
-                      <a href={instaUserURL} target="_blank"
-	                 className="follow-link">Follow</a>
+                      {this.topRightButton()}
                     </div>
                     <div className="caption"
                          dangerouslySetInnerHTML={{__html: this.props.caption}} />
@@ -1160,9 +1189,7 @@ $(function(){
                     </div>
                     {this.props.active === "tumblr" && this.props.tumblr &&
                       <TumblrDetails tags={TumblrUtils.toTags(this.props.tumblr)}
-                                     notes={this.props.tumblr.note_count}
-                                     likeButton={this.props.tumblr.likeButton}
-                                     reblogButton={this.props.tumblr.reblogButton} />}
+                                     notes={this.props.tumblr.note_count} />}
                     {this.props.active === "instagram" && this.props.instagram &&
                       <InstagramDetails tags={this.props.instagram.tags}
                                         likes={this.props.instagram.likes}

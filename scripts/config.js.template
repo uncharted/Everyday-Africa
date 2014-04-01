@@ -9,6 +9,7 @@ EAConfig = {
   tearsheetBase: "TEARSHEET_BASE",
 
   images: {
+    base: "IMAGES_BASE_URL",
     africa: "AFRICA_URL",
     photographer: "PHOTOGRAPHER_URL",
     search: "SEARCH_URL",
@@ -33,7 +34,11 @@ EAConfig = {
     aboutBlack: "ABOUT_BLACK_URL",
     arrowleft: "ARROW_LEFT_URL",
     arrowright: "ARROW_RIGHT_URL",
-    arrowdown: "CIRCLE_ARROW_DOWN_URL"
+    arrowdown: "CIRCLE_ARROW_DOWN_URL",
+
+    from: function(i) {
+      return this.base + "/" + i;
+    }
   },
 
   countries: {

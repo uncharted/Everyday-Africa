@@ -91,6 +91,7 @@ SED_TEMPLATER = sed \
             -e 's|FLATIRON_URL|$(FLATIRON_URL)|g' \
             -e 's|BLUR_URL|$(BLUR_URL)|g' \
             -e 's|LODASH_URL|$(LODASH_URL)|g' \
+            -e 's|IMAGES_BASE_URL|$(IMAGES_BASE_URL)|g' \
             -e 's|FLAG_BASE|$(FLAG_BASE)|g' \
             -e 's|PHOTOGRAPHER_BASE|$(PHOTOGRAPHER_BASE)|g' \
             -e 's|TEARSHEET_BASE|$(TEARSHEET_BASE)|g' \
