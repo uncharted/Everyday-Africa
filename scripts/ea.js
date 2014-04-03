@@ -678,7 +678,7 @@ $(function(){
 		   Everyday Africa is also honored to acknowledge its collaborative partnerships with Uncharted Digital, The LAMP, and the Bronx Documentary Center. [include logos]
 		   </p>
 		   <p>
-		   This site was designed by Uncharted Digital, and built by <a href="http://pocketknife.io">Pocketknife</a>.
+		   This site was designed by <a target="_blank" href="http://uncharteddigital.com/">Uncharted Digital</a>.
 		   </p>
                    </div>);
          }
