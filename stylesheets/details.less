@@ -197,6 +197,10 @@
         font-weight: 400;
         font-size: .95em;
         padding: 0.4em 0.8em;
+
+	@media(max-width: @medium) {
+	  margin-right: -24px;
+	}
       }
 
       h4 {
@@ -269,8 +273,6 @@
   }
 
   .detail-panel {
-    overflow-x: hidden;
-
     @media (max-width: @medium) {
       width: 95%;
     }

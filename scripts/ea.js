@@ -464,28 +464,33 @@ $(function(){
             <ul>
               <li>
                 <NavToggleButton href={"http://instagram.com/everydayafrica"}
+	                         target="_blank"
                                  largeSrc={EAConfig.images.from("instagram.svg")}
                                  smallSrc={EAConfig.images.from("instagram.svg")}
-                                 activeSrc={EAConfig.images.from("instagram-black.svg")} />
+                                 activeSrc={EAConfig.images.from("instagram-black.svg")}
+                                 clickHandler={this.smallDismisser("#share-buttons")} />
               </li>
               <li>
                 <NavToggleButton href={"https://twitter.com/EverydayAfrica"}
+	                         target="_blank"
                                  largeSrc={EAConfig.images.from("twitter.svg")}
                                  smallSrc={EAConfig.images.from("twitter.svg")}
-                                 activeSrc={EAConfig.images.from("twitter-black.svg")} />
+                                 activeSrc={EAConfig.images.from("twitter-black.svg")}
+                                 clickHandler={this.smallDismisser("#share-buttons")} />
               </li>
               <li>
                 <NavToggleButton href={"https://www.facebook.com/everydayafrica"}
+	                         target="_blank"
                                  largeSrc={EAConfig.images.from("facebook.svg")}
                                  smallSrc={EAConfig.images.from("facebook.svg")}
-                                 activeSrc={EAConfig.images.from("facebook-black.svg")} />
+                                 activeSrc={EAConfig.images.from("facebook-black.svg")}
+                                 clickHandler={this.smallDismisser("#share-buttons")} />
               </li>
               <li>
                 <NavToggleButton href={window.location.hash.indexOf("#/tumblr/share") === - 1 ? "#/tumblr/share" : "#/"}
                                  largeSrc={EAConfig.images.from("tumblr.svg")}
                                  smallSrc={EAConfig.images.from("tumblr.svg")}
                                  activeSrc={EAConfig.images.from("tumblr-black.svg")}
-                                 //content="Tumblr Share"
                                  clickHandler={this.smallDismisser("#share-buttons")} />
               </li>
             </ul>
@@ -529,6 +534,7 @@ $(function(){
         "hide": this.state.mouseOver});
 
       return (<a className="nav-button" href={this.props.href}
+	         target={this.props.target}
 	         onClick={this.props.clickHandler}>
                  <img className={activeClassSet}
                       src={this.props.activeSrc}
@@ -582,6 +588,7 @@ $(function(){
 
     render: function() {
       return (<div className="countries grid">
+                <CloseWindow />
                 <h3>Countries</h3>
                 {_.map(this.props.data, function(data, country) {
                   return (<div key={country} className="country grid-item">

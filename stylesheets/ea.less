@@ -44,29 +44,34 @@ a {
 .close-window, .close-window-overlay{
   display: block;
   position: fixed;
-  right: 0%;
-  top: 0%;
-  margin-top: 60px;
-  margin-right: 15px;
-  z-index: 200;
+  right: 15px;
+  top: 60px;
+  width: 32px;
+  height: 32px;
+  z-index: 9;
 
-  cursor:pointer;
   font-size: 24px;
   font-weight: 300;
   line-height: 0px;
   padding: 11px 3px;
   text-decoration: none;
 
-  @media (max-width: @small) {
-    margin-top: 35px;
-    margin-right: 5px;
+  a {
+    display: block;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  h3 {
+    display: block;
   }
 }
 
 .close-window-overlay {
-  a {
-    text-decoration: none;
-  }
   h3 {
     font-size: 30px;
     color: #FFFFFF;
@@ -74,10 +79,7 @@ a {
 }
 
 .close-window {
-  margin-top: 60px;
-  margin-right: 15px;
   color: #000;
-  a { text-decoration: none;}
 
   h3 {
     font-size: 20px;
@@ -85,9 +87,9 @@ a {
   }
 }
 
-// #tumblr_controls {
-//   display: none;
-// }
+#tumblr_controls {
+  display: none;
+}
 
 // Import other less files
 @import "details.less";

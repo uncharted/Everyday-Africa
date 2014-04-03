@@ -14,13 +14,14 @@ JSX		= $(NODE_MODULES)/react-tools/bin/jsx --cache-dir=$(VAR)/.module-cache
 UGLIFY		= $(NODE_MODULES)/uglify-js/bin/uglifyjs
 
 # Project structure
-VAR				= var
-PUBLIC				= $(VAR)/public
+VAR			= var
+PUBLIC			= $(VAR)/public
 PUBLIC_SCRIPTS		= $(PUBLIC)/scripts
 PUBLIC_STYLESHEETS	= $(PUBLIC)/stylesheets
 
 # Other commands
-S3CMD = s3cmd
+S3CMD		= s3cmd
+FSWATCH		= fswatch
 
 # Resource URLs
 IMAGES_BASE_URL = /$(PUBLIC)/images
@@ -36,8 +37,8 @@ TUMBLRVARS	= -e '/TUMBLRVARS/{r ./local.js' -e 'd;}'
 
 
 # Production Profile
-ifeq ($(PROFILE), prod)
-    PORT		= 80
+ifeq ($(PROFILE), tumblr)
+    # Used as the root for the Tumblr build's asset references
     S3_PUBLIC		= http://s3.amazonaws.com/everydayafrica/public
     IMAGES_BASE_URL	= $(S3_PUBLIC)/images
     STYLESHEET_URL	= $(S3_PUBLIC)/stylesheets/ea.css
@@ -123,7 +124,7 @@ SED_TEMPLATER = sed \
 	    # $(TUMBLRVARS)
 
 
-.PHONY: all build push serve open deps
+.PHONY: all build push serve open deps fswatch
 
 all: build
 
@@ -184,3 +185,6 @@ serve: all
 
 open: $(VAR)/ea.html
 	open "http://localhost:$(PORT)/$<"
+
+fswatch:
+	$(FSWATCH) public:scripts:stylesheets:Makefile "make build"
