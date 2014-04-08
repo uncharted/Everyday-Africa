@@ -443,7 +443,8 @@ $(function(){
                 var href =  active ? "#/" : d.href;
                 return (<li key={d.href}>
                           <NavToggleButton href={href}
-                                           largeSrc={active ? d.activeSrc : d.largeSrc}
+			                   active={active}
+                                           largeSrc={d.largeSrc}
                                            activeSrc={d.activeSrc}
                                            smallSrc={d.smallSrc}
                                            content={d.content}
@@ -527,11 +528,11 @@ $(function(){
         "active-img": true,
         "large-img": true,
         "hide-for-small": true,
-        "hide": !this.state.mouseOver});
+        "hide": !(this.props.active || this.state.mouseOver)});
       var largeClassSet = React.addons.classSet({
         "large-img": true,
         "hide-for-small": true,
-        "hide": this.state.mouseOver});
+        "hide": this.props.active || this.state.mouseOver});
 
       return (<a className="nav-button" href={this.props.href}
 	         target={this.props.target}
@@ -559,11 +560,7 @@ $(function(){
   });
 
   /**
-   * NavDrawers:
-   *   - Countries
-   *   - Photographers
-   *   - Search
-   *   - Tumblr Share
+   * NavDrawers
    */
   var SlideToggleMixin = {
     componentDidMount: function() {
