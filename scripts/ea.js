@@ -334,8 +334,15 @@ $(function(){
     };
 
     this.getByURL = function(url) {
-      var id = url.match(/http:\/\/instagram\.com\/p\/(.*)\//)[1];
+      var id;
+      var regexes = [/^https?:\/\/instagram\.com\/p\/(.*)\/$/,
+                     /^https?:\/\/instagr\.am\/p\/(.*)\/$/];
+      for (var i = regexes.length; i--; ) {
+        var matches = url.match(regexes[i]);
+        if (matches && matches.length == 2) id = matches[1];
+      }
       if (!id) throw "badURL";
+
       if (!cache[id]) {
         cache[id] = $.Deferred();
         var params = $.param({callback: "?", url: url});
@@ -1250,7 +1257,7 @@ $(function(){
                                    {d.username}
                                  </a>,&emsp;
                                </li>; })}
-	             {(additionalLikes > 0) && <li>and {additionalLikes} others</li>}
+	             {(additionalLikes > 0) && <li>and {additionalLikes} others like this</li>}
                    </ul>
                  </div>
                </div>
