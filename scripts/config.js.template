@@ -72,7 +72,7 @@ EAConfig = {
     centralAfricanRepublic: {
       name: "Central African Republic",
       flag: "FLAG_BASE/Central-African-Republic.png"},
-    centralAfricanRepublic: {
+    chad: {
       name: "Chad",
       flag: "FLAG_BASE/Chad.png"},
     /*ceuta: {
@@ -198,6 +198,9 @@ EAConfig = {
     southAfrica: {
       name: "South Africa",
       flag: "FLAG_BASE/South-Africa.png"},
+    southSudan: {
+      name: "South Sudan",
+      flag: "FLAG_BASE/South-Sudan.png"},
     sudan: {
       name: "Sudan",
       flag: "FLAG_BASE/Sudan.png"},
@@ -217,7 +220,7 @@ EAConfig = {
       name: "Uganda",
       flag: "FLAG_BASE/Uganda.png"},
     westernSahara: {
-      name: "WesternSahara",
+      name: "Western Sahara",
       flag: "FLAG_BASE/Western-Sahara.png"},
     zambia: {
       name: "Zambia",
@@ -233,58 +236,65 @@ EAConfig = {
       username: "pdicampo",
       url: "http://www.peterdicampo.com/",
       image: "PHOTOGRAPHER_BASE/Peter_DiCampo.jpg"
-    }, {
+    },
+    {
       name: "Austin Merrill",
       username: "austin_merrill",
       image: "PHOTOGRAPHER_BASE/Austin_Merrill.jpg"
-    }, {
-      name: "Nana Kofi Acquah",
-      username: "africashowboy",
-      url: "http://www.nkaphoto.com/en/",
-      image: "PHOTOGRAPHER_BASE/Nana_Kofi_Acquah.jpg"
-    }, {
+    },
+    {
       name: "Jide Alakija",
       username: "alakija",
       url: "http://www.alakija.com/",
-    }, {
+    },
+    {
       name: "Andrew Esiebo",
       username: "andrewesiebo",
       url: "http://www.andrewesiebo.com/",
       image: "PHOTOGRAPHER_BASE/Andrew_Esiebo.jpg"
-    }, {
+    },
+    {
       name: "Glenna Gordon",
       username: "glennagordon",
       url: "http://www.glennagordon.com/",
       image: "PHOTOGRAPHER_BASE/Glenna_Gordon.jpg"
-    }, {
+    },
+    {
       name: "Jane Hahn",
       username: "janehahn",
       url: "http://www.janehahn.com/",
       image: "PHOTOGRAPHER_BASE/Jane_Hahn.jpg"
-    }, {
+    },
+    {
       name: "Idil Ibrahim",
       username: "i_am_idil",
       image: "PHOTOGRAPHER_BASE/Idil_Ibrahim.jpg"
-    }, {
+    },
+    {
       name: "Shannon Jenson",
       username: "shannonje",
       url: "http://www.shannon-jensen.com/",
       image: "PHOTOGRAPHER_BASE/Shannon_Jensen.jpg"
-    }, {
+    },
+    {
       name: "Lindsay Mackenzie",
       username: "lindsay_mackenzie",
       url: "http://lindsaymackenzie.com/",
       image: "PHOTOGRAPHER_BASE/Lindsay_Mackenzie.jpg"
-    }, {
+    },
+    {
       name: "Holly Pickett",
       username: "hollypickettpix",
       url: "http://www.hollypickett.com/",
       image: "PHOTOGRAPHER_BASE/Holly_Pickett.jpg"
-    }, {
+    },
+    {
       name: "Allison Shelley",
       username: "allisonshelley",
-      url: "http://allisonshelley.photoshelter.com/#!/index"
-    }, {
+      url: "http://allisonshelley.photoshelter.com/#!/index",
+      image: "PHOTOGRAPHER_BASE/Allison_Shelley.jpg"
+    },
+    {
       name: "Charlie Shoemaker",
       username: "charlieshoemaker",
       url: "http://www.charlieshoemaker.com/",
@@ -301,14 +311,16 @@ EAConfig = {
       image: "PHOTOGRAPHER_BASE/Laura_El-Tantawy.jpg"
     }, {
       name: "Sara Terry",
-      username: "asenbrennerova",
+      username: "sterry13",
       image: "PHOTOGRAPHER_BASE/Sara_Terry.jpg"
     }, {
       name: "Jana Ašenbrennerová",
-      username: "asenbrennerova"
+      username: "asenbrennerova",
+      image: "PHOTOGRAPHER_BASE/Jana_Asenbrennerova.jpg"
     }, {
       name: "Emeka Okereke",
-      username: "emekaokereke"
+      username: "emekaokereke",
+      image: "PHOTOGRAPHER_BASE/Emeka_Okereke.jpg"
     }
   ],
 

@@ -108,7 +108,6 @@ $(function(){
 
   /*
    * TumblrFetch -- Tumblr API Client
-   *
    */
   var TumblrUtils = {
     toImage: function(d) {
@@ -606,15 +605,17 @@ $(function(){
       return (<div className="photographers grid">
                 <CloseWindow />
                 <h3>Photographers</h3>
-                {_.map(this.props.data, function(p) {
-                  var image = p.image || EAConfig.images.photographer;
-                  return (<div key={p.name} className="photographer grid-item">
-                            <a href={TumblrUtils.externalTagURL(p.username)}>
-                              <img className="protogimg" src={image} alt={p.name} />
-                              <h4>{p.name}</h4>
-                            </a>
-                          </div>);
-                }.bind(this))}
+                {_(this.props.data)
+		   .sortBy(function(p) { return p.name.split(" ").slice(-1); })
+		   .map(function(p) {
+                     var image = p.image || EAConfig.images.photographer;
+                     return (<div key={p.name} className="photographer grid-item">
+                             <a href={TumblrUtils.externalTagURL(p.username)}>
+                             <img className="protogimg" src={image} alt={p.name} />
+                             <h4>{p.name}</h4>
+                             </a>
+                             </div>);
+                   }.bind(this))}
               </div>);
     }
   });
@@ -711,52 +712,58 @@ $(function(){
                                  </li>);
                         })}
                      </ul>
-                     <h4>Tearsheets</h4>
+                     <h4>Publications</h4>
                      <ol>
                        <li>
                          {img("001.jpg")}
                          Aperture Magazine, Spring 2014 "Documentary, Expanded" Issue
                          Accompanying article "Toward a New Documentary Expression" by Stephen Mayes:
-                         http://www.aperture.org/blog/toward-new-documentary-expression/
+                         <a href="http://www.aperture.org/blog/toward-new-documentary-expression/">http://www.aperture.org/blog/toward-new-documentary-expression/</a>
                          Photos by Charlie Shoemaker, Peter DiCampo, Glenna Gordon Photography, and Nana Kofi Acquah (Clockwise from top left)
                        </li>
+		       <li>
                          {img("002.jpg")}
                          National Geographic, October 2013, “The Photography Issue”
-                         http://ngm.nationalgeographic.com/2013/10/digital-village/everyday-africa-photography
+                         <a href="http://ngm.nationalgeographic.com/2013/10/digital-village/everyday-africa-photography">http://ngm.nationalgeographic.com/2013/10/digital-village/everyday-africa-photography</a>
+		       </li>
                        <li>
                          {img("003.jpg")}
                          Departures, October 2013
                        </li>
+		       <li>
                          {img("004.jpg")}
                          The New York Times - Lens blog, September 2013
-                         http://lens.blogs.nytimes.com/2013/09/16/everyday-nigeria-not-idealized-not-debased/?_php=true&_type=blogs&_r=0
-                       <li>
+                         <a href="http://lens.blogs.nytimes.com/2013/09/16/everyday-nigeria-not-idealized-not-debased">http://lens.blogs.nytimes.com/2013/09/16/everyday-nigeria-not-idealized-not-debased</a>
                        </li>
+		       <li>
                          {img("005a.jpg")}
                          {img("005b.jpg")}
                          {img("005c.jpg")}
                          Newsweek Japan, March 2013 (3 total)
-                       <li>
                        </li>
+                       <li>
                          {img("006.jpg")}
                          China City Zine Magazine, March 2013
+		       </li>
                        <li>
                          {img("007.jpg")}
                          Interview with co-founder Austin Merrill on Around the World With Christiane Amanpour for ABC / Yahoo! News. April 2013.
-                         http://news.yahoo.com/blogs/around-the-world-abc-news/surprising-images-life-africa-040640315.html#more-id
+                         <a href="http://news.yahoo.com/blogs/around-the-world-abc-news/surprising-images-life-africa-040640315.html#more-id">http://news.yahoo.com/blogs/around-the-world-abc-news/surprising-images-life-africa-040640315.html#more-id</a>
                        </li>
                        <li>
                          {img("008.jpg")}
                          The Sunday Times (Johannesburg), March 2013
                        </li>
+		       <li>
                          {img("009.jpg")}
                          The New Yorker - Photo Booth, February 2013
-                         http://www.newyorker.com/online/blogs/photobooth/2013/02/slide-show-across-the-continent-with-everyday-africa.html#slide_ss_0=1
+                         <a href="http://www.newyorker.com/online/blogs/photobooth/2013/02/slide-show-across-the-continent-with-everyday-africa.html#slide_ss_0=1">http://www.newyorker.com/online/blogs/photobooth/2013/02/slide-show-across-the-continent-with-everyday-africa.html#slide_ss_0=1</a>
+		       </li>
                        <li>
-                       </li>
                          {img("010.jpg")}
                          The New Yorker - Instagram takeover, February 2013
-                         http://www.newyorker.com/online/blogs/photobooth/2013/02/slide-show-across-the-continent-with-everyday-africa.html#slide_ss_0=1
+                         <a href="http://www.newyorker.com/online/blogs/photobooth/2013/02/slide-show-across-the-continent-with-everyday-africa.html#slide_ss_0=1">http://www.newyorker.com/online/blogs/photobooth/2013/02/slide-show-across-the-continent-with-everyday-africa.html#slide_ss_0=1</a>
+		       </li>
                        <li>
                          {img("011.jpg")}
                          Article by co-founder Peter DiCampo in Salon, February 2013
@@ -1226,6 +1233,8 @@ $(function(){
 
   var InstagramDetails = React.createClass({
     render: function() {
+      console.log(this.props.likes);
+      var additionalLikes = this.props.likes.count - this.props.likes.data.length;
       return(<div className="instagram source-details">
                <TagList tags={_.map(this.props.tags, function(t) {
                  return {tag: t, url: "/tagged/" + t};
@@ -1240,8 +1249,9 @@ $(function(){
                         return <li key={i}>
                                  <a target="_blank" href={instaFetch.userUrl(d.username)}>
                                    {d.username}
-                                 </a>&emsp;
+                                 </a>,&emsp;
                                </li>; })}
+	             {(additionalLikes > 0) && <li>and {additionalLikes} others</li>}
                    </ul>
                  </div>
                </div>
