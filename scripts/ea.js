@@ -1233,7 +1233,6 @@ $(function(){
 
   var InstagramDetails = React.createClass({
     render: function() {
-      console.log(this.props.likes);
       var additionalLikes = this.props.likes.count - this.props.likes.data.length;
       return(<div className="instagram source-details">
                <TagList tags={_.map(this.props.tags, function(t) {
@@ -1330,6 +1329,7 @@ $(function(){
               </div>);
     }
   })
+
   /*
    * Single Comment View
    */
@@ -1341,7 +1341,7 @@ $(function(){
           </div>
             <div className="rightcol">
               <h4>{this.props.data.from.username}</h4>
-              <p>{this.props.data.text}</p>
+              <p className="comment-post">{this.props.data.text}</p>
             </div>
               </div>);
     }
