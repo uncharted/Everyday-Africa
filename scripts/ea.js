@@ -702,7 +702,7 @@ $(function(){
          }
       })},
 
-      {name: "tearsheets",
+      {name: "publications",
        component: React.createClass({
          render: function() {
            var img = function(file) {
@@ -723,73 +723,75 @@ $(function(){
                      <ol>
                        <li>
                          {img("001.jpg")}
-                         Aperture Magazine, Spring 2014 "Documentary, Expanded" Issue
-                         Accompanying article "Toward a New Documentary Expression" by Stephen Mayes:
-                         <a href="http://www.aperture.org/blog/toward-new-documentary-expression/">http://www.aperture.org/blog/toward-new-documentary-expression/</a>
-                         Photos by Charlie Shoemaker, Peter DiCampo, Glenna Gordon Photography, and Nana Kofi Acquah (Clockwise from top left)
+                         <p>Aperture Magazine, Spring 2014 "Documentary, Expanded" Issue</p>
+
+                        <p>Accompanying article "Toward a New Documentary Expression" by Stephen Mayes</p>
+                         <p><a href="http://www.aperture.org/blog/toward-new-documentary-expression/">http://www.aperture.org/blog/toward-new-documentary-expression/</a></p>
+
+                        <p>Photos by Charlie Shoemaker, Peter DiCampo, Glenna Gordon Photography, and Nana Kofi Acquah (Clockwise from top left)</p>
                        </li>
 		       <li>
                          {img("002.jpg")}
-                         National Geographic, October 2013, “The Photography Issue”
-                         <a href="http://ngm.nationalgeographic.com/2013/10/digital-village/everyday-africa-photography">http://ngm.nationalgeographic.com/2013/10/digital-village/everyday-africa-photography</a>
+                         <p>National Geographic, October 2013, “The Photography Issue”</p>
+                         <p><a href="http://ngm.nationalgeographic.com/2013/10/digital-village/everyday-africa-photography">http://ngm.nationalgeographic.com/2013/10/digital-village/everyday-africa-photography</a></p>
 		       </li>
                        <li>
                          {img("003.jpg")}
-                         Departures, October 2013
+                         <p>Departures, October 2013</p>
                        </li>
 		       <li>
                          {img("004.jpg")}
-                         The New York Times - Lens blog, September 2013
-                         <a href="http://lens.blogs.nytimes.com/2013/09/16/everyday-nigeria-not-idealized-not-debased">http://lens.blogs.nytimes.com/2013/09/16/everyday-nigeria-not-idealized-not-debased</a>
+                         <p>The New York Times - Lens blog, September 2013</p>
+                         <p><a href="http://lens.blogs.nytimes.com/2013/09/16/everyday-nigeria-not-idealized-not-debased">http://lens.blogs.nytimes.com/2013/09/16/everyday-nigeria-not-idealized-not-debased</a></p>
                        </li>
 		       <li>
                          {img("005a.jpg")}
                          {img("005b.jpg")}
                          {img("005c.jpg")}
-                         Newsweek Japan, March 2013 (3 total)
+                         <p>Newsweek Japan, March 2013 (3 total)</p>
                        </li>
                        <li>
                          {img("006.jpg")}
-                         China City Zine Magazine, March 2013
+                         <p>China City Zine Magazine, March 2013</p>
 		       </li>
                        <li>
                          {img("007.jpg")}
-                         Interview with co-founder Austin Merrill on Around the World With Christiane Amanpour for ABC / Yahoo! News. April 2013.
-                         <a href="http://news.yahoo.com/blogs/around-the-world-abc-news/surprising-images-life-africa-040640315.html#more-id">http://news.yahoo.com/blogs/around-the-world-abc-news/surprising-images-life-africa-040640315.html#more-id</a>
+                         <p>Interview with co-founder Austin Merrill on Around the World With Christiane Amanpour for ABC / Yahoo! News. April 2013.</p>
+                         <p><a href="http://news.yahoo.com/blogs/around-the-world-abc-news/surprising-images-life-africa-040640315.html#more-id">http://news.yahoo.com/blogs/around-the-world-abc-news/surprising-images-life-africa-040640315.html#more-id</a></p>
                        </li>
                        <li>
                          {img("008.jpg")}
-                         The Sunday Times (Johannesburg), March 2013
+                         <p>The Sunday Times (Johannesburg), March 2013</p>
                        </li>
 		       <li>
                          {img("009.jpg")}
-                         The New Yorker - Photo Booth, February 2013
-                         <a href="http://www.newyorker.com/online/blogs/photobooth/2013/02/slide-show-across-the-continent-with-everyday-africa.html#slide_ss_0=1">http://www.newyorker.com/online/blogs/photobooth/2013/02/slide-show-across-the-continent-with-everyday-africa.html#slide_ss_0=1</a>
+                         <p>The New Yorker - Photo Booth, February 2013</p>
+                         <p><a href="http://www.newyorker.com/online/blogs/photobooth/2013/02/slide-show-across-the-continent-with-everyday-africa.html#slide_ss_0=1">http://www.newyorker.com/online/blogs/photobooth/2013/02/slide-show-across-the-continent-with-everyday-africa.html#slide_ss_0=1</a></p>
 		       </li>
                        <li>
                          {img("010.jpg")}
-                         The New Yorker - Instagram takeover, February 2013
-                         <a href="http://www.newyorker.com/online/blogs/photobooth/2013/02/slide-show-across-the-continent-with-everyday-africa.html#slide_ss_0=1">http://www.newyorker.com/online/blogs/photobooth/2013/02/slide-show-across-the-continent-with-everyday-africa.html#slide_ss_0=1</a>
+                         <p>The New Yorker - Instagram takeover, February 2013</p>
+                         <p><a href="http://www.newyorker.com/online/blogs/photobooth/2013/02/slide-show-across-the-continent-with-everyday-africa.html#slide_ss_0=1">http://www.newyorker.com/online/blogs/photobooth/2013/02/slide-show-across-the-continent-with-everyday-africa.html#slide_ss_0=1</a></p>
 		       </li>
                        <li>
                          {img("011.jpg")}
-                         Article by co-founder Peter DiCampo in Salon, February 2013
-                         http://www.salon.com/2013/02/04/introducing_africa_to_the_omg_crowd/
+                         <p>Article by co-founder Peter DiCampo in Salon, February 2013</p>
+                         <p>http://www.salon.com/2013/02/04/introducing_africa_to_the_omg_crowd/</p>
                        </li>
                        <li>
                          {img("012a.jpg")}
                          {img("012b.jpg")}
                          {img("012c.jpg")}
-                         Internazionale, January 2013 (3 total)
+                         <p>Internazionale, January 2013 (3 total)</p>
                        </li>
                        <li>
                          {img("013.jpg")}
-                         The New York Times - Lens Blog, September 2012
-                         http://lens.blogs.nytimes.com/2012/09/17/picturing-everyday-life-in-africa/
+                         <p>The New York Times - Lens Blog, September 2012</p>
+                         <p>http://lens.blogs.nytimes.com/2012/09/17/picturing-everyday-life-in-africa/</p>
                        </li>
                        <li>
                          {img("014.jpg")}
-                         Bloomberg Businessweek, August 2012
+                         <p>Bloomberg Businessweek, August 2012</p>
                        </li>
                      </ol>
                    </div>);
