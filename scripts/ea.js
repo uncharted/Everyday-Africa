@@ -796,6 +796,12 @@ $(function(){
                      </ol>
                    </div>);
            }
+       })},
+      {name: "curriculum",
+       component: React.createClass({
+         render: function() {
+           return (<p>Curriculum HTML Goes Here</p>);
+         }
        })}
     ],
 
