@@ -719,7 +719,7 @@ $(function(){
                                  </li>);
                         })}
                      </ul>
-                     <h4>Publications</h4>
+                     <h4>Tearsheets</h4>
                      <ol>
                        <li>
                          {img("001.jpg")}
