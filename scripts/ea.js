@@ -676,12 +676,19 @@ $(function(){
 		     </li>
 		   </ul>
 		   <p>
-		   This website was made possible thanks to the generous support of the Pulitzer Center on Crisis Reporting and the Open Society Foundations.
-		   [include Pulitzer and OSF logos]
+		   This website was made possible thanks to the generous support of the <a target="_blank" href="http://pulitzercenter.org/">Pulitzer Center on Crisis Reporting</a> and the <a target="_blank" href="http://www.opensocietyfoundations.org/">Open Society Foundations</a>.
 		   </p>
+		   <div className="logo-container">
+		     <img className="logo" src={EAConfig.images.base + "/logos/pulitzer-center.png"} />
+		     <img className="logo" src={EAConfig.images.base + "/logos/OSF.png"} />
+		   </div>
 		   <p>
-		   Everyday Africa is also honored to acknowledge its collaborative partnerships with Uncharted Digital, The LAMP, and the Bronx Documentary Center. [include logos]
+		   Everyday Africa is also honored to acknowledge its collaborative partnerships with <a target="_blank" href="http://uncharteddigital.com/">Uncharted Digital</a>, <a target="_blank" href="http://www.thelampnyc.org/">The LAMP</a>, and the <a href="http://bronxdoc.org/">Bronx Documentary Center</a>.
 		   </p>
+		   <div className="logo-container">
+		     <img className="logo" src={EAConfig.images.base + "/logos/lamp.png"} />
+		     <img className="logo" src={EAConfig.images.base + "/logos/BDC.png"} />
+		   </div>
 		   <p>
 		   This site was designed by <a target="_blank" href="http://uncharteddigital.com/">Uncharted Digital</a>.
 		   </p>
@@ -888,8 +895,8 @@ $(function(){
         var singleRatio = 0.12
         var sideLength = singleRatio * width;
         var centerLength = (1 - (singleRatio * 6)) * width;
+	console.log(this.props.tumblr.length);
 
-        
         var total = this.props.tumblr ? this.props.tumblr.length * (centerLength / sideLength * 6) : 0;
         var imageGroups = partition(instaFetch.take(total).map(function(d, i) {
           return {key: i, deferred: d};

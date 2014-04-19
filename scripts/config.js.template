@@ -84,7 +84,7 @@ EAConfig = {
     cotedIvoire: {
       name: "Côte d'Ivoire",
       flag: "FLAG_BASE/Cote-dIvoire.png"},
-    democraticRepublicoftheCongo: {
+    drcongo: {
       name: "Democratic Republic of the Congo",
       flag: "FLAG_BASE/Democratic-Republic-of-the-Congo.png"},
     djibouti: {
@@ -168,7 +168,7 @@ EAConfig = {
     nigeria: {
       name: "Nigeria",
       flag: "FLAG_BASE/Nigeria.png"},
-    republicoftheCongo: {
+    congo: {
       name: "Republic of Congo",
       flag: "FLAG_BASE/Republic-of-the-Congo.png"},
     /*reunion: {
@@ -243,9 +243,16 @@ EAConfig = {
       image: "PHOTOGRAPHER_BASE/Austin_Merrill.jpg"
     },
     {
+      name: "Nana Kofi Acquah",
+      username: "africashowboy",
+      url: "http://www.nkaphoto.com/en/",
+      image: "PHOTOGRAPHER_BASE/Nana_Kofi_Acquah.jpg"
+    },
+    {
       name: "Jide Alakija",
       username: "alakija",
       url: "http://www.alakija.com/",
+      image: "PHOTOGRAPHER_BASE/Jide_Alakija.jpg"
     },
     {
       name: "Andrew Esiebo",
@@ -311,7 +318,7 @@ EAConfig = {
       image: "PHOTOGRAPHER_BASE/Laura_El-Tantawy.jpg"
     }, {
       name: "Sara Terry",
-      username: "sterry13",
+      username: "saraterry13",
       image: "PHOTOGRAPHER_BASE/Sara_Terry.jpg"
     }, {
       name: "Jana Ašenbrennerová",
