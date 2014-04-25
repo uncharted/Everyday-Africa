@@ -809,7 +809,9 @@ $(function(){
       {name: "curriculum",
        component: React.createClass({
          render: function() {
-           return (<p>Curriculum HTML Goes Here</p>);
+           return (<p>
+		   Through our partnership with The LAMP, we have built a pilot classroom curriculum for middle and high school students that uses the Everyday Africa image archive to teach about the dangers of stereotypes and the power of photography. Students begin by exploring what life is like in Africa, comparing Everyday Africa photographs with typical media images that depict conflict, poverty, disease, and safaris. They then look at their own communities and examine the stereotypes that they themselves have to live with every day. Ultimately they photograph their communities, using their cameras to tell the story of what their lives are really like. The curriculum will soon be available as a downloadable PDF document here.
+		   </p>);
          }
        })}
     ],
@@ -921,11 +923,17 @@ $(function(){
           } else {
 	    if (currentTag) {
               return (<div className="none-msg">
-                        <p>There are no posts tagged with #{currentTag || "[none]"}.</p>
+                        <p>
+		        We don't yet have any official Everyday Africa images
+                        #{currentTag}. But post your own #{currentTag} photos
+		        to your Instagram page and hash-tag them #everydayafrica
+		        and #{currentTag} - they'll show up here to the left
+		        and right of the center column.
+		        </p>
                       </div>);
             } else {
-	      return (<div></div>);
-	    }
+              return <div></div>;
+            }
           }
 
         } else {
