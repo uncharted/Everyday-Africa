@@ -701,7 +701,9 @@ $(function(){
          render: function() {
            return (<div className="about-photographers">
                      <ul>
-                       {_.map(EAConfig.photographers, function(p) {
+                       {_(EAConfig.photographers)
+			 .sortBy(function(p) { return p.name.split(" ").slice(-1); })
+			 .map(function(p) {
                          return <li key={p.name}><a href={p.url}>{p.name}</a> @{p.username}</li>;
                        })}
                      </ul>
@@ -895,27 +897,36 @@ $(function(){
         var singleRatio = 0.12
         var sideLength = singleRatio * width;
         var centerLength = (1 - (singleRatio * 6)) * width;
-	console.log(this.props.tumblr.length);
 
-        var total = this.props.tumblr ? this.props.tumblr.length * (centerLength / sideLength * 6) : 0;
-        var imageGroups = partition(instaFetch.take(total).map(function(d, i) {
-          return {key: i, deferred: d};
-        }), 3);
-        return (<div className="gallery desktop">
-                  <GalleryColumn type="instagram" position="left" imageLength={sideLength} data={imageGroups[0]} />
-		  <div className="gallery-column center-column">
-                    {_.map(this.props.tumblr, function(d, i) {
-                      var classes = React.addons.classSet({
-                        'tagged-image': true, image: true});
-                      return (<TaggedImage key={i}
-                                           className={classes}
-                                           imageLength={centerLength}
-                                           type="tumblr"
-                                           image={TumblrUtils.toImage(d)} />);
-                        }, this)}
-		  </div>
-                  <GalleryColumn type="instagram" position="right" imageLength={sideLength} data={imageGroups[1]} />
-              </div>);
+	if (this.props.tumblr && this.props.tumblr.length) {
+          var total = this.props.tumblr ? this.props.tumblr.length * (centerLength / sideLength * 6) : 0;
+          var imageGroups = partition(instaFetch.take(total).map(function(d, i) {
+            return {key: i, deferred: d};
+          }), 3);
+          return (<div className="gallery desktop">
+                    <GalleryColumn type="instagram" position="left" imageLength={sideLength} data={imageGroups[0]} />
+                  <div className="gallery-column center-column">
+                      {_.map(this.props.tumblr, function(d, i) {
+                        var classes = React.addons.classSet({
+                          'tagged-image': true, image: true});
+                        return (<TaggedImage key={i}
+                                             className={classes}
+                                             imageLength={centerLength}
+                                             type="tumblr"
+                                             image={TumblrUtils.toImage(d)} />);
+                          }, this)}
+                  </div>
+                    <GalleryColumn type="instagram" position="right" imageLength={sideLength} data={imageGroups[1]} />
+                </div>);
+          } else {
+	    if (currentTag) {
+              return (<div className="none-msg">
+                        <p>There are no posts tagged with #{currentTag || "[none]"}.</p>
+                      </div>);
+            } else {
+	      return (<div></div>);
+	    }
+          }
 
         } else {
           var single = width / 3;
