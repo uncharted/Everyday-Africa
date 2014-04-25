@@ -679,15 +679,16 @@ $(function(){
 		   This website was made possible thanks to the generous support of the <a target="_blank" href="http://pulitzercenter.org/">Pulitzer Center on Crisis Reporting</a> and the <a target="_blank" href="http://www.opensocietyfoundations.org/">Open Society Foundations</a>.
 		   </p>
 		   <div className="logo-container">
-		     <img className="logo" src={EAConfig.images.base + "/logos/pulitzer-center.png"} />
-		     <img className="logo" src={EAConfig.images.base + "/logos/OSF.png"} />
+		     <a target="_blank" href="http://pulitzercenter.org/"><img className="logo" src={EAConfig.images.base + "/logos/pulitzer-center.png"} /></a>
+		     <a target="_blank" href="http://www.opensocietyfoundations.org/"><img className="logo" src={EAConfig.images.base + "/logos/OSF.png"} /></a>
 		   </div>
 		   <p>
-		   Everyday Africa is also honored to acknowledge its collaborative partnerships with <a target="_blank" href="http://uncharteddigital.com/">Uncharted Digital</a>, <a target="_blank" href="http://www.thelampnyc.org/">The LAMP</a>, and the <a href="http://bronxdoc.org/">Bronx Documentary Center</a>.
+		   Everyday Africa is also honored to acknowledge its collaborative partnerships with <a target="_blank" href="http://uncharteddigital.com/">Uncharted Digital</a>, <a target="_blank" href="http://www.thelampnyc.org/">The LAMP</a>, and the <a target="_blank" href="http://bronxdoc.org/">Bronx Documentary Center</a>.
 		   </p>
 		   <div className="logo-container">
-		     <img className="logo" src={EAConfig.images.base + "/logos/lamp.png"} />
-		     <img className="logo" src={EAConfig.images.base + "/logos/BDC.png"} />
+		     <a target="_blank" href="http://uncharteddigital.com/"><img className="logo" src={EAConfig.images.base + "/logos/uncharted.png"} /></a>
+		     <a target="_blank" href="http://www.thelampnyc.org/"><img className="logo" src={EAConfig.images.base + "/logos/lamp.png"} /></a>
+		     <a target="_blank" href="http://bronxdoc.org/"><img className="logo" src={EAConfig.images.base + "/logos/BDC.png"} /></a>
 		   </div>
 		   <p>
 		   This site was designed by <a target="_blank" href="http://uncharteddigital.com/">Uncharted Digital</a>.
