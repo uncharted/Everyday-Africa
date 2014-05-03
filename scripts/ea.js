@@ -94,6 +94,7 @@ $(function(){
 
     this.withLock = function(f) {
       if (this.lock()) {
+	// XXX - Error catching?
         var result = f();
         this.release()
         return result;
@@ -110,6 +111,9 @@ $(function(){
    * TumblrFetch -- Tumblr API Client
    */
   var TumblrUtils = {
+    photographerRegEx: /\/tagged\/photographer-(.*)$/,
+    tagRegEx: /\/tagged\/(.*)$/,
+
     toImage: function(d) {
       return d.photos[0].alt_sizes[1];
     },
@@ -124,26 +128,38 @@ $(function(){
     },
 
     /**
-     * Returns the tag for the current page, or none if not available
+     * Returns the tag/photographer for the current page, or none if not available.
+     *
+     *     {tag: "extag"} or  {user: "exuser"}
      */
     currentTag: function(pathname) {
-      var matches = pathname.match(/\/tagged\/(.*)$/);
-      if (matches) return matches[1];
+      var photographerMatches = pathname.match(TumblrUtils.photographerRegEx);
+      if (photographerMatches) return {user: photographerMatches[1]};
+
+      var tagMatches = pathname.match(TumblrUtils.tagRegEx);
+      if (tagMatches) return {tag: tagMatches[1]};
     },
 
     externalTagURL: function(tag) {
       return "/tagged/" + tag;
     },
 
+    externalPhotographerURL: function(photographer) {
+      return "/tagged/photographer-" + photographer;
+    },
+
     internalPostURL: function(id) {
       return "#/posts/tumblr/" + id + "/instagram";
     },
 
-    fetchAvatar: function(args) {
+    avatarURL: function(args) {
       var apiURL = "https://api.tumblr.com/v2";
       var params = $.param({callback: "?"});
-      var url = apiURL + "/blog/" + args.source + "/avatar/" + args.size || 128;
-      return $.ajax({url: url + "?" + params, dataType: "jsonp"});
+      return apiURL + "/blog/" + args.source + "/avatar/" + args.size || 128;
+    },
+
+    fetchAvatar: function(args) {
+      return $.ajax({url: this.avatarURL(args) + "?" + params, dataType: "jsonp"});
     },
 
     instagramID: function(post) {
@@ -165,6 +181,8 @@ $(function(){
     var offset = config.offset || 0;
     var tag    = config.tag || "everydayafrica";
     var type   = "photo";
+    var reblogInfo = true;
+    var notesInfo = true;
     // The total number of posts, set on fetch
     var posts;
 
@@ -191,6 +209,8 @@ $(function(){
           limit: limit,
           offset: offset,
           tag: config.tag,
+	  reblog_info: reblogInfo,
+	  notes_info: notesInfo,
           type: type,
           api_key: API_KEY,
           callback: "?"
@@ -242,13 +262,34 @@ $(function(){
 	width: img.width,
 	height: img.height
       }
+    },
+
+    /**
+     * Returns a function that can be used to filter for a particular tag with
+     * `InstaFetch`.
+     */
+    tagDataFilter: function(tag) {
+      return function(data) { return _.contains(_.values(data.tags), tag); }
     }
+
   }
 
+  /**
+   * # InstaFetch
+   *
+   * A limited Instagram client which attempts to abstract out pagination.
+   *
+   * Constructor options:
+   * - `query`: `{user: ...}` or `{tag: ...}`
+   * - `limit`: integer, posts to fetch per query
+   * - `dataFilter`: a function to use to filter posts
+   *
+   */
   function InstaFetch(o) {
     this.prototype = InstaUtils;
-    this.tag   = "tag" in o ? o["tag"] : "everydayafrica";
-    this.limit = "limit" in o ? o["limit"] : 20;
+    this.query     = "query" in o ? o["query"] : {tag: "everydayafrica"};
+    this.limit     = "limit" in o ? o["limit"] : 20;
+    var dataFilter = o.dataFilter;
 
     var CLIENT_ID = "57dbff39f8dc4b659e6489ac6dd68b45";
     var API_URL   = "https://api.instagram.com/v1";
@@ -259,26 +300,44 @@ $(function(){
     /*
      * Internal Functions
      */
-    function params() {
-      return $.param({client_id: CLIENT_ID, callback: "?"});
+    function params(additional) {
+      return $.param(_.extend({client_id: CLIENT_ID, callback: "?"}, additional));
     }
 
     function _resolve(deferred, item) {
       return deferred.resolveWith(this, [item]).promise();
     }
 
+    function getUser(user) {
+      return $.ajax({url: API_URL + "/users/search?" + params({q: user}),
+                     dataType: "jsonp"});
+    }
+
+    function _getURL() {
+      if ("tag" in this.query) {
+        return API_URL + "/tags/" + this.query.tag + "/media/recent?" + params();
+      } else if ("user" in this.query) {
+        return getUser(this.query.user).then(function(userResp) {
+          var userID = userResp.data[0].id;
+          return API_URL + "/users/" + userID + "/media/recent?" + params();
+        });
+      }
+    }
+
     function fetch(pendingDeferreds, url) {
       $.ajax({url: url, dataType: "jsonp"})
         .done(function(d) {
           _.each(d.data, function(item) {
-            var deferred = pendingDeferreds.shift()
-            if (deferred) {
-              // Resolve it
-              deferred.resolveWith(this, [item]);
-              return true;
-            } else {
-              // If there are no more deferreds, queue up in pending
-	      pendingItems.push(item);
+            if (!dataFilter || dataFilter(item)) {
+              var deferred = pendingDeferreds.shift()
+              if (deferred) {
+                // Resolve it
+                deferred.resolveWith(this, [item]);
+                return true;
+              } else {
+                // If there are no more deferreds, queue up in pending
+	        pendingItems.push(item);
+              }
             }
           }.bind(this));
 
@@ -288,8 +347,9 @@ $(function(){
           }
         }.bind(this))
         .fail(function(d) {
-          console.log("Instagram API Fetch failed, retrying")
-          setTimeout(function() {this._populate(remaining, url, index)}, 1000)
+          console.log("Instagram API Fetch: " + url + " failed, retrying")
+          setTimeout(function() { return fetch(pendingDeferreds, url); }.bind(this),
+                     10000);
         }.bind(this));
       return this;
     }
@@ -318,7 +378,9 @@ $(function(){
 	items.push(deferred);
       }, this);
 
-      return fetch(items.slice(), API_URL + "/tags/" + this.tag + "/media/recent?" + params());
+      $.when(_getURL.bind(this)()).then(function(url) {
+        return fetch.bind(this)(items.slice(), url);
+      }.bind(this));
     }
 
     this.get = function(i) {
@@ -393,10 +455,12 @@ $(function(){
 
   // The global Fetchers
   // Check for being on a tagged page
-  var currentTag = TumblrUtils.currentTag(window.location.pathname);
-  var instaFetch = new InstaFetch({tag: currentTag || "everydayafrica", limit: 30});
+  var instaQuery = (TumblrUtils.currentTag(window.location.pathname)
+                    || {tag: "everydayafrica"});
+  var instaFetch = new InstaFetch({query: instaQuery,
+                                   limit: 30});
   var tumblrFetch = new TumblrFetch({source: "everydayafrica.tumblr.com",
-                                     tag: currentTag});
+                                     tag: instaQuery.tag || instaQuery.user});
 
 
   /************
@@ -617,7 +681,7 @@ $(function(){
 		   .map(function(p) {
                      var image = p.image || EAConfig.images.photographer;
                      return (<div key={p.name} className="photographer grid-item">
-                             <a href={TumblrUtils.externalTagURL(p.username)}>
+                             <a href={TumblrUtils.externalPhotographerURL(p.username)}>
                              <img className="protogimg" src={image} alt={p.name} />
                              <h4>{p.name}</h4>
                              </a>
@@ -922,13 +986,13 @@ $(function(){
                     <GalleryColumn type="instagram" position="right" imageLength={sideLength} data={imageGroups[1]} />
                 </div>);
           } else {
-	    if (currentTag) {
+	    if (instaQuery && "tag" in instaQuery) {
               return (<div className="none-msg">
                         <p>
 		        We don't yet have any official Everyday Africa images
-                        #{currentTag}. But post your own #{currentTag} photos
+                        #{instaQuery.tag}. But post your own #{instaQuery.tag} photos
 		        to your Instagram page and hash-tag them #everydayafrica
-		        and #{currentTag} - they'll show up here to the left
+		        and #{instaQuery.tag} - they'll show up here to the left
 		        and right of the center column.
 		        </p>
                       </div>);
@@ -1259,7 +1323,8 @@ $(function(){
                     </div>
                     {this.props.active === "tumblr" && this.props.tumblr &&
                       <TumblrDetails tags={TumblrUtils.toTags(this.props.tumblr)}
-                                     notes={this.props.tumblr.note_count} />}
+                                     notes={{count: this.props.tumblr.note_count,
+					     items: this.props.tumblr.notes}} />}
                     {this.props.active === "instagram" && this.props.instagram &&
                       <InstagramDetails tags={this.props.instagram.tags}
                                         likes={this.props.instagram.likes}
@@ -1296,19 +1361,48 @@ $(function(){
                    </ul>
                  </div>
                </div>
-               <CommentBox comments={{instagram: this.props.comments}}/>
+               <CommentBox comments={this.props.comments.data}/>
              </div>);
     }
   });
 
   var TumblrDetails = React.createClass({
     render: function() {
+      var commentNotes = _.map(this.props.notes.items, function(note, i) {
+        var text;
+        if (note.type === "posted") {
+          text = "posted this"
+        } else if (note.type === "like") {
+          text = "liked this"
+        } else if (note.type === "reblog"){
+          text = "reblogged this"
+        }
+        var blog = note.blog_url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+
+        return {id: i,
+                text: text,
+                created_time: moment.unix(note.timestamp),
+                from: {username: note.blog_name,
+                       profile_picture: TumblrUtils.avatarURL({source: blog,
+                                                               size: 32})}};
+      });
+
       return (<div className="tumblr source-details">
                 <TagList tags={_.map(this.props.tags, function(t) {
                   return {tag: t.tag, url: t.tagUrl};
                 })} />
                 <div className="reblogs" dangerouslySetInnerHTML={{__html: this.props.reblogButton}} />
-                <p>{this.props.notes ? this.props.notes : 0} Photo Reblogs</p>
+                <div>
+                  <p>
+	            {this.props.notes.count ? this.props.notes.count : 0} Photo Reblogs
+	          </p>
+                </div>
+                <CommentBox comments={commentNotes} />
+	        <ul className="notes">
+	          {this.props.notes.items &&
+                   _.map(this.props.notes.items, function(note) {
+                   })}
+	        </ul>
               </div>);
     }
   });
@@ -1334,57 +1428,36 @@ $(function(){
     }
   });
 
-  /*
-   * Properties:
+  /**
+   * # CommentBox
    *
-   * props: {
-   *   comments: {
-   *     instagram: see above,
-   *     tumblr: see above
-   *   },
-   *   active: "tumblr" | "instagram"
-   * }
+   *     props: {
+   *      comments: [...]
+   *     }
    *
    * The comment type selector will only contain the types for which
    * there are comments.
    */
   var CommentBox = React.createClass({
-    getDefaultProps: function() {
-      // Set the active comment type
-      return {active: _.findKey(this.props.comments)};
-    },
-
-    // Get the currently active comments
-    activeComments: function() {
-      return this.props.comments[this.props.active].data;
-    },
-
     render: function() {
       return (<div className="comments">
-                <div>
-                  {_.map(this.activeComments(), function(comment) {
-                    return <Comment key={comment.id} data={comment} />;
-                  }.bind(this))}
-                  <div>
-                  </div>
-                </div>
-              </div>);
-    }
-  })
-
-  /*
-   * Single Comment View
-   */
-  var Comment = React.createClass({
-    render: function() {
-      return (<div className="comment">
-          <div className="leftcol">
-            <img src={this.props.data.from.profile_picture} className="circle_profile" />
-          </div>
-            <div className="rightcol">
-              <h4>{this.props.data.from.username}</h4>
-              <p className="comment-post">{this.props.data.text}</p>
-            </div>
+                {_.map(this.props.comments, function(comment, i) {
+                  var created_time =
+                    ((typeof comment.created_time) === "string" ?
+                     parseInt(comment.created_time) : comment.created_time);
+                  var time = moment.unix(comment.created_time);
+                  return (<div id={comment.id || i} className="comment">
+                            <div className="leftcol">
+                              <img src={comment.from.profile_picture}
+                                   className="circle_profile" />
+                            </div>
+                            <div className="rightcol">
+                              <h4>{comment.from.username}</h4>
+                              <p className="comment-post">{comment.text}</p>
+                              <p className="quiet">{time.format("M/D/YY, ha")}</p>
+                            </div>
+                          </div>);
+                  })}
               </div>);
     }
   });

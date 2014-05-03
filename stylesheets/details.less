@@ -297,7 +297,8 @@
       }
 
       .rightcol{
-        width: 74%;
+        width: 72%;
+	margin-left: 2%;
         margin-top: 5px;
         p {
           font-size: 1em;
@@ -412,9 +413,13 @@
 
 .source-details {
 
-  p {
+  > * {
     float: left;
     display: inline-block;
+    width: 80%%;
+  }
+
+  p, .notes {
     padding-left: 10px;
   }
 
@@ -442,4 +447,15 @@
     display: inline-block;
     width: 240px;
     overflow-x: hidden;
+}
+
+.notes {
+    list-style: none;
+}
+
+.quiet {
+    color: @grey;
+    margin: 0 0.5em;
+    font-size: 0.8em;
+    font-weight: 200;
 }
