@@ -975,8 +975,7 @@ $(function(){
                     and hash-tag them #everydayafrica — they'll show
                     up here to the left and right of the center
                     column.
-		</span>
-                );
+		</span>);
       }
       return <div key="none" />;
     },
