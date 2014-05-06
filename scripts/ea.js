@@ -222,7 +222,7 @@ $(function(){
           .done(onFetchDone.bind(this))
           .always(function() { fetchLock.release(); });
       } else {
-        // console.log("LOCKED");
+        console.log("tumblr fetch failed -- LOCKED");
         return false;
       }
     };
@@ -324,6 +324,9 @@ $(function(){
       }
     }
 
+    /**
+     * Fill the pending deferreds.
+     */
     function fetch(pendingDeferreds, url) {
       $.ajax({url: url, dataType: "jsonp"})
         .done(function(d) {
@@ -365,7 +368,8 @@ $(function(){
      * External API
      */
     this.fetchNext = function(count) {
-      var corrected = items.length + count >= this.limit ? this.limit - items.length : count;
+      var corrected = (items.length + count >= this.limit ?
+                       this.limit - items.length : count);
       var newItems = [];
 
       // Set all of the deferreds
@@ -455,12 +459,13 @@ $(function(){
 
   // The global Fetchers
   // Check for being on a tagged page
-  var instaQuery = (TumblrUtils.currentTag(window.location.pathname)
-                    || {tag: "everydayafrica"});
-  var instaFetch = new InstaFetch({query: instaQuery,
+  var instaQuery = TumblrUtils.currentTag(window.location.pathname);
+  var instaFetch = new InstaFetch({query: instaQuery || {tag: "everydayafrica"},
                                    limit: 30});
+  // var tumblrTag = instaQuery ? instaQuery.tag || instaQuery.user : undefined;
+  var tumblrTag = "everydayafrica";
   var tumblrFetch = new TumblrFetch({source: "everydayafrica.tumblr.com",
-                                     tag: instaQuery.tag || instaQuery.user});
+                                     tag: tumblrTag});
 
 
   /************
@@ -950,6 +955,40 @@ $(function(){
   });
 
 
+  /**
+   * The status overlay sets a display based on a provided deferred
+   * .state: {status: "loading" | "error"}
+   */
+  var StatusIndicator = React.createClass({
+    defaultProps: {state: "none"},
+
+    render: function() {
+      if (this.props.status === "loading") {
+        console.log("WTF");
+        // Create a container for the spinner, added in componentDidUpdate
+        return (<div ref="loading" key="loading" className="loading-status">
+                </div>);
+      } else if (this.props.status === "error") {
+        return (<span className="error-status" key="error">
+		    We're out of official Everyday Africa images.
+                    But post your own photos to your Instagram page
+                    and hash-tag them #everydayafrica — they'll show
+                    up here to the left and right of the center
+                    column.
+		</span>
+                );
+      }
+      return <div key="none" />;
+    },
+
+    componentDidUpdate: function() {
+      if (this.props.status === "loading") {
+        var loading = this.refs.loading.getDOMNode();
+        var spinner = new Spinner(EAConfig.spinnerOpts).spin(loading);
+      }
+    }
+  });
+
   /********
    * Images
    */
@@ -986,21 +1025,8 @@ $(function(){
                     <GalleryColumn type="instagram" position="right" imageLength={sideLength} data={imageGroups[1]} />
                 </div>);
           } else {
-	    if (instaQuery && "tag" in instaQuery) {
-              return (<div className="none-msg">
-                        <p>
-		        We don't yet have any official Everyday Africa images
-                        #{instaQuery.tag}. But post your own #{instaQuery.tag} photos
-		        to your Instagram page and hash-tag them #everydayafrica
-		        and #{instaQuery.tag} - they'll show up here to the left
-		        and right of the center column.
-		        </p>
-                      </div>);
-            } else {
-              return <div></div>;
-            }
+            return <div key="gallery-empty" />;
           }
-
         } else {
           var single = width / 3;
           var dbl = single * 2;
@@ -1468,9 +1494,11 @@ $(function(){
   (function() {
     var gallery = <Gallery tag="everydayafrica" />;
     var navBar = <NavBar />;
+    var statusIndicator = <StatusIndicator />;
 
     React.renderComponent(navBar, $("header").get(0));
     React.renderComponent(gallery, $("#content").get(0));
+    React.renderComponent(statusIndicator, $("#status-indicator").get(0));
 
     /**
      * Fix/unfix body scrolling
@@ -1530,16 +1558,35 @@ $(function(){
     });
 
     // Infinite scroll
+    var tumblrNextLock = new Lock();
+
     // Fetch the next set of tumblr images, update the gallery
     function tumblrNext() {
+      if (!tumblrNextLock.lock()) return;
+
       instaFetch.fetchNext(8 * 10);
+      statusIndicator.setProps({status: "loading"});
       var deferred = tumblrFetch.fetchNext();
+
       if (deferred) {
-        deferred.done(function(resp) {
-          // cache the instagram data
-          _.each(resp.posts, function(post) { instaFetch.getByURL(post.link_url); });
-          gallery.setProps({tumblr: tumblrFetch.items.slice()});
-        });
+        deferred
+          .done(function(resp) {
+            if (resp.posts.length) {
+              statusIndicator.setProps({status: "none"});
+              // cache the instagram data
+              _.each(resp.posts,
+                     function(post) { instaFetch.getByURL(post.link_url); });
+              tumblrNextLock.release();
+              gallery.setProps({tumblr: tumblrFetch.items.slice()});
+            } else {
+              statusIndicator.setProps({status: "error"});
+            }
+          })
+          .fail(function() {
+            statusIndicator.setProps({status: "error"});
+            console.log("Error pulling down data")
+          });
+        return deferred;
       }
     }
     tumblrNext();

@@ -17,6 +17,7 @@
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/fastclick/0.6.11/fastclick.min.js"></script>
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.4/jquery.touchSwipe.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.0/spin.min.js"></script>
   </head>
   <body>
     <!-- Nav + Title + Social -->
@@ -27,6 +28,8 @@
     <section id="content"></section>
     <!-- A modal containing the image details -->
     <div id="modal"></div>
+    <!-- The status indicator -->
+    <div id="status-indicator"></div>
 
     <script type="text/javascript" src="CONFIG_URL"></script>
     <script type="text/javascript" src="EA_JS_URL"></script>
