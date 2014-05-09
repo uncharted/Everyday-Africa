@@ -209,8 +209,8 @@ $(function(){
           limit: limit,
           offset: offset,
           tag: config.tag,
-	  reblog_info: reblogInfo,
-	  notes_info: notesInfo,
+          reblog_info: reblogInfo,
+          notes_info: notesInfo,
           type: type,
           api_key: API_KEY,
           callback: "?"
@@ -462,8 +462,7 @@ $(function(){
   var instaQuery = TumblrUtils.currentTag(window.location.pathname);
   var instaFetch = new InstaFetch({query: instaQuery || {tag: "everydayafrica"},
                                    limit: 30});
-  // var tumblrTag = instaQuery ? instaQuery.tag || instaQuery.user : undefined;
-  var tumblrTag = "everydayafrica";
+  var tumblrTag = instaQuery ? instaQuery.tag || instaQuery.user : undefined;
   var tumblrFetch = new TumblrFetch({source: "everydayafrica.tumblr.com",
                                      tag: tumblrTag});
 
@@ -964,7 +963,6 @@ $(function(){
 
     render: function() {
       if (this.props.status === "loading") {
-        console.log("WTF");
         // Create a container for the spinner, added in componentDidUpdate
         return (<div ref="loading" key="loading" className="loading-status">
                 </div>);
@@ -972,10 +970,11 @@ $(function(){
         return (<span className="error-status" key="error">
 		    We're out of official Everyday Africa images.
                     But post your own photos to your Instagram page
-                    and hash-tag them #everydayafrica — they'll show
+                    and hash-tag them #everydayafrica - they'll show
                     up here to the left and right of the center
                     column.
-		</span>);
+		</span>
+                );
       }
       return <div key="none" />;
     },
@@ -996,7 +995,7 @@ $(function(){
   var Gallery = React.createClass({
     render: function() {
       // Divide the images which fall on the left and the right
-      var width = $(window).width();
+      var width = $(".gallery").width();
 
       if (width > Settings.galleryBreakpoint) {
         var singleRatio = 0.12
