@@ -39,7 +39,7 @@ TUMBLRVARS	= -e '/TUMBLRVARS/{r ./local.js' -e 'd;}'
 # Production Profile
 ifeq ($(PROFILE), tumblr)
     # Used as the root for the Tumblr build's asset references
-    S3_PUBLIC		= http://s3.amazonaws.com/everydayafrica/public
+    S3_PUBLIC		= http://s3.amazonaws.com/everydayafricastatic/public
     IMAGES_BASE_URL	= $(S3_PUBLIC)/images
     STYLESHEET_URL	= $(S3_PUBLIC)/stylesheets/ea.css
     EA_JS_URL		= $(S3_PUBLIC)/scripts/ea.js
@@ -172,10 +172,11 @@ scripts/config.js: scripts/config.js.template Makefile
 $(VAR)/ea.html: ea.html.template $(VAR) Makefile local.js tumblrvars.js
 	$(SED_TEMPLATER) $< > $@
 
-push: BUCKET = s3://everydayafrica/
+push: CONFIG = .s3cmd.ea
+push: BUCKET = s3://everydayafricastatic/
 push: $(PUBLIC)
 	$(S3CMD) mb $(BUCKET)
-	$(S3CMD) sync --acl-public $< $(BUCKET)
+	$(S3CMD) -c $(CONFIG) sync --acl-public $< $(BUCKET)
 
 
 # Running locally

@@ -2,6 +2,7 @@
 
 EAConfig = {
   account: "everydayafrica",
+  blog: "everydayafrica.tumblr.com",
   follow: "http://tumblr.com/follow/everydayafrica",
   profile: "PROFILE",
   profilePic: "http://images.ak.instagram.com/profiles/profile_220885929_75sq_1367867072.jpg",

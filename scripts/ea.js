@@ -941,7 +941,7 @@ $(function(){
     render: function() {
       return (<div className="tumblr-share">
                 <a target="_blank" href={"http://instagram.com/" + EAConfig.account}>
-                  <img src={EAConfig.profilePic} />
+                  <img src={TumblrUtils.avatarURL({source: EAConfig.blog, size: 128})} />
                 </a>
                 <div className="follow">
                   <a target="_blank" href={EAConfig.follow}>+ Follow {EAConfig.account}</a>
@@ -968,11 +968,9 @@ $(function(){
                 </div>);
       } else if (this.props.status === "error") {
         return (<span className="error-status" key="error">
-		    We're out of official Everyday Africa images.
-                    But post your own photos to your Instagram page
-                    and hash-tag them #everydayafrica - they'll show
-                    up here to the left and right of the center
-                    column.
+		  Post your own photos of Africa to your Instagram page
+		  and hash-tag them #everydayafrica - they'll show
+                  up here to the left and right of the center column.
 		</span>
                 );
       }
@@ -1020,7 +1018,7 @@ $(function(){
                                              image={TumblrUtils.toImage(d)} />);
                           }, this)}
                   </div>
-                    <GalleryColumn type="instagram" position="right" imageLength={sideLength} data={imageGroups[1]} />
+                  <GalleryColumn type="instagram" position="right" imageLength={sideLength} data={imageGroups[1]} />
                 </div>);
           } else {
             return <div key="gallery-empty" />;
@@ -1136,10 +1134,8 @@ $(function(){
       if (this.state && this.state.image) {
 	url = this.state.image.url;
         if (this.state.image.width > this.state.image.height) {
-          // imgStyle.width = "120%";
           imgStyle.width = "101%";
         } else {
-          // imgStyle.height = "120%";
           imgStyle.height = "101%";
         }
       }
@@ -1148,11 +1144,11 @@ $(function(){
                  <a href={"#/posts/" + this.props.type + "/" + this.props.key + "/instagram"}
                     style={aStyle}
                     onMouseEnter={this.mouseEnterHandler}
-                    onMouseOut={this.mouseOutHandler}
-	          >
+                    onMouseOut={this.mouseOutHandler}>
                    <img src={url} style={imgStyle} />
 	           {this.props.type === "tumblr" && <div className="img-overlay">
-                      <img src={EAConfig.profilePic} />
+                      <img src={TumblrUtils.avatarURL({source: EAConfig.blog,
+						       size: 64})} />
                       <span>{EAConfig.account}</span>
 	            </div>}
                    {this.props.type === "instagram" && this.state && this.state.user && <div className="img-overlay">
@@ -1413,7 +1409,7 @@ $(function(){
 
       return (<div className="tumblr source-details">
                 <TagList tags={_.map(this.props.tags, function(t) {
-                  return {tag: t.tag, url: t.tagUrl};
+                  return {tag: t.tag, url: TumblrUtils.externalTagURL(t.tag)};
                 })} />
                 <div className="reblogs" dangerouslySetInnerHTML={{__html: this.props.reblogButton}} />
                 <div>
@@ -1655,8 +1651,8 @@ $(function(){
                             caption={post.caption}
                             created={moment(post.date)}
                             image={TumblrUtils.toImage(post)}
-                            // Warning: pic is hardcoded
-                            user={{profile_picture: EAConfig.profilePic,
+                            user={{profile_picture: TumblrUtils.avatarURL(
+				{source: EAConfig.blog, size: 128}),
                                    username: tumblrFetch.blog.name}}
                             tumblr={post}
                             active={type || "instagram"}

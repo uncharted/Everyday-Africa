@@ -4,9 +4,24 @@ Everyday-Africa
 All around you are files pertaining to the Everyday Africa
 tumblr blog.
 
-The blog's source is built from component pieces. The final outputs are:
-- `var/ea.html` which is deployed by hand pasting via the tumblr interface
-- `var/public/ea.css` which must be served via s3 or some other mechanism
+The blog's source is built from component pieces, and output to
+`var`. See the `Makefile` for the various build tasks. To deploy in
+multiple environments, e.g. local vs Tumblr, you can specify a
+`PROFILE` variable. `PROFILE` defaults to `dev` for local builds,
+and must be set to `tumblr` for Tumblr builds. See `To Tumblr` below
+for more information.
+
+- `/stylesheets`: Stylesheets are written in
+[`less`](http://lesscss.org/). `ea.less` is the entrypoint, and should
+include import all of the other stylesheets.
+- `/scripts`: There are two javascript files:
+  - `ea.js`: the heart of the application, this uses
+    [`react.js`](http://facebook.github.io/react/) to specify the
+    application's behavior.
+  - `config.js.template`: application variables and paths are specified
+    here. The file is templated by the Makefile, allowing different profiles
+    to be used.
+
 
 To Tumblr
 ---------
@@ -17,13 +32,14 @@ the the Tumblr page's `Edit HTML` menu. Also, to get it to work for
 mobile, you'll need to create/edit a Tumblr Page named `/iphone-theme`
 to have the `var/ea.html` source.
 
-More common changes, e.g. editing `scripts/ea.js`, only require
-for the changed files to be pushed to S3. To do this, after running
-`make PROFILE=prod -B`, push the files to S3 with `make push`. This
-requires for you to have s3cmd properly configured, and for `S3_PUBLIC`
-to be properly set in the `Makefile`
+Changes to any of the other static resources, e.g. editing
+`scripts/ea.js`, only require the altered files to be pushed to S3. To
+do this, run `make push` after running `make PROFILE=prod -B`. Note:
+This requires for you to have s3cmd properly configured, and for
+`S3_PUBLIC` to be properly set in the `Makefile`
 
 If there's an issue, you can get ahold of me at jtmoulia@pocketknife.io
+
 
 Usage
 -----
@@ -33,15 +49,11 @@ below.
 
 To build all files which had a dependency modified, run `make`.
 
-To build `build/ea.html` run `make build/ea.html`.
-
-To compile the `build/public/ea.css`, run `make build/public/ea.css`.
-
-To push `build/public/tumblr.css`, run `make push`. Note that this requires
-`s3cmd` to be installed and properly configured for your server.
+If you'd like to build an individual file (probably not worth it -- the build
+is fast), check out the `Makefile`.
 
 To run `make build` on changes, run `make fswatch`. This depends on
-`fswatch`, and only works on OS X.
+`fswatch`, and therefore only works on OS X.
 
 
 Dependencies
